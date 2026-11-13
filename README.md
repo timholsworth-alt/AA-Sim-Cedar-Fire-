@@ -5,7 +5,7 @@ A browser-based radio trainer for Air Tactical Group Supervisor students. You ar
 ## Use it
 Open the GitHub Pages address for this repository in **Chrome or Edge**, click **Check microphone**, then **Launch**.
 
-- Hold a radio key (mouse, **Space**, or number keys **1–7**) and talk. Release, check the words, press **Enter** to transmit.
+- Hold a radio key (mouse, **Space**, or number keys **1–7**) and talk. Your call goes out when you release.
 - **Scripts** shows the standard wording for every call. **End** shows your report card.
 
 ## Publish or update
