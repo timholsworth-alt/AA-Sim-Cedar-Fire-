@@ -56,14 +56,17 @@ button{font:inherit;color:inherit;}
   display:flex;align-items:baseline;gap:8px;padding:4px 12px;border-radius:3px;
   background:rgba(24,26,24,.72);font-family:'Barlow Condensed',sans-serif;pointer-events:none;}
 #hdgTape b{font-size:20px;font-weight:600;letter-spacing:1px;font-variant-numeric:tabular-nums;}
-#hdgTape span{font-size:12px;color:var(--muted);}
+#hdgTape span{font-size:12px;color:var(--muted);max-width:34ch;}
+#hdgTape .sep{width:1px;height:14px;background:var(--rule);margin:0 2px;align-self:center;}
+#hdgTape #altV,#hdgTape #qnhV{font-size:15px;font-weight:600;color:var(--placard);font-variant-numeric:tabular-nums;}
+#hdgTape #qnhV::before{content:'ALT ';font-size:10px;font-weight:500;color:var(--muted);} #hdgTape #altV::after{content:' MSL';font-size:10px;font-weight:500;color:var(--muted);}
 
-#nextStep{display:none;position:absolute;top:calc(48px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);
+#nextStep{display:none;position:absolute;top:calc(54px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);
   max-width:min(92%,640px);padding:4px 12px;border-radius:3px;background:rgba(24,26,24,.7);
   font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--amber);text-align:center;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none;}
 
-#prompt{position:absolute;top:calc(84px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);
+#prompt{position:absolute;top:calc(90px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);
   width:min(92%,460px);padding:9px 13px 10px;border-radius:3px;background:rgba(31,34,31,.94);
   border-left:3px solid var(--amber);display:none;pointer-events:none;}
 #prompt.show{display:block;}
@@ -136,6 +139,7 @@ button{font:inherit;color:inherit;}
   user-select:none;-webkit-user-select:none;touch-action:none;min-height:38px;}
 .key:hover{background:#383e37;}
 .key .lamp{width:8px;height:8px;border-radius:50%;background:#454b43;flex:none;}
+.key small{font-size:.72em;font-weight:500;color:var(--muted);margin-left:1px;} .key.tx small{color:#4a3510;}
 .key.sel{border-color:#6c7468;}
 .key.rx .lamp{background:var(--rx);box-shadow:0 0 8px var(--rx);}
 .key.tx{background:var(--amber);color:#1b1b1b;border-color:var(--amber);}
@@ -257,7 +261,7 @@ button{font:inherit;color:inherit;}
     <path d="M0,0 L1000,0 L1000,9 Q500,26 0,9 Z" fill="#1d201d" opacity=".85"/>
   </svg>
   <div id="labels"></div>
-  <div id="hdgTape"><b id="hdgV">000</b><span id="hdgS">right orbit</span></div>
+  <div id="hdgTape"><b id="hdgV">000</b><span id="hdgS">right orbit</span><span class="sep"></span><span id="altV" title="Air Attack altitude MSL">4,000</span><span class="sep"></span><span id="qnhV" title="Altimeter setting">30.02</span></div>
   <div id="nextStep"></div>
   <div id="prompt"><div id="pFrom"></div><div id="pMsg"></div></div>
   <div id="legBanner"></div>
@@ -302,7 +306,7 @@ button{font:inherit;color:inherit;}
   <div id="keys">
     <button class="key sel" data-f="tac" data-n="1" type="button"><span class="lamp"></span>Air Tactics 4</button>
     <button class="key" data-f="vhf" data-n="2" type="button"><span class="lamp"></span>122.925</button>
-    <button class="key" data-f="rv" data-n="3" type="button"><span class="lamp"></span>Rotor Victor</button>
+    <button class="key" data-f="rv" data-n="3" type="button"><span class="lamp"></span>Rotor Victor <small>127.325</small></button>
     <button class="key" data-f="neu" data-n="4" type="button"><span class="lamp"></span>NEU West</button>
     <button class="key" data-f="cdf" data-n="5" type="button"><span class="lamp"></span>CDF A/G 3</button>
     <button class="key" data-f="tac2" data-n="6" type="button"><span class="lamp"></span>CDF Tac 2</button>
@@ -336,7 +340,7 @@ button{font:inherit;color:inherit;}
       <div id="mtHeard"></div>
       <div id="mtResult"></div>
     </div>
-    <div class="note">Version 3.2 — graded to the CAL FIRE CSAS (March 2025). Use Chrome or Edge. Hold a radio key (or <kbd>Space</kbd>) and talk; your call goes out when you release. A headset mic works best.</div>
+    <div class="note">Version 3.3 — graded to the CAL FIRE CSAS (March 2025). Use Chrome or Edge. Hold a radio key (or <kbd>Space</kbd>) and talk; your call goes out when you release. A headset mic works best.</div>
   </div>
 </div>
 
@@ -1088,10 +1092,10 @@ function startPattern(ac){
      else{[L.x1,L.x2]=[L.x2,L.x1];[L.z1,L.z2]=[L.z2,L.z1];}}}
   const len=Math.hypot(L.x2-L.x1,L.z2-L.z1),dx=(L.x2-L.x1)/len,dz=(L.z2-L.z1)/len;
   const nx=ac._rightPat?-dz:dz,nz=ac._rightPat?dx:-dx;
-  const off=780,fin=1650,yP=FIRE_TOP+290;   // maneuvering altitude: under 1,000 AGL (CSAS)
+  const off=780,fin=2300,yP=FIRE_TOP+290;   // maneuvering altitude: under 1,000 AGL (CSAS)
   const DW={x:L.x2+nx*off+dx*420,z:L.z2+nz*off+dz*420},BASE={x:L.x1-dx*fin+nx*off,z:L.z1-dz*fin+nz*off};
   const FS={x:L.x1-dx*fin,z:L.z1-dz*fin},gStart=hAt(L.x1,L.z1);
-  ac._finalCalled=false;ac._warned=false;ac.cleared=false;
+  ac._finalCalled=false;ac._warned=false;ac._warned2=false;ac._lateGrace=false;ac._lateStarted=false;ac.cleared=false;
   ac.route=[
     {k:'pt',x:DW.x,z:DW.z,y:yP,spd:ac.cruise,cap:360,tmax:60,cb:()=>legCall(ac,'downwind')},
     {k:'pt',x:BASE.x,z:BASE.z,y:yP-40,spd:ac.cruise,cap:360,tmax:40,cb:()=>legCall(ac,'base')},
@@ -1102,28 +1106,44 @@ function startPattern(ac){
 function legCall(ac,leg){
   if(ac.status!=='maneuvering')return;
   ac.currentLeg=leg;
-  rtx(ac.callsign,`${ac.spokenCS} is ${ac._rightPat?'right ':''}${leg}.`,'rx',ac.role,'tac');
+  rtx(ac.callsign,`${ac.spokenCS} is ${ac._rightPat?'right ':''}${leg}${leg==='downwind'&&ac.checkPending?', passing '+ac.checkPending:''}.`,'rx',ac.role,'tac');
   flashLeg(`${ac.short} ${leg}`,'#3a5f37');
   setNextStep(`${ac.short} is ${leg} — watch it (acknowledge if you like); final needs a verbal call`);
   setAwaiting(ac);
 }
 function finalAlong(ac,al,fin,dx,dz){
   if(!ac._finalCalled&&al>-250&&Math.abs(angDiff(ac.psi,Math.atan2(dz,dx)))<.32){
+    ac._finalLen=fin;
     ac._finalCalled=true;ac.status='on_final';ac.currentLeg='final';
-    rtx(ac.callsign,`${ac.spokenCS} is on final.`,'rx',ac.role,'tac');
+    rtx(ac.callsign,`${ac.spokenCS} is on final${ac._dryRun?', dry':''}.`,'rx',ac.role,'tac');
+    if(ac._dryRun){flashLeg(`${ac.short} final — dry run`,'#3a5f37');return;}
     flashLeg(`${ac.short} final — needs drop clearance`,'#8a2a1a');
     setNextStep(`"${ac.spokenCS}, I have your final; clear to drop."`);
     setAwaiting(ac);
-    after(6,()=>{if(ac.status==='on_final'&&!ac.cleared&&!ac._warned){ac._warned=true;
-      rtx(ac.callsign,`${ac.spokenCS} — standing by for drop clearance.`,'rx',ac.role,'tac');}});
+    after(8,()=>{if(ac.status==='on_final'&&!ac.cleared&&!ac._warned){ac._warned=true;
+      rtx(ac.callsign,`${ac.spokenCS} on final, standing by for drop clearance.`,'rx',ac.role,'tac');}});
+    after(15,()=>{if(ac.status==='on_final'&&!ac.cleared&&!ac._warned2){ac._warned2=true;
+      rtx(ac.callsign,`${ac.spokenCS}, short final, need clearance or we go around.`,'rx',ac.role,'tac');}});
   }
   if(al>=fin-15){
-    if(ac.cleared)startDropRun(ac);else goAround(ac);
+    if(ac._dryRun&&!ac._dryDone){ac._dryDone=true;dryPass(ac,dx,dz);return;}
+    if(ac.cleared)startDropRun(ac);
+    else if(!ac._dryRun&&!ac._lateGrace){ac._lateGrace=true;after(2.5,()=>{if(ac.status==='on_final'&&!ac.cleared)goAround(ac);});}
   }
+  if(ac._lateGrace&&ac.cleared&&!ac._lateStarted){ac._lateStarted=true;startDropRun(ac);}
 }
 // CSAS: on a go-around the tanker re-establishes downwind (it stays cleared to
 // maneuver). If the ATGS doesn't affirm the final and clear to drop, a go-around
 // shall be done.
+function dryPass(ac,dx,dz){
+  const L=ac.pendingLine;ac.status='dropping';ac.currentLeg='';
+  const len=L?Math.hypot(L.x2-L.x1,L.z2-L.z1):400;
+  ac.route=[{k:'line',px:L.x1,pz:L.z1,dx,dz,look:280,spd:ac.cruise*.8,yFn:(al,a)=>hAt(a.pos.x,a.pos.z)+72,
+    onAlong:al=>{if(al>=len&&!ac._dryEnded){ac._dryEnded=true;
+      rtx(ac.callsign,`${ac.spokenCS}, that was the line, dry. Back to the orbit.`,'rx',ac.role,'tac');
+      ac._dryRun=false;ac._dryDone=false;ac._dryEnded=false;ac._finalCalled=false;ac.pendingLine=null;ac.status='orbit';routeOrbit(ac);S.awaitingAC=null;S.awaitingQueue=S.awaitingQueue.filter(x=>x!==ac);promptToken++;hidePrompt();
+      after(2,()=>{showPrompt(ac,`"${ac.spokenCS}, good line, cleared to maneuver." — or adjust the target first.`);setNextStep(`Clear ${ac.short} to maneuver for the live drop`);});}}}];
+}
 function goAround(ac,aborted){
   ac.currentLeg='';hidePrompt();
   if(aborted)rtx(ac.callsign,`${ac.spokenCS} copies, going around, re-establishing downwind.`,'rx',ac.role,'tac');
@@ -1232,7 +1252,7 @@ function heliCycle(ac){
       if(ac.held){heliHold(ac);return;}
       if(!heliQuiet(6)){ac.route=[{k:'hover',x:POND.x,z:POND.z,y:POND_H+16,t:1.2,cb:leave}];return;}
       const t=heliDropTheta(ac),D=firePt(t,30);ac.dropPt=D;
-      ac.dipPhase='toFire';S.heliCallT=S.simT;rtx(ac.callsign,`${ac.spokenCS} is out of the dip.`,'heli',ac.role,fqOf(ac));
+      ac.dipPhase='toFire';S.heliCallT=S.simT;rtx(ac.callsign,`${ac.spokenCS} is out of the dip${ac.checkPending?', passing '+ac.checkPending:''}.`,'heli',ac.role,fqOf(ac));
       ac.route=[{k:'pt',x:D.x,z:D.z,y:hAt(D.x,D.z)+70,spd:ac.cruise,cap:70,cb:tryDrop}];
     };
     ac.route=[{k:'hover',x:POND.x,z:POND.z,y:POND_H+16,t:4.5,cb:leave}];
@@ -1294,7 +1314,7 @@ const S={simT:0,secAcc:0,elapsed:0,launched:false,blindPhase:false,blindT:0,opsA
   aircraft:[],procedures:[],awaitingAC:null,awaitingQueue:[],
   blindCount:0,blindCalls:[],blindFreqCount:{tac:0,vhf:0,rv:0},
   score:{total:0,blind:0,timing:0,freq:0,ops:0,ledger:[]},hints:true,extrasOrdered:false,selFreq:'tac',review:false,zoom:1.5,noDivert:false,divertDue:0,divertDone:false,ordered:{},heliCallT:-99,pending:null,paused:false,userPaused:false,micTest:false,vol:1,
-  reps:{blind:[],ic:[],report:[],clear:[],target:[],dropclr:[],depart:[],rotor:[]},icContacted:false,lastNearEngineDrop:null,engineToldComplete:false,safety:{deconf:0,unwarned:0,goaround:0,aborts:0},
+  reps:{blind:[],airspace:[],ic:[],report:[],clear:[],target:[],dropclr:[],depart:[],rotor:[]},icContacted:false,lastNearEngineDrop:null,engineToldComplete:false,safety:{deconf:0,unwarned:0,goaround:0,aborts:0},
   bl:{round:1,nm:13.5,dir:'south',dirC:180,done:{1:{},2:{}},seq:{1:[],2:[]}},
   enginePos:{x:-560,z:-478},engineMove:null,engineWarnedAt:null};
 let TIMESCALE=1,DEBUG=false;
@@ -1626,8 +1646,12 @@ function micEmpty(peak,held){
   if(MIC.empties===3&&S.launched)addLog('','Mic tip: key the radio, pause half a second, speak at a normal pace, and hold the key until you finish. A headset mic works best. Press ` (backtick) to see what the microphone is doing.','sys');
 }
 function deliver(text,f){
-  if(!S.launched){micTestResult(text);return;}
-  if(S.review)setPending(text,f);else processXmit(text,f);
+  let fixed=text,changes=[];
+  if(window.AUTOCORRECT){try{changes=AUTOCORRECT.changed(text)||[];const f=AUTOCORRECT(text);fixed=f.charAt(0).toUpperCase()+f.slice(1);}catch(e){fixed=text;}}
+  if(!S.launched){micTestResult(fixed);return;}
+  if(S.review)setPending(fixed,f);else processXmit(fixed,f);
+  if(changes.length){const show=changes.slice(0,3).map(([a,b])=>`“${a}” → ${b}`).join(', ');
+    addLog('',`Heard as: ${show}${changes.length>3?' …':''}`,'sys');}
 }
 // ── Microphone check on the briefing screen
 function micTestStatus(){
@@ -1743,6 +1767,7 @@ function stripSelf(s,ac){const r=SELF_RX[ac.id];return r?s.replace(r,' '):s;}
 const CLR_EL=[['altim','altimeter'],['alt','clearance altitude'],['atgs','Air Attack altitude'],['others','other aircraft altitudes'],['haz','hazards']];
 function parseAltim(s){
   let m=s.match(/\b(2[89]|30)\.(\d{2})\b/);if(m)return m[1]+'.'+m[2];
+  m=s.match(/\b(2[89]|30)(\d{2})\b(?!\s*(?:feet|ft|msl|miles?))/);if(m&&!/altimet/.test(s)&&!/^(?:00|50)$/.test(m[2]))return m[1]+'.'+m[2];
   const i=s.search(/altimet/);if(i<0)return null;
   const toks=s.slice(i).split(' ').slice(1,8);let dig='';
   for(const t of toks){
@@ -1755,13 +1780,13 @@ function parseAltim(s){
 }
 function stripAltim(s){return s.replace(/(altimet\w*\s+(?:is\s+|setting\s+)?)(\d{2}\.\d{2}|\d{4}|(?:(?:\d|zero|oh|one|two|three|four|five|six|seven|eight|nine|niner|twenty|thirty)\s*){1,4})/,'$1 ');}
 function parseAtgsAlt(s){
-  const m=stripAltim(s).match(/air\s*attack\s*(?:230\s*|2 3 0\s*|two thirty\s*)?(?:is\s*|will\s*be\s*|'s\s*)?(?:up\s*)?(?:at\s*)?(\d{4})\b/)||s.match(/\b(?:i'm|i\s+am)\s+(?:at\s+)?(\d{4})\b/);
+  const m=stripAltim(s).match(/(?:cedar\s+)?air\s*attack\s*(?:230\s*|2 3 0\s*|two thirty\s*)?(?:is\s*|will\s*be\s*|'s\s*|orbiting\s*|holding\s*|up\s*|at\s*)*(\d{4})\b/)||s.match(/\b(?:i'm|i\s+am|we're|we\s+are|i'll\s+be|we'll\s+be|i\s+will\s+be|we\s+will\s+be|i\s+am\s+going\s+to\s+be)\s+(?:up\s+|orbiting\s+|holding\s+)?(?:at\s+)?(\d{4})\b/)||s.match(/\b(\d{4})\s+(?:for|is)\s+(?:cedar\s+)?air\s*attack\b/);
   return m?+m[1]:null;
 }
 function parseOthers(s,ac){
-  if(/\bno\s+other\s+(?:aircraft|traffic|tankers?|copters?)|\bonly\s+aircraft|you're\s+the\s+(?:only|first)|first\s+aircraft|\bno\s+traffic|nobody\s+else/.test(s))return 'none';
+  if(/\bno\s+(?:other|additional|known|reported)\s+(?:aircraft|traffic|tankers?|copters?|helicopters?)|\bonly\s+(?:aircraft|one|traffic)|you're\s+the\s+(?:only|first)|you\s+are\s+the\s+(?:only|first)|first\s+(?:aircraft|one)\s+(?:in|on)|\bno\s+traffic|nobody\s+else|no\s+one\s+else|nothing\s+else\s+(?:in|on)|alone\s+in|fta\s+is\s+(?:empty|clear)|area\s+is\s+(?:empty|clear)|negative\s+traffic/.test(s))return 'none';
   const t=stripSelf(stripAltim(s),ac);
-  const m=t.match(/\b(?:tankers?|copters?|helicopters?|helos?|heli|rotor\s*wing|lead\s*plane|traffic)\b[^]{0,40}?(?:\b\d{4}\b|holding|outside|seven\s+miles|7\s+miles|in\s+orbit)/);
+  const m=t.match(/\b(?:tankers?|copters?|helicopters?|helos?|heli|rotor\s*wing|lead\s*plane|traffic|flight|s2s?|seat|hawk)\b[^]{0,40}?(?:\b\d{4}\b|holding|outside|seven\s+miles|7\s+miles|in\s+(?:the\s+)?orbit|working|dipping|on\s+the\s+(?:left|right|head|heel)|below\s+you|above\s+you|at\s+or\s+below)/)||t.match(/\b(?:left|right)[-\s]hand\s+orbit\b/);
   return m?m[0]:null;
 }
 function parseClrAlt(s,ac){
@@ -1773,7 +1798,9 @@ function parseClrAlt(s,ac){
   t=t.replace(/air\s*attack\s*(?:230\s*)?(?:is\s*|will\s*be\s*)?(?:up\s*)?(?:at\s*)?\d{4}/g,' ');
   t=stripSelf(t,ac).replace(/\b(?:tankers?|copters?|helicopters?|helos?|heli|traffic)\b[^]{0,40}?\b\d{4}\b/g,' ');
   m=t.match(/\b([1-9]\d{3})\b/);
-  return m&&/\bclear/.test(s)?+m[1]:null;
+  if(m&&/\bclear/.test(s))return +m[1];
+  m=t.match(/\bclear(?:ed)?\s+(?:in\s+)?(?:at\s+)?([1-9])(?:\s+thousand)?\b(?!\s*(?:miles?|mile|nm|hundred))/);
+  return m?+m[1]*1000:null;
 }
 function gradeClearance(s,ac){
   return {altim:parseAltim(s),alt:parseClrAlt(s,ac),atgs:parseAtgsAlt(s),others:parseOthers(s,ac),haz:RX_HAZ.test(s)?true:null,pwr:RX_PWR.test(s)};
@@ -1786,19 +1813,20 @@ function gradeClearance(s,ac){
 // Buckhorn incident, in the vicinity of Redding, Air Attack 240, 12 miles from the
 // West at 3,000, advise on Air T 21"
 const BL_EL=[['rx','receiving unit'],['vic','incident vicinity'],['cs','call sign'],['loc','distance and direction'],['alt','altitude'],['adv','"advise on" frequency']];
+const BL_PASS=5;   // 5 of 6 elements counts as a complete call; the missing one is still noted
 const BL_ORDER=['tac','vhf','rv'];
 const BL_FNAME={tac:'Air Tactics 4',vhf:'122.925',rv:'Rotor Victor'};
 function gradeBlind(s,freq,round){
   const g={};
-  g.rx=/any\s*(?:aircraft|traffic)|all\s*aircraft|aircraft\s+(?:at|on)\s+scene|responding\s+to|cedar\s*(?:fire\s*)?(?:traffic|aircraft)|fire\s*traffic/.test(s);
-  g.vic=/vicinity|\bnear\b|cedar\s*ridge|ridgeline|\barea\s+of\b/.test(s);
+  g.rx=/any\s*(?:aircraft|traffic|one|body)|all\s*(?:aircraft|traffic|stations)|aircraft\s+(?:at|on|responding)|responding\s+to|cedar\s*(?:fire\s*|incident\s*)?(?:traffic|aircraft)|fire\s*traffic|attention\s+(?:all\s+)?aircraft/.test(s);
+  g.vic=/vicinity|\bnear\b|cedar\s*ridge|ridgeline|\barea\b|grass\s*valley|nevada\s*county|\boff\s+(?:of\s+)?\w+\s+road|north\s+of|south\s+of|east\s+of|west\s+of|cedar\s+(?:fire|incident)\b/.test(s);
   g.cs=/air\s*attack/.test(s);
   const mi=s.match(/\b(\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen)\s*(?:nautical\s*)?(?:miles?|nm|mi)\b/);
   const dist=mi?numOf(mi[1]):null;
   const dir=/\b(?:north|south|east|west)(?:east|west)?\b/.test(s);g.loc=dist!=null&&dir;
   g.alt=/\b[1-9]\d{3}\b/.test(s.replace(/122\.?925/g,' '));
-  const fq={tac:/air\s*tac|tactics|\bair\s*t\b/,vhf:/\b122|one\s*two\s*two|one\s*twenty\s*two/,rv:/rotor\s*victor|\bvictor\b|\brotor\b/}[freq].test(s);
-  g.adv=/\badvise\b/.test(s)&&fq;
+  const fq={tac:/air\s*tac|tactics|\bair\s*t\b/,vhf:/\b122|one\s*two\s*two|one\s*twenty\s*two/,rv:/rotor\s*victor|\bvictor\b|\brotor\b|127\.?325|one\s*two\s*seven|one\s*twenty\s*seven/}[freq].test(s);
+  g.adv=(/\badvise\b|\bcontact\b|\bcall\b|\breport\b|\bcheck\s*in\b|\bidentify\b|\bcome\s*up\b|\bup\s+on\b/.test(s))&&fq;
   const miss=BL_EL.filter(([k])=>!g[k]).map(([,n])=>n),notes=[],want=round===1?12:7;
   if(dist!=null&&!dir)notes.push('say which direction you are from the fire — "12 miles from the southwest"');
   if(/\badvise\b/.test(s)&&!fq)notes.push(`name the frequency you are on — "advise on ${BL_FNAME[freq]}"`);
@@ -1814,11 +1842,13 @@ function structSide(){
   return Math.abs(d)<Math.PI/4?'head':d<0?'left':'right';
 }
 function parseAssignment(s){
-  const pick=w=>/left/.test(w)?'left':/right/.test(w)?'right':/heel/.test(w)?'heel':/struct|home|house/.test(w)?structSide():/head/.test(w)?'head':null;
+  const pick=w=>/left/.test(w)?'left':/right/.test(w)?'right':/heel|rear|back\s*end|origin/.test(w)?'heel':/struct|home|house|road|ridgeline|neighbou?rhood/.test(w)?structSide():/head|front/.test(w)?'head':null;
   // the assignment itself ("your drop is the left flank", "target is the head") beats orientation remarks
-  const m=s.match(/(?:drop|target|line|load|work(?:ing)?|assignment|hit|start(?:ing)?|put\s+it|go)\s+(?:is\s+|will\s+be\s+)?(?:on\s+|at\s+|across\s+|along\s+)?(?:the\s+)?(left\s*flank|right\s*flank|left\s*side|right\s*side|head|heel|structures?|homes?|houses?)\b/);
+  const m=s.match(/(?:drop|target|line|load|work(?:ing)?|assignment|hit|start(?:ing)?|put\s+it|go|lay\s+it|want\s+(?:it|you|the\s+load))\s+(?:is\s+|will\s+be\s+|to\s+be\s+)?(?:on\s+|at\s+|across\s+|along\s+|down\s+)?(?:the\s+)?(?:fire'?s?\s+)?(left\s*flank|right\s*flank|left\s*side|right\s*side|left|right|head|heel|rear|structures?|homes?|houses?)\b/);
   if(m)return pick(m[1]);
-  if(/between\s+the\s+fire\s+and\s+the\s+(?:structures|homes|houses)|protect\s+the\s+(?:structures|homes|houses)/.test(s))return structSide();
+  const ex=s.match(/left\s*flank|right\s*flank|\bthe\s*head\b|\bthe\s*heel\b/);
+  if(ex&&!/tie\s*(?:it\s*)?(?:in\s*)?(?:in)?to\s*the\s*head/.test(ex[0]))return pick(ex[0]);
+  if(/between\s+the\s+fire\s+and\s+(?:the\s+)?(?:structures|homes|houses|road)|protect\s+(?:the\s+)?(?:structures|homes|houses)|structure\s+(?:protection|defense|defence)|point\s+protection|in\s+front\s+of\s+the\s+(?:structures|homes|houses)|pretreat\s+along|along\s+(?:the\s+)?(?:road|ridgeline)\s+(?:to|in\s+front)/.test(s))return structSide();
   const t=s.replace(/(?:tie|tying)\s*(?:it\s*)?(?:in\s*)?(?:in)?to\s*the\s*head/g,' ').replace(/head\s+(?:is\s+)?(?:running|moving|making|pushing|heading)/g,' ');
   const f=t.match(/left\s*flank|right\s*flank|left\s*side|right\s*side|\bthe\s*head\b|across\s*the\s*head|pinch\s*the\s*head|\bthe\s*heel\b/);
   return f?pick(f[0]):null;
@@ -1834,7 +1864,7 @@ function gradeTarget(s){
   g.load=/full\s*load|all\s*of\s*it|whole\s*load|salvo|everything|entire\s*load/.test(s)?'full load':/half\s*(?:a\s*)?load|\bhalf\b/.test(s)?'half load':/\bsplit/.test(s)?'split load':null;
   g.tie=/(?:tie|tying)\s*(?:it\s*)?(?:in\s*)?(?:in)?to\s*the\s*head|tie\s*in\s*(?:at|with)\s*the\s*head/.test(s)?'tie in to the head'
     :/(?:tie|tying)\s*(?:it\s*)?(?:in\s*)?(?:in)?to\s*the\s*(?:road|black|anchor|heel|previous|last|retardant|line)/.test(s)?'tie in to the anchor':null;
-  g.obj=!!g.tie||/objective|parallel|pretreat|point\s*protection|structure\s*protection|tie\s*(?:it\s*)?in|tying\s*in|\btag\b|extend|anchor|hook|pinch|protect|check\s*(?:the\s*)?spread|hold\s+(?:it|the)|keep\s+(?:it|the\s+fire)|knock|cool|indirect|direct|between\s+the\s+fire|\bstop\b|slow\s+(?:it|the)|cut\s*(?:it\s*)?off|catch/.test(s);
+  g.obj=!!g.tie||!!asn&&/\b(?:hit|put\s+it|lay\s+it|want\s+(?:it|the\s+load)|start|work)\b/.test(s)||/objective|parallel|pretreat|pre-treat|point\s*protection|structure\s*(?:protection|defense|defence)|protect\s+(?:the\s+)?(?:structures?|homes?|houses?|road)|defend|buy\s+(?:some\s+)?time|box\s+(?:it|the)|check\s+line|flanking|burnout|burn\s*out|firing|tie\s*(?:it\s*)?in|tying\s*in|\btag\b|extend|anchor|hook|pinch|protect|check\s*(?:the\s*)?spread|hold\s+(?:it|the)|keep\s+(?:it|the\s+fire)|knock|cool|indirect|direct|between\s+the\s+fire|\bstop\b|slow\s+(?:it|the)|cut\s*(?:it\s*)?off|catch/.test(s);
   g.tag=/tag\s*(?:and|&|n|in|an)?\s*extend|\btag\s+(?:on|onto|the|that|his|her|your|tanker)\b|extend\s+(?:the|your|that|his|her|tanker|off)\b/.test(s);
   g.haz=RX_HAZ.test(s);g.pwr=RX_PWR.test(s);
   g.exit=/\bexit|egress|climb\s*out|\bdepart|pull\s*(?:off|up)|break\s*(?:left|right)/.test(s);
@@ -1860,17 +1890,7 @@ function gradeDepart(s){
     instr:/load\s*and\s*return|reload|\breturn\b|releas|\bhold\b/.test(s)};
 }
 // ── Report on conditions to NEU West
-const ROC_EL=[['cmd','on scene as aerial supervision'],['loc','location'],['size','size'],['pot','potential'],['fuel','fuel type'],['ros','fire behavior'],['threat','values at risk'],['res','resource needs']];
 function parseAcres(s){const m=s.match(/\b(\d{1,4})\s*(?:\+\s*)?acres?\b/)||s.match(/\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty|forty|fifty)\s+acres?\b/);return m?numOf(m[1]):null;}
-function gradeReport(s){
-  const a=parseAcres(s);
-  return {acres:a,g:{loc:/ridgeline|cedar\s*ridge|\barea\b|vicinity|center\s*point|lat|located|\boff\b/.test(s),
-    pot:/potential|could\s+(?:go|reach|get)|will\s+(?:go|reach)|expect|projected/.test(s),size:a!=null,fuel:/timber|understory|brush|grass|fuel|litter|chaparral|conifer|\boak|\bpine/.test(s),
-    ros:/rate\s*of\s*spread|\bros\b|spread|running|\bslow|moderate|rapid|dangerous|critical|creeping|backing|slope|wind/.test(s),
-    threat:/structure|home|house|threat|exposure|power|infrastructure|\broad|life/.test(s),
-    res:/resources|sufficient|adequate|\border|request|additional|\bneed|enough|current\s+assignment/.test(s),
-    cmd:/assum|cedar\s*air\s*attack|will\s+be\s+cedar|designat/.test(s)}};
-}
 // ── Reps: each one logged, scored and kept for the report card
 function recordRep(kind,label,got,of,miss,notes,extra){
   S.reps[kind].push({label,got,of,miss:miss||[],notes:notes||'',t:S.elapsed});
@@ -1918,12 +1938,14 @@ function addressees(s){
 function classify(s){
   const c={};
   c.abort=/\babort|go\s*around|break\s*(?:it\s*)?off|discontinue|knock\s*it\s*off|don't\s*drop|do\s*not\s*drop|\bno\s*drop|hold\s*(?:your|the)\s*(?:drop|load)|negative\s*(?:on\s*the\s*)?drop|stop\s*(?:the\s*)?drop/.test(s);
-  c.drop=!c.abort&&/\bclear(?:ed)?\s*(?:to|too|two|2|for|the|a|and)?\s*(?:the\s*)?dr(?:op|ap|aw|ob)|drop\s+(?:is\s+)?(?:approved|cleared)|lines?\s+(?:are\s+|is\s+)?clear|cleared\s+hot/.test(s);
+  c.drop=!c.abort&&/\bclear(?:ed)?\s*(?:to|too|two|2|for|the|a|and)?\s*(?:the\s*)?dr(?:op|ap|aw|ob)|drop\s+(?:is\s+)?(?:approved|cleared)|lines?\s+(?:are|is)\s+clear|line'?s\s+clear|cleared\s+hot/.test(s)&&!/maneuv/.test(s);
   c.manWord=/maneuver|maneuvre|maneuv|manuver|man.ver|man.over/.test(s);
   c.maneuver=!c.drop&&(c.manWord||(!/maintain/.test(s)&&/clear.*to.*man|proceed.*man|fly.*pattern|run.*pattern/.test(s)));
   c.clear=!c.drop&&!c.maneuver&&(/\bclear(?:ed)?\s+in(?:to)?\b|\baltimet|\bclear(?:ed)?\s+(?:at|to)\s+\d|you're\s+cleared|you\s+are\s+cleared|cleared\s+inbound|clear\s+to\s+enter|in\s+at\s+\d|come\s+in\s+at|enter\s+at|descend\s+and\s+maintain/.test(s));
-  c.hold=/\bhold\b|stand\s*by/.test(s);
-  c.resume=/\bcontinue\b|\bresume\b|back\s+to\s+work|press\s+on|cleared\s+back|clear(?:ed)?\s+to\s+target|cleared\s+unrestricted/.test(s);
+  c.hold=/\bhold\b|stand\s*by|\bwait\b/.test(s);
+  c.dry=/dry\s*run|show\s*me\s*(?:the|your)?\s*(?:line|run|drop)?|practice\s*run|low\s*pass/.test(s);
+  c.resume=/\bcontinue\b|\bresume\b|back\s+to\s+work|press\s+on|cleared\s+back|clear(?:ed)?\s+(?:to|for|back\s+to)\s+(?:the\s+)?(?:target|fire|work|drop)|cleared\s+unrestricted|release\s+(?:your|the)\s+hold|go\s+ahead\s+and\s+(?:continue|work|resume)|tankers?\s+(?:are|is)\s+clear|line\s+is\s+clear|you're\s+clear\s+to\s+(?:go|continue|work)/.test(s);
+  c.fence=/\bfence|virtual\s*fence|\bcheck\s*(?:point|line)?\b.*(?:at|on|along|over)\b|\bcall\s+(?:me\s+)?(?:at|over|passing|crossing)\b|report\s+(?:at|over|passing|crossing|when)\b|\bbugsmasher|hold\s+(?:north|south|east|west)\s+of|stay\s+(?:north|south|east|west)\s+of|remain\s+(?:north|south|east|west)\s+of|don'?t\s+(?:cross|go)\s+(?:north|south|east|west)/.test(s);
   c.seq=/number\s*(?:2|two)\s+behind|behind\s+(?:tanker|t)\s*\d|after\s+tanker/.test(s);
   c.brief=/coverage|objective|\btag\b|extend|flank|\bthe\s*head\b|\bthe\s*heel\b|tie\s*in|tying|full\s*load|half\s*(?:a\s*)?load|split\s*load|your\s*(?:drop|target)|target\s+is|between\s+the\s+fire/.test(s);
   c.same=/same\s+(?:target|as\s+(?:last|before)|drop|line)/.test(s);
@@ -1935,11 +1957,13 @@ function processXmit(text,freq){
   $('heard').textContent=text;$('heard').classList.remove('live');
   const s=normCall(text);
   if(/end\s*(?:the\s*)?(?:exercise|drill|sim)|terminate\s*(?:the\s*)?exercise/.test(s)){showSummary();return;}
+  if(window.N412&&(N412.waiting||N412.names(s))&&N412.onCall(s,freq))return;
   if(S.blindPhase&&['tac','vhf','rv'].includes(freq)){
     const named=addressees(s);
     if(!(named.length&&/\bclear|altimet|\bhold\b|maneuv|drop/.test(s))){recordCall(text,freq,s);return;}
   }
   if(freq==='tac2'){addLog('','CDF Tac 2 — no resources assigned on this frequency.','sys');return;}
+  if(freq==='vhf'&&!S.blindPhase&&!(window.N412&&N412.waiting)&&!/sierra\s*papa|412|cessna/.test(s)){const named=addressees(s);if(!named.length){addLog('','Nothing heard back on 122.925 — your aircraft are on Air Tactics 4'+(S.aircraft.some(a=>a.freq==='rv')?' and Rotor Victor':'')+'.','sys');return;}}
   if(freq==='guard'){addLog('','Air Guard is for emergencies. Work your aircraft on Air Tactics 4.','sys');adjustScore('freq',-1,'non-emergency traffic on Air Guard');return;}
   if(freq==='cdf'){engineTraffic(s);return;}
   if(freq==='neu'){neuTraffic(s);return;}
@@ -1966,8 +1990,21 @@ function processXmit(text,freq){
 function handleAC(ac,s,c){
   const cs=ac.spokenCS,r=ac.role,tag=r==='heli'?'heli':'rx';
   const say=m=>rtx(ac.callsign,m,tag,r,fqOf(ac));
+  // 0a — fences and checks: "Tanker 88, your fence is Ridgeline Road, stay south of it" /
+  //      "Copter 5 Bravo Tango, check at the pond" — acknowledged, remembered, graded as ops credit
+  if(c.fence&&!c.drop&&!c.clear&&!c.brief){
+    const side=(s.match(/\b(north|south|east|west)\s+of\b/)||[])[1];
+    const lm=/ridgeline|\broad\b/.test(s)?'Ridgeline Road':/pond|pilgrim/.test(s)?'Pilgrim Pond':/power\s*lines?|wires/.test(s)?'the power lines':/\bhead\b/.test(s)?'the head':/\bheel\b/.test(s)?'the heel':/structures?|homes?|houses?/.test(s)?'the structures':/nocom|7\s*miles?|seven\s*miles?/.test(s)?'the 7-mile ring':null;
+    const chk=/\bcheck|call|report/.test(s)&&!/fence/.test(s);
+    ac.fence={side,lm,chk,t:S.elapsed};S.fences=(S.fences||0)+1;
+    if(S.fences===1)adjustScore('ops',2,'fence/check set for an aircraft');
+    const what=chk?`check ${lm?'at '+lm:'point'}`:`fence${side&&lm?', staying '+side+' of '+lm:lm?' at '+lm:side?', staying '+side:''}`;
+    say(`${cs} copies the ${what}.`);
+    if(chk&&lm)ac.checkPending=lm;
+    return;
+  }
   // 0 — frequency change: "Copter 5 Bravo Tango, switch to Rotor Victor"
-  const sw=s.match(/(?:switch|go|going|come\s+up|contact\s+me|meet\s+me|move|change|push|over\s+to)\b[^]{0,24}?(rotor\s*victor|\bvictor\b|air\s*tac\w*(?:\s*4)?|\btactics\b)/);
+  const sw=s.match(/(?:switch|go|going|come\s+up|contact\s+me|meet\s+me|move|change|push|over\s+to)\b[^]{0,24}?(rotor\s*victor|\bvictor\b|127\.?325|air\s*tac\w*(?:\s*4)?|\btactics\b)/);
   if(sw){
     const to=/victor/.test(sw[1])?'rv':'tac';
     if(r!=='heli'){say(`${cs}, unable, fixed wing stays on Air Tactics 4.`);return;}
@@ -1984,11 +2021,22 @@ function handleAC(ac,s,c){
     return;
   }
   if(r==='tanker'&&c.abort&&ac.status==='dropping'){say(`${cs} — load's already away.`);return;}
+  // 1b — dry run: "Tanker 88, show me the line" / "give me a dry run"
+  if(r==='tanker'&&c.dry&&!c.drop){
+    if(ac.status==='orbit'){
+      if(!ac.targetReady&&!ac.assignment){say(`${cs} — say the target first, then we'll show you the line.`);return;}
+      if(!ac.targetReady)ac.targetReady=true;
+      ac._dryRun=true;ac.status='maneuvering';ac.currentLeg='';hidePrompt();clearAwaiting(ac);
+      adjustScore('ops',1,'dry run requested');startPattern(ac);
+      say(`${cs}, dry run on the ${asnLabel(ac.assignment||'left')}, cleared to maneuver.`);
+      setNextStep(`${ac.short} will fly the line dry — watch where it goes, then brief and clear it`);return;}
+    if(ac.status==='maneuvering'||ac.status==='on_final'){ac._dryRun=true;ac.cleared=false;say(`${cs}, copy, dry run.`);return;}
+  }
   // 2 — drop clearance: "I have your final, clear to drop"
   if(c.drop&&r==='tanker'){
     if(ac.status==='maneuvering'||ac.status==='on_final'){
       if(ac.cleared)return;
-      const onFinal=ac.status==='on_final',ack=/have\s*(?:your\s*|you\s*on\s*)?final|\bon\s+final|your\s+final/.test(s);
+      const onFinal=ac.status==='on_final',ack=/final|see\s+you|got\s+you|have\s+you|in\s+sight|tally|contact|looking\s+good/.test(s);
       ac.cleared=true;hidePrompt();clearAwaiting(ac);
       const miss=[];if(!onFinal)miss.push('clearance on final');if(!ack)miss.push('acknowledging final');
       recordRep('dropclr',`Drop clearance — ${ac.short}`,2-miss.length,2,miss,onFinal?'':'clear tankers to drop once they call final and you can see the line is clear');
@@ -2029,6 +2077,8 @@ function handleAC(ac,s,c){
     }
     if(c.same){sameTarget(ac,say);return;}
   }
+  if(r==='tanker'&&ac.status==='orbit'&&c.hold&&!c.brief&&!c.maneuver){
+    ac._holdOrbit=true;say(`${cs} copies, holding in the orbit.`);hidePrompt();clearAwaiting(ac);return;}
   // 7 — re-brief a tanker that's inbound, holding or returning
   if(r==='tanker'&&(c.brief||c.same)&&['inbound','waiting_clearance','returning'].includes(ac.status)){
     if(c.same)sameTarget(ac,say);else targetDesc(ac,s,say,false);return;
@@ -2041,11 +2091,13 @@ function handleAC(ac,s,c){
     if(t){ac.held=true;ac.seqBehind=t.id;heliHold(ac);adjustScore('ops',2,`${ac.short} sequenced behind ${t.short}`);
       say(`${cs}, number 2 behind ${t.spokenCS}, holding at the pond until ${t.short} is off the drop.`);return;}
   }
-  if(r==='heli'&&c.hold&&ac.status==='maneuvering'&&!ac.held){
+  if(r==='heli'&&(c.hold||/hold\s*(?:out|short|outside|off|at\s+the\s+dip|at\s+the\s+pond|at\s+the\s+water|clear)|stay\s+(?:out|at\s+the\s+(?:pond|dip))|remain\s+(?:clear|at)|stand\s*off|break\s*off|pull\s*off/.test(s))&&ac.status==='maneuvering'&&!ac.held){
     ac.held=true;heliHold(ac);
     if(inPattern())adjustScore('ops',2,'rotor traffic held for a tanker drop');
-    say(`${cs} copies, holding at the pond.`);return;
+    const where=/dip|pond|water/.test(s)?'at the dip site':/short|outside|out\b/.test(s)?'short of the fire':'at the pond';
+    say(`${cs} copies, holding ${where}.`);return;
   }
+  if(r==='heli'&&c.hold&&ac.held){say(`${cs} is holding.`);return;}
   if(r==='heli'&&c.resume&&ac.held){ac.held=false;say(`${cs} copies, back to work.`);heliCycle(ac);return;}
   // 9 — status
   const st={inbound:'inbound, 12 miles.',waiting_clearance:'holding outside, 7 miles.',orbit:'established.',
@@ -2103,7 +2155,7 @@ function targetDesc(ac,s,say,expectManeuver){
   markP('p3');hidePrompt();clearAwaiting(ac);
   const rb=[];if(P.tag)rb.push('tag and extend'+(P.asn?' on '+asnLabel(P.asn):''));else if(P.asn)rb.push(asnLabel(P.asn));if(P.tie&&!P.tag)rb.push(P.tie);if(P.cov)rb.push('coverage level '+P.cov);
   if(P.load)rb.push(P.load);if(P.exitAlt)rb.push(fmtAlt(P.exitAlt)+' on the exit');if(P.pwr)rb.push('copy the power line');
-  const ask=[];if(!P.asn&&!ac.assignment)ask.push('target');if(!P.cov)ask.push('coverage level');
+  const ask=[];if(!P.asn&&!ac.assignment)ask.push('target');if(!P.cov){if(ac.cov&&S.windShifted===false&&ac.lastLine)P.cov=ac.cov;else ask.push('coverage level');}
   if(ask.length){say(`${cs}${rb.length?' copies '+rb.join(', ')+'.':' —'} Say ${joinList(ask)}.`);
     showPrompt(ac,`${cs} needs: ${joinList(ask)}.`);return false;}
   ac.td.pending=false;ac.targetReady=true;ac.briefed=true;
@@ -2285,13 +2337,12 @@ function neuTraffic(s){
     S.fbDue=0;markP('p7');
     after(1.4,()=>rtx('NEU WEST','Air Attack 230, NEU West copies your update.','dsp','dispatch','neu'));return;
   }
-  const looksReport=/acres?|timber|understory|brush|grass|rate|spread|flank|threat|structure|slope|assum|at\s+scene|on\s+scene/.test(s);
+  const looksReport=/acres?|timber|understory|brush|grass|rate|spread|flank|threat|structure|slope|assum|at\s+scene|on\s+scene|potential|fuel|power\s*lines?|values|resources|cedar\s+air\s+attack|homes?/.test(s);
   if(looksReport&&!S.conditionsReported){
-    const {acres,g}=gradeReport(s),miss=ROC_EL.filter(([k])=>!g[k]).map(([,n])=>n);
-    if(ROC_EL.length-miss.length<3){after(1.4,()=>rtx('NEU WEST','Air Attack 230, NEU West, say again your size-up.','dsp','dispatch','neu'));return;}
+    const R=SIZEUP.grade(s),EL=SIZEUP.EL,got=EL.length-R.miss.length;
+    if(got<3){after(1.4,()=>rtx('NEU WEST','Air Attack 230, NEU West, say again your size-up.','dsp','dispatch','neu'));return;}
     S.conditionsReported=true;markP('p2');
-    const notes=acres!=null&&Math.abs(acres-actual)>actual*.5?`the fire is about ${actual} acres`:'';
-    recordRep('report','Size-up to NEU West',ROC_EL.length-miss.length,ROC_EL.length,miss,notes);
+    recordRep('report','Size-up to NEU West',got,EL.length,R.miss,R.notes.join('; '));
     after(1.6,()=>{
       rtx('NEU WEST','Air Attack 230, NEU West copies your Cedar Fire. Tanker 88 and Tanker 89 assigned, Copter 5 Bravo Tango en route. You are Cedar Air Attack.','dsp','dispatch','neu');
       S.aircraft.filter(a=>a.onCanvas&&!isWing(a)&&(a.status==='inbound'||a.status==='waiting_clearance')).forEach((a,i)=>{
@@ -2330,10 +2381,10 @@ function recordCall(text,freq,s){
   if(r===2&&S.bl.nm>8.5)G.notes.push('wait for 7 nm before the 7-mile calls');
   S.bl.done[r][freq]={G,orderOK};
   const got=BL_EL.length-G.miss.length;
-  const N=BL_EL.length;
+  const N=BL_EL.length;if(got>=BL_PASS&&G.miss.length)G.notes.unshift(`close — ${G.miss.join(', ')} next time`);
   recordRep('blind',`${r===1?12:7}-mile call on ${flbl(freq)}`,got,N,G.miss,G.notes.join('; '),orderOK?0:-1);
   const dot=$('bd'+({tac:1,vhf:3,rv:5}[freq]+r-1));if(dot)dot.className='bdot '+(got===N&&orderOK?'on':'warn');
-  if(freq==='vhf'&&r===1)after(3.6,()=>rtx('N412SP','Air Attack 230, November 4 1 2 Sierra Papa, light aircraft 8 miles southeast of the Cedar Fire at 4,500, westbound. Will remain clear of the fire traffic area.','dsp','dispatch','vhf'));
+  if(freq==='vhf'&&r===1)N412.onBlind(1,'vhf');
   if(BL_ORDER.every(f=>S.bl.done[r][f])){
     if(r===1){S.bl.round=2;$('bRound').textContent='7-mile calls';
       addLog('','12-mile calls done. Continuing inbound — make the 7-mile calls when the readout shows 7 nm.','sys');
@@ -2578,7 +2629,7 @@ function renderOrderMenu(){
 function toggleOrderMenu(on){const m=$('orderMenu');if(on===undefined)on=!m.classList.contains('show');if(on)renderOrderMenu();m.classList.toggle('show',on);}
 const SKILLS=[['blind','Calls in the blind','7 elements each, in frequency order'],['clear','FTA clearances','altimeter, clearance altitude, Air Attack altitude, other aircraft, hazards'],
   ['target','Target descriptions','orientation, target, objective, coverage, load, hazards, exit'],['dropclr','Drop clearances','"I have your final, clear to drop"'],
-  ['depart','Departure briefings','start, line, end, instructions'],['ic','IC contact','verify no other aircraft; objectives and priorities'],['rotor','Copter briefings','target, dip site, altitude, hazards, calls'],['report','Reports to NEU West','report on conditions and updates']];
+  ['depart','Departure briefings','start, line, end, instructions'],['ic','IC contact','verify no other aircraft; objectives and priorities'],['rotor','Copter briefings','target, dip site, altitude, hazards, calls'],['airspace','Incident airspace','callsign, remain clear / TFR, altitude or distance'],['report','Reports to NEU West','CSAS size-up: on scene, location, size, potential, fuel, ROS, behavior, values, strategy, resources']];
 function showSummary(){
   S.paused=true;
   const st=fireStats(),saved=houseObjs.filter(hh=>!hh.lost).length;
@@ -2625,6 +2676,7 @@ function frame(){
   fireLight.position.set(0,FIRE_H+70,0);fireLight.intensity=(.9+st.active*1.1)*(.85+.15*Math.sin(S.simT*11)+.08*Math.sin(S.simT*23));
   skyMat.uniforms.smoke.value=clamp(st.acres/500,0,.45);
   $('hdgV').textContent=String(Math.round(aaHeading)%360).padStart(3,'0')+'°';
+  if(frame.n===undefined)frame.n=0;if(++frame.n%10===0){$('altV').textContent=(S.launched&&!S.opsActive?4000:4000).toLocaleString('en-US');}
   $('hdgS').textContent=S.launched&&!S.opsActive?`${S.bl.nm.toFixed(1)} nm ${dirAbbr(S.bl.dirC)} of the fire, inbound at 4,000`:'right orbit';
   renderer.render(scene,camera);
   updateLabels();
@@ -2659,6 +2711,8 @@ function launch(){
   startEngineHum();requestMic();watchMicPermission();
   S.blindPhase=true;S.bl.dirC=thetaToCompass(aaTheta);S.bl.dir=dirName(S.bl.dirC);
   after(4,blindPrompt);
+  try{if(!localStorage.getItem('cedarTips')){S.showTips=true;localStorage.setItem('cedarTips','1');}}catch(e){S.showTips=true;}
+  if(S.showTips)after(1.5,()=>{addLog('','Tips: hold the key the whole time you talk; lead with the callsign; say numbers in thousands ("three thousand"). Press Scripts any time for the wording.','sys');});
   setTimeout(()=>dispatchBeeps(()=>rtx('NEU WEST','Air Attack 230, Tanker 88, Tanker 89, Copter 5 Bravo Tango, vegetation fire, Cedar Ridge area off Ridgeline Road. elevation 1,500. Engine 2362 at scene, Cedar IC, reporting 10 acres in timber understory, dangerous rate of spread, structures threatened. Air Attack 230, Tanker 88, Tanker 89, Copter 5 Bravo Tango.','dsp','dispatch','neu')),900);
 }
 
@@ -2685,7 +2739,10 @@ function openHelp(){
   <div class="model">“Any aircraft at scene or responding to the Cedar incident, in the vicinity of Cedar Ridge, Air Attack 230, 12 miles from the ${S.bl.dir} at 4,000, advise on Air Tactics 4.”</div>
   <h3>2. IC on CDF A/G 3, then size-up to NEU West</h3>
   <div class="model">“Engine 2362, Air Attack 230, any aircraft on scene? Say your objectives and priorities.”</div>
-  <div class="model">“NEU West, Air Attack 230 at scene Cedar Fire, Cedar Ridge area off Ridgeline Road. 10 acres, potential 100, timber understory, moderate rate of spread, structures threatened on Ridgeline Road. Current resources sufficient. Air Attack 230 will be Cedar Air Attack.”</div>
+  <div class="model">“${SIZEUP.example}”</div>
+  <p>CSAS size-up elements: on scene as aerial supervision, location, size, potential, fuel, rate of spread, fire behavior (wind, slope), values at risk, strategy, resource needs.</p>
+  <h3>Transiting aircraft on 122.925</h3>
+  <div class="model">“${N412.model}”</div>
   <h3>3. Clearance into the FTA — altimeter, assigned altitude, Air Attack altitude, other aircraft, hazards</h3>
   <div class="model">“Tanker 88, Cedar Air Attack, altimeter 30.02, you're cleared in at 3,000. Cedar Air Attack is at 4,000. No other aircraft. Power lines along Ridgeline Road are your hazard.”</div>
   <p>A flight checks in together (“Tanker 88, flight of 2 with Tanker 89”). Clear it with one call to “Tanker 88 flight”; each tanker reads back. Then brief and clear them to maneuver one at a time: “Tanker 88, cleared to maneuver number 1. Tanker 89, number 2.”</p>
@@ -2695,12 +2752,15 @@ function openHelp(){
   <p>Timber litter and understory is coverage level 4; use 6 on a running head. A full S-2T load lays about 320 ft at coverage level 4 and 140 ft at coverage level 6.</p>
   <h3>5. Maneuver and drop</h3>
   <div class="model">“Tanker 88, cleared to maneuver.” … on final: “Tanker 88, I have your final; clear to drop.”</div>
-  <p>No more than two tankers maneuvering at once. If you don't affirm the final, the tanker goes around. “Tanker 88, go around” aborts a run.</p>
+  <p>No more than two tankers maneuvering at once. The tanker gives you about 15 seconds on final (with two reminders) before it goes around. “Tanker 88, go around” aborts a run. “Tanker 88, show me the line” flies a dry run first.</p>
+  <h3>Fences and checks</h3>
+  <div class="model">“Tanker 89, your fence is Ridgeline Road, stay south of it.” … “Copter 5 Bravo Tango, check at the pond, call me passing it.”</div>
+  <p>Other drop objectives the tankers understand: structure protection or defense, point protection, pretreat along the road, parallel, indirect, tag and extend.</p>
   <h3>6. Departure briefing — start, line, end, then instructions</h3>
   <div class="model">“Tanker 88, good start, good line, good end. Load and return.”</div>
   <h3>7. Copters — target, dip site, hard ceiling, hazards, reports</h3>
   <div class="model">“Copter 5 Bravo Tango, objective is direct attack on the right flank. Dip site is Pilgrim Pond. Hard ceiling 2,000. Caution power lines along Ridgeline Road. Call your dips and drops.”</div>
-  <p>Copters dip one at a time, in order. To move them off the tanker frequency: “Copter 5 Bravo Tango, switch to Rotor Victor” — then talk to that copter on Rotor Victor.</p>
+  <p>Copters dip one at a time, in order. To move them off the tanker frequency: “Copter 5 Bravo Tango, switch to Rotor Victor (127.325)” — then talk to that copter on Rotor Victor. Hold them with “hold at the dip”, “hold out for the tanker”, “hold short of the fire” or “stay at the pond”; release them with “resume”, “back to work” or “tankers are clear”.</p>
   <p>Deconflict before a tanker drops: “Copter 5 Bravo Tango, hold at the pond” then “resume”, or “clear to target, number 2 behind Tanker 88”.</p>
   <h3>8. Ground</h3>
   <p>On CDF A/G 3, warn Engine 2362 before retardant comes in near them (“retardant inbound, clear the area”), and tell them when the drop is complete. Give NEU West a fire behavior update when they ask. Order more aircraft by type on NEU West (“request one large airtanker”, “one type 1 helicopter”, “one SEAT”) or from Order aircraft. With structures threatened: “NEU West, Air Attack 230, request no divert on Tanker 88 and Tanker 89.” Say “end exercise” for your report card.</p>`;
@@ -2769,6 +2829,404 @@ window.addEventListener('blur',()=>{pttCode=null;});
 setReview(false);
 try{const o=JSON.parse(localStorage.getItem('cedarATGS3')||'{}');if(o.hints===false)setHints(false);if(o.review===true)setReview(true);if(o.zoom>=.8&&o.zoom<=2.4)S.zoom=o.zoom;}catch(e){}
 boot();
+</script>
+<script>
+// ════════════════════════════════════════════════════════════════════
+//  SIZEUP — CSAS (Mar 2025) size-up to dispatch, graded element by element.
+//  Ch. 6 at-scene procedure: "Call dispatch, notify you are the on scene
+//  aerial supervision and provide size-up." Size-up elements (CSAS Ch. 6):
+//  values at risk; current size and potential; fuel models and rates of
+//  spread; fire behavior elements (wind, terrain, aspect); recommended
+//  strategy; and for dispatch a center point and resource needs.
+//  Input s is already normalized by normCall().
+//
+//  N412 — two-way exchange with the transiting Cessna on 122.925 (CSAS Ch. 3
+//  Incident Airspace: non-participating aircraft are asked to remain clear;
+//  aerial supervision advises, it cannot clear civil traffic through; a TFR
+//  is requested through dispatch).
+//  Globals used (all defined in atgs_v32.js): S, numOf, parseAcres, dirName,
+//  fireStats, rtx, after, adjustScore, addLog, recordRep, showPromptRaw,
+//  setNextStep, hidePrompt, fmtAlt, joinList, blindPrompt.
+// ════════════════════════════════════════════════════════════════════
+(function(){
+  'use strict';
+  var DIRS='northeast|northwest|southeast|southwest|north|south|east|west|ne|nw|se|sw';
+  var DEG={north:0,northeast:45,east:90,southeast:135,south:180,southwest:225,west:270,northwest:315,
+    n:0,ne:45,e:90,se:135,s:180,sw:225,w:270,nw:315};
+  var WN='(?:\\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty)';
+  function joinDirs(s){
+    return s.replace(/\b(north|south)\s+(east|west)\b/g,'$1$2').replace(/\b(north|south|east|west)erly\b/g,'$1')
+      .replace(/\b(northeast|northwest|southeast|southwest)erly\b/g,'$1');
+  }
+  function wordNum(w){
+    // "twenty five" → 25 ; digits pass through ; single words via numOf
+    if(w==null)return null;var p=String(w).trim().split(/\s+/);
+    if(p.length===2){var a=numOf(p[0]),b=numOf(p[1]);if(a!=null&&b!=null&&a>=20&&a%10===0&&b<10)return a+b;}
+    return numOf(p[p.length-1]);
+  }
+  // Current size: the first acreage that is not part of a potential/forecast clause.
+  var RX_POTCTX=/(?:potential|could|will|expect\w*|projected|project|up\s+to|reach|hit|make|go|another|additional)\s+(?:\w+\s+){0,3}$/;
+  function sizeOf(s){
+    var rx=new RegExp('\\b('+WN+'(?:\\s+(?:one|two|three|four|five|six|seven|eight|nine))?|\\d+(?:\\.\\d+)?|half(?:\\s+an)?|a\\s+quarter|quarter(?:\\s+of\\s+an)?|an?)\\s*(?:\\+\\s*)?(?:plus\\s+)?acres?\\b','g');
+    var m;
+    while((m=rx.exec(s))){
+      var pre=s.slice(Math.max(0,m.index-40),m.index);
+      if(RX_POTCTX.test(pre))continue;
+      var w=m[1],v;
+      if(/^half/.test(w))v=.5;else if(/quarter/.test(w))v=.25;else if(/^an?$/.test(w))v=1;
+      else if(/^\d+(?:\.\d+)?$/.test(w))v=+w;else v=wordNum(w);
+      if(v==null){v=parseAcres(m[0]);}
+      if(v!=null)return v;
+    }
+    // "10 acre fire", "a 10 acre", fall back to the app's own parser
+    return parseAcres(s);
+  }
+  function windFrom(s){
+    s=joinDirs(s);var m,D='('+DIRS+')';
+    // toward: "wind pushing it to the northeast", "wind driven toward the northeast"
+    if((m=s.match(new RegExp('\\bwinds?\\s+(?:\\w+\\s+){0,3}?(?:to(?:ward)?s?|into)\\s+the\\s+'+D+'\\b')))||
+       (m=s.match(new RegExp('\\bwinds?\\s+(?:driven|pushing|pushed|blowing)\\s+(?:\\w+\\s+){0,2}?(?:to(?:ward)?s?\\s+)?(?:the\\s+)?'+D+'\\b'))))
+      return {name:m[1],deg:(DEG[m[1]]+180)%360,toward:true};
+    if((m=s.match(new RegExp('\\bwinds?\\s+(?:\\w+\\s+){0,3}?(?:out\\s+of|from|coming\\s+from|off)\\s+(?:of\\s+)?(?:the\\s+)?'+D+'\\b')))||
+       (m=s.match(new RegExp('\\b'+D+'\\s+winds?\\b')))||
+       (m=s.match(new RegExp('\\bwinds?\\s+(?:are\\s+|is\\s+|out\\s+)?'+D+'\\b')))||
+       (m=s.match(new RegExp('\\b'+D+'\\s+(?:at\\s+)?'+WN+'\\s+(?:mph|miles\\s+(?:an|per)\\s+hour|knots)\\b'))))
+      return {name:m[1],deg:DEG[m[1]],toward:false};
+    return null;
+  }
+  function angDiff(a,b){var d=Math.abs(((a-b)%360+360)%360);return d>180?360-d:d;}
+  var FULL={n:'north',ne:'northeast',e:'east',se:'southeast',s:'south',sw:'southwest',w:'west',nw:'northwest'};
+
+  var EL=[['onscene','on scene as aerial supervision'],['loc','location / center point'],['size','current size'],['pot','potential'],
+    ['fuel','fuel type'],['ros','rate of spread'],['behavior','fire behavior (wind, terrain, aspect)'],['values','values at risk'],
+    ['strategy','recommended strategy'],['resources','resource needs']];
+
+  function grade(s){
+    s=' '+String(s||'')+' ';
+    s=s.replace(/\bunder\s+story\b/g,'understory').replace(/\bmid\s+slope\b/g,'midslope').replace(/\bup\s+slope\b/g,'upslope')
+       .replace(/\bdown\s+slope\b/g,'downslope').replace(/\bon\s+seen\b/g,'on scene').replace(/\bat\s+seen\b/g,'at scene');
+    var sd=joinDirs(s);
+    var acres=sizeOf(s);
+    // Strip other units' "at scene" so E-2362 at scene doesn't count as ours
+    var own=s.replace(/\b(?:engine|e|eng|ic|dozer|crews?|units?|resources|ground\s+\w+|tankers?|copters?|helicopters?)\s+(?:\d+\s+)*(?:is\s+|are\s+)?(?:already\s+)?(?:at|on)\s+scene\b/g,' ');
+    // place names that would otherwise read as terrain
+    var terr=s.replace(/\bcedar\s+ridge\b|\bridgeline\s+(?:road|rd|drive)\b|\bridge\s+(?:road|rd)\b|\b(?:on|off|along|at|near)\s+ridgeline\b/g,' ');
+    var g={
+      onscene:/(?:air\s+attack(?:\s+(?:2\s*30|two\s+thirty))?|\b230|\btwo\s+thirty|\bi\s+am|\bi'm|\bwe\s+are|\bwe're|aerial\s+supervision|\baa)\s+(?:is\s+)?(?:now\s+|just\s+)?(?:arrived\s+|arriving\s+)?(?:at|on|over)\s+(?:the\s+)?(?:scene|station|fire|incident)\b/.test(own)||
+        /^\s*(?:at|on)\s+scene\b/.test(own)||/\boverhead\s+(?:the\s+)?(?:cedar|fire|incident)|\b(?:arrived|arriving)\s+(?:at|on)\s+scene/.test(own)||
+        /\bassum\w*\s+(?:cedar\s+)?(?:air\s+attack|aerial\s+supervision|air\s+tactical|command\s+of\s+the\s+air|the\s+air|atgs)|\b(?:will\s+be|is\s+now|is|be)\s+cedar\s+air\s+attack|\bcedar\s+air\s+attack\b|\bdesignat\w*\s+(?:as\s+)?cedar/.test(own),
+      loc:/\bcedar\s+ridge\b|\bridgeline\b|\bridge\s+road\b|\b\w+\s+(?:road|rd|highway|hwy|creek|drive|lane|lake|river)\b|\bhighway\s+\d+|\b(?:lat(?:itude)?|long(?:itude)?|lat\s+long|coordinates|center\s*point|centre\s*point|vicinity|located|location)\b|\b39\s+\d{1,2}\b[^]{0,30}\b121\s+\d{1,2}\b|\b(?:\d+|one|two|three|four|five|a)\s+(?:and\s+a\s+half\s+)?miles?\s+(?:to\s+the\s+)?(?:north|south|east|west|northeast|northwest|southeast|southwest)\s+of\b|\b(?:north|south|east|west|northeast|northwest|southeast|southwest)\s+of\s+(?:the\s+)?(?!the\s+fire|fire|it\b|us\b)\w+|\bnear\s+(?!the\s+(?:head|heel|flank))\w+|\boff\s+(?:of\s+)?(?:ridgeline|\w+\s+(?:road|rd|highway))/.test(joinDirs(s)),
+      size:acres!=null,
+      pot:/\bpotential\b|\bcould\s+(?:go|reach|get|make|run|burn|be)\b|\bwill\s+(?:go|reach|get|make|burn)\b|\bexpect\w*\b|\bproject(?:ed|ing)?\b|\bforecast|\bthreatening\s+to\s+(?:go|reach|make)|\bup\s+to\s+\d+\s+acres|\bif\s+(?:it|this|we)\s+(?:gets?|reach\w*|don't|do\s+not|cross\w*)|\blarge\s+fire\b|\bextended\s+attack\b|\bhas\s+room\s+to\s+run|\bgood\s+chance|\blikely\s+to\b/.test(s),
+      fuel:/\btimber\b|\bunderstory\b|\blitter\b|\bneedle\s+cast|\bbrush\b|\bchaparral\b|\bchamise\b|\bmanzanita\b|\bceanothus\b|\bgrass(?!\s+valley)\w*|\boak\w*|\bpines?\b|\bconifers?\b|\bfuels?\b|\bfuel\s+model\b|\bfm\s*\d+|\bwoodland|\bslash\b|\bheavy\s+(?:dead\s+)?(?:down|fuel)|\bmixed\s+(?:conifer|timber|brush)|\bforest|\bdead\s+and\s+down|\bfir\b|\bcedar\s+(?:trees|stand)|\btrees\b/.test(s),
+      ros:/\brate\s+(?:of|a|uh)\s+spread\b|\bros\b|\br\s+o\s+s\b|\b(?:slow|moderate|rapid|dangerous|critical|extreme|high|low|fast|minimal)\s+(?:rate|spread|ros|r\s+o\s+s)|\b(?:spread(?:ing)?|moving|progressing)\s+(?:is\s+|at\s+a\s+)?(?:\w+\s+)?(?:slow|moderate|rapid|fast|quick)\w*|\b(?:slow|moderate|rapid|dangerous|critical|extreme)(?:ly)?\b|\brunning\b|\bmaking\s+(?:a\s+)?runs?\b|\bcreeping\b|\bbacking\b|\bchains?\s+(?:per|an|a)\s+hour\b|\bactively\s+spreading|\bforward\s+(?:rate|spread|progress)|\bspreading\b|\bsmoldering\b|\bholding\s+in\s+place|\bnot\s+moving/.test(s),
+      behavior:/\bwinds?\b|\bmph\b|\bgust\w*|\bslope\b|\bupslope\b|\bdownslope\b|\bmidslope\b|\bterrain\b|\baspect\b|\bexposure\b|\bfacing\s+slope|\bridge(?:top|line)?s?\b|\bcanyon\b|\bdrainage\b|\bchimney\b|\bsaddle\b|\bdraw\b|\bspotting\b|\bspots?\b|\bspot\s+fires?\b|\btorching\b|\bcrown\w*\b|\bflame\s+lengths?\b|\bfoot\s+flames|\bfeet\s+(?:of\s+)?flames|\bflames?\s+\d+|\bfire\s+behavior\b|\balignment\b|\btopograph\w*|\bsteep\b|\bflat\b|\bbluff\b|\bhillside\b|\bmid\s+slope\b|\bupcanyon|\bdowncanyon|\b(?:head|fire)\s+(?:is\s+)?(?:running|moving|pushing|heading)\s+(?:up|down)/.test(terr),
+      values:/\bstructures?\b|\bhomes?\b|\bhouses?\b|\bresidenc\w+|\bdwellings?\b|\bsubdivision\b|\bcommunit\w+|\bneighborhood\b|\btown\b|\bbuildings?\b|\boutbuildings?\b|\bimprovements\b|\bthreat(?:s|ened)?\b(?!\s+to\s+(?:go|reach))|\bexposures\b|\blife\b|\blives\b|\blife\s+safety|\bpower\s*lines?\b|\btransmission\s+lines?\b|\butilit\w+|\binfrastructure\b|\bvalues\s+at\s+risk\b|\bvalues\b|\bevacuat\w+|\bcell\s+towers?\b|\bpeople\b|\bresidents?\b|\branch\w*|\bwatershed\b|\bcampground\b|\bcommercial\b|\bpower\s+line\b|\bat\s+risk\b/.test(s),
+      strategy:/\bdirect\b|\bindirect\b|\bparallel\b|\bpoint\s+protection\b|\bstructure\s+(?:protection|defense|defence)\b|\bperimeter\s+(?:control|protection)\b|\banchor\w*|\bflank(?:ing)?\s+attack|\bpinch\w*\s+(?:off\s+)?(?:the\s+)?head|\bhold\s+(?:it\s+|the\s+fire\s+|the\s+head\s+)?(?:at|to|on|below|south\s+of|north\s+of)\b|\btie\s+(?:it\s+)?in\b|\bcheck\s+(?:the\s+)?(?:head|spread|forward)|\bstop\s+(?:the\s+)?forward\s+(?:spread|progress)|\bcut\s+off\s+the\s+head|\bhit\s+the\s+head|\bgo\s+after\s+the\s+(?:head|flank)|\bwork\s+(?:the\s+)?(?:flanks?|heel)\b|\bcontain\w*\b|\bconfine\w*\b|\bkeep\s+it\s+(?:south|north|east|west|below|off|out|on|away|from)\b|\bkeep\s+(?:the\s+)?fire\b|\bprotect\w*\s+(?:the\s+)?(?:homes|structures|houses|power|values|road|community)|\bretardant\s+(?:on|along|to|line|around|at)\b|\bline\s+(?:on|along|around)\s+the\b|\bprioriti\w+|\bpriority\b|\bstrateg\w+|\btactics?\b|\brecommend\w*|\bplan\s+is\b|\bknock\s+(?:it\s+)?down|\bfull\s+suppression|\bcatch\s+(?:it|the\s+fire)\b|\bheel\s+to\s+(?:the\s+)?head\b/.test(s),
+      resources:/\bresources?\b|\bsufficient\b|\badequate\b|\benough\b|\border(?:ing|ed)?\b|\brequest\w*\b|\bneed(?:s|ed|ing)?\b|\badditional\b|\bmore\s+(?:tankers?|engines?|crews?|dozers?|aircraft|copters?|helicopters?|helos?|air|ground|help)|\bcancel\w*\b|\brelease\b|\bdivert\w*\b|\bno\s+(?:further|additional|more)\b|\bnothing\s+(?:further|more|additional)|\bwhat\s+(?:we|i)\s+have\b|\bfill\s+(?:the\s+)?order|\bbump\s+(?:up\s+)?(?:the\s+)?(?:response|assignment)|\bupgrade\b|\bdowngrade\b|\bstrike\s+team\b|\bhold\s+(?:the\s+)?(?:assignment|response)|\bcurrent\s+assignment\b|\bkeep\s+(?:the\s+)?(?:assignment|response|tankers|resources)\b|\bsend\s+(?:me\s+|us\s+)?(?:\w+\s+)?(?:tankers?|engines?|crews?|dozers?|copters?|helicopters?|aircraft)/.test(s)
+    };
+    var miss=EL.filter(function(e){return !g[e[0]];}).map(function(e){return e[1];});
+    var notes=[];
+    try{
+      var actual=Math.round(fireStats().acres);
+      if(acres!=null&&actual>0&&Math.abs(acres-actual)>actual*.5)notes.push('the fire is about '+actual+' acres');
+    }catch(e){}
+    var w=windFrom(sd);
+    if(w&&S&&S.wx){
+      if(angDiff(w.deg,S.wx.dir)>60){
+        var truth=dirName(S.wx.dir);
+        notes.push(w.toward?'the wind is out of the '+truth+', pushing the fire '+dirName(S.wx.dir+180)+' — you called it toward the '+(FULL[w.name]||w.name)
+          :'the wind is out of the '+truth+', not the '+(FULL[w.name]||w.name));
+      }
+    }
+    return {acres:acres,g:g,miss:miss,notes:notes,wind:w};
+  }
+
+  window.SIZEUP={EL:EL,grade:grade,windFrom:windFrom,sizeOf:sizeOf,
+    example:'NEU West, Air Attack 230 is on scene at the Cedar Fire. Center point Cedar Ridge, off Ridgeline Road. '+
+      'The fire is 10 acres in timber understory, midslope, head running northeast upslope with a moderate rate of spread, '+
+      'southwest wind at 12. Potential for 100 acres. Homes threatened on Ridgeline Road off the left flank, power lines along the road. '+
+      'Engine 2362 is at scene. Two S-2Ts and a Type 2 copter assigned. '+
+      'Recommend direct attack, anchored at the heel on Ridgeline Road, retardant on the left flank to protect the homes and pinch off the head. '+
+      'Current resources are sufficient. Air Attack 230 will be Cedar Air Attack.'};
+
+  // ══════════════════════════════════════════════════════════════════
+  //  N412SP — transiting Cessna 182 on 122.925
+  // ══════════════════════════════════════════════════════════════════
+  var LABEL='Transiting aircraft on 122.925';
+  var N_EL=[['cs','addressed N412SP by callsign'],['clear','remain-clear / avoidance instruction'],['alt','altitude or distance to stay outside']];
+  var MODEL='"November 4 1 2 Sierra Papa, Air Attack 230, a TFR is being established over the Cedar Fire. Remain clear of the fire area — suggest you stay south of the fire and above 5,500 (or: remain 5 miles clear)."';
+  var RX_NAME=/sierra\s+pap\w*|\b412\s*(?:sp|s\s*p)?\b|\b4\s+1\s+2\b|\b4\s+12\b|\bfour\s+(?:one\s+two|twelve)\b|\bnovember\s+(?:4|four|for)\b|\bn\s*412\b|\bcessna\b|\blight\s+aircraft\b|\bthe\s+182\b/;
+  var RX_CLEAR=/\bremain\s+(?:well\s+)?(?:clear|outside|south|north|east|west|above|out)\b|\bstay\s+(?:well\s+)?(?:clear|out|away|south|north|east|west|outside|above|\d+)|\bkeep\s+(?:well\s+)?(?:clear|out|away|south|north|east|west|outside|above)\b|\bavoid\w*\b|\btfr\b|\bt\s+f\s+r\b|\btemporary\s+flight\s+restriction|\bfire\s+traffic\s+area\b|\bfta\b|\bdeviate\b|\bdivert\b|\b(?:go|route|fly|pass|transit)\s+(?:\w+\s+){0,2}?(?:around|south|north|east|west)\b|\b(?:do\s+not|don't|not\s+to|unable\s+to)\s+(?:enter|transit|cross|overfly|fly\s+over|come)|\bclear\s+of\s+the\s+(?:fire|area|incident)\b|\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|fifteen|twenty)\s+miles?\s+(?:clear|outside|away|from)\b/;
+  var RX_THRU=/\b(?:clear(?:ed)?\s+(?:to\s+)?(?:transit|through|cross|over|direct|as\s+requested|westbound|eastbound)|you(?:'re|\s+are)\s+(?:cleared|clear\s+to|good\s+to)|\bapproved\b|\bgo\s+ahead\s+(?:and\s+)?(?:transit|through|westbound|cross)|\bcontinue\s+(?:westbound|on\s+course|as\s+planned|through)|\bno\s+(?:factor|problem|conflict)|\bpermission\s+granted)/;
+  var RX_ALT=/\b(?:above|over|at\s+or\s+above|or\s+higher|climb(?:ing)?\s+(?:to|and\s+maintain)|maintain|minimum(?:\s+of)?|at\s+least|not\s+below|no\s+lower\s+than)\s+(\d{4,5})\b|\b(\d{4,5})\s+(?:feet\s+)?(?:or\s+(?:above|higher)|and\s+above|msl|agl)\b|\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|fifteen|twenty)\s+(?:nautical\s+)?miles?\b|\b(\d+)\s+mile\s+radius\b/;
+  var N={waiting:false,started:false,done:false,asks:0,tok:0,best:null,
+    reset:function(){N.waiting=false;N.started=false;N.done=false;N.asks=0;N.best=null;N.tok++;},
+    say:function(m){rtx('N412SP',m,'dsp','dispatch','vhf');},
+    names:function(s){return RX_NAME.test(' '+s+' ');}
+  };
+  function ensureReps(){if(S.reps&&!S.reps.airspace)S.reps.airspace=[];}
+  function gradeN(s){
+    s=' '+joinDirs(s)+' ';
+    var thru=RX_THRU.test(s)&&!/\b(?:not|unable|cannot|can't|can\s+not)\s+(?:\w+\s+){0,2}clear/.test(s);
+    var g={cs:RX_NAME.test(s),clear:RX_CLEAR.test(s),alt:RX_ALT.test(s)};
+    var miss=N_EL.filter(function(e){return !g[e[0]];}).map(function(e){return e[1];});
+    var notes=[];
+    if(thru)notes.push(g.clear?'don’t "clear" civil traffic — advise them to remain clear':'aerial supervision can’t clear civil traffic through the fire area — advise them to remain clear');
+    var dm=s.match(/\b(?:stay|remain|keep|go|route|fly|pass|transit|deviate)\s+(?:well\s+)?(?:\w+\s+){0,2}?(north|south|east|west|northeast|northwest|southeast|southwest)\b/)||
+           s.match(/\b(north|south|east|west|northeast|northwest|southeast|southwest)\s+of\s+the\s+(?:fire|area|incident)\b/);
+    var am=s.match(/\b(?:above|over|at\s+or\s+above|climb(?:ing)?\s+(?:to|and\s+maintain)|maintain|minimum(?:\s+of)?|at\s+least|not\s+below|no\s+lower\s+than)\s+(\d{4,5})\b|\b(\d{4,5})\s+(?:feet\s+)?(?:or\s+(?:above|higher)|and\s+above)/);
+    var mm=s.match(/\b(\d+|one|two|three|four|five|six|seven|eight|nine|ten|fifteen|twenty)\s+(?:nautical\s+)?miles?\b/);
+    return {g:g,got:N_EL.length-miss.length,miss:miss,notes:notes,thru:thru,
+      dir:dm?dm[1]:'south',alt:am?+(am[1]||am[2]):null,mi:mm?numOf(mm[1]):null};
+  }
+  function finish(G,leaveMsg){
+    N.waiting=false;N.done=true;N.tok++;
+    try{hidePrompt();}catch(e){}
+    ensureReps();
+    recordRep('airspace',LABEL,G.got,N_EL.length,G.miss,G.notes.join('; '));
+    if(leaveMsg)after(1.4,function(){N.say(leaveMsg);});
+    after(2,function(){if(S.blindPhase&&typeof blindPrompt==='function')blindPrompt();else setNextStep('');});
+  }
+  function armTimeout(){
+    var tk=++N.tok;
+    after(60,function(){
+      if(tk!==N.tok||!N.waiting)return;
+      N.say('Air Attack 230, 4 1 2 Sierra Papa, we’ll remain clear to the south.');
+      var G=N.best||{got:0,miss:N_EL.map(function(e){return e[1];}),notes:['N412SP got no answer']};
+      if(!N.best)G.notes=['N412SP got no answer'];
+      else G.notes=G.notes.concat(['N412SP never got a usable answer']);
+      finish(G,null);
+    });
+  }
+  N.onBlind=function(round,freq){
+    if(round!==1||freq!=='vhf'||N.started)return;
+    N.started=true;
+    after(3.6,function(){
+      N.say('Air Attack 230, November 4 1 2 Sierra Papa, Cessna 182, 8 miles southeast of the Cedar Fire at 4,500, westbound. Request to transit.');
+      N.waiting=true;N.asks=0;N.best=null;
+      after(.6,function(){if(!N.waiting)return;showPromptRaw('N412SP — transiting Cessna on 122.925',MODEL);setNextStep('Answer N412SP on 122.925 — have them remain clear');});
+      armTimeout();
+    });
+  };
+  N.onCall=function(s,freq){
+    s=String(s||'');
+    var named=N.names(s);
+    if(!N.waiting){
+      if(!named)return false;
+      if(freq!=='vhf'){addLog('','N412SP is on 122.925.','sys');adjustScore('freq',-1,'called N412SP on the wrong frequency');return true;}
+      var G0=gradeN(s);
+      after(1.4,function(){
+        if(G0.g.clear)N.say('4 1 2 Sierra Papa copies, remaining clear of the fire area to the '+G0.dir+'.');
+        else N.say(N.started?'4 1 2 Sierra Papa is 10 miles south of the fire, clear of the area.':'Air Attack 230, 4 1 2 Sierra Papa, Cessna 182, 9 miles southeast of the Cedar Fire at 4,500, westbound.');
+      });
+      return true;
+    }
+    // Waiting for an answer. Unnamed traffic is ours only if it is on 122.925,
+    // is not a blind call, and isn't addressed to another aircraft.
+    if(!named){
+      if(freq!=='vhf')return false;
+      if(/\bany\s+aircraft\b|\badvise\s+on\b/.test(s))return false;
+      try{if(typeof addressees==='function'&&addressees(s).length)return false;}catch(e){}
+      if(!RX_CLEAR.test(s)&&!RX_THRU.test(s)&&!RX_ALT.test(s))return false;
+    }
+    if(freq!=='vhf'){addLog('','N412SP is on 122.925.','sys');adjustScore('freq',-1,'answered N412SP on the wrong frequency');return true;}
+    var G=gradeN(s);
+    if(!N.best||G.got>N.best.got)N.best=G;
+    if(G.g.clear){
+      var parts=['4 1 2 Sierra Papa copies, remaining clear of the fire area to the '+G.dir];
+      if(G.alt)parts.push(', climbing to '+fmtAlt(G.alt));
+      else if(G.mi)parts.push(', '+G.mi+' miles clear');
+      var msg=parts.join('')+'. Good day.';
+      finish(G,null);
+      after(1.4,function(){N.say(msg);});
+      return true;
+    }
+    N.asks++;
+    if(N.asks>2){finish(N.best,'4 1 2 Sierra Papa, we’ll remain clear to the south. Good day.');return true;}
+    after(1.4,function(){N.say('4 1 2 Sierra Papa, say again?');});
+    if(G.thru)addLog('','You can’t clear civil traffic through the fire area — advise N412SP to remain clear.','sys');
+    armTimeout();
+    return true;
+  };
+  N.grade=gradeN;N.EL=N_EL;N.model=MODEL;
+  window.N412=N;
+})();
+
+</script>
+<script>
+/* ATGS radio trainer — speech-to-text auto-correct layer.
+ * window.AUTOCORRECT(text) -> text   (apply to the RAW transcript, before normCall)
+ * window.AUTOCORRECT.table           ordered [regex, replacement, note] rules
+ * window.AUTOCORRECT.changed(text)   -> [[from,to],...] substitutions made (for a "heard as" hint)
+ * Output is lower case. Only this scenario's vocabulary is touched; every rule is anchored
+ * to a callsign, a radio keyword or a number so ordinary English passes through unchanged.
+ * Plain script, ES2019, no lookbehind.
+ */
+(function(){
+  'use strict';
+  var U = '(?:one|won|two|to|too|three|tree|free|four|for|fore|five|six|sex|seven|eight|ate|nine|niner)';
+  var D = { zero:'0', oh:'0', o:'0', one:'1', won:'1', two:'2', to:'2', too:'2', three:'3', tree:'3', free:'3',
+            four:'4', 'for':'4', fore:'4', five:'5', fife:'5', six:'6', sex:'6', seven:'7', eight:'8', ate:'8', nine:'9', niner:'9' };
+  var TENS = { twenty:'2', thirty:'3', forty:'4', fifty:'5', sixty:'6', seventy:'7', eighty:'8', ninety:'9' };
+  var dig = function(w){ return /^\d$/.test(w) ? w : (D[w] || ''); };
+  var R = function(src, flags){ return new RegExp(src, flags || 'g'); };
+  var finalCtx = function(s){ return /\bfinal|\bdrop\b/.test(s); };
+
+  // Tanker / copter prefixes Chrome produces for "tanker" / "copter"
+  var TPFX = '(?:tanker|tankers|tinker|thinker|anchor|banker|tanger|tanka|taker|tank\\s+(?:or|her|a)|tank)';
+  var CPFX = '(?:copter|copters|copper|coptor|kopter|captor|cop\\s+her|helicopter|heli|chopper)';
+
+  var T = [
+    // ── 1. callsigns ───────────────────────────────────────────────
+    [R('\\b' + TPFX + '\\s+(?=(?:\\d|eight|eighty|ate|nine|ninety|one|won|aa\\b|ada\\b))'), 'tanker ', 'tanker prefix'],
+    [R('\\btanker\\s+(?:eighty\\s+eight|eight\\s+eight|ate\\s+ate|8\\s+8|88\\s*th|aa|ada|eighty\\s+ate|88)\\b'), 'tanker 88', 'Tanker 88'],
+    [R('\\btanker\\s+(?:eighty\\s+nine|eight\\s+nine|ate\\s+(?:nine|9)|8\\s+9(?:\\s*th)?|89\\s*(?:er|th)|89)\\b'), 'tanker 89', 'Tanker 89'],
+    [R('\\btanker\\s+(?:one\\s+eighteen|won\\s+eighteen|one\\s+one\\s+eight|won\\s+won\\s+(?:eight|ate)|1\\s+18|11\\s+8|1\\s+1\\s+8|1:18|118\\s*th|118)\\b'), 'tanker 118', 'Tanker 118'],
+    [R('\\btanker\\s+(?:ninety|nine\\s+(?:zero|oh|0)|9\\s+0|90\\s*th|90)\\b'), 'tanker 90', 'Tanker 90'],
+    [R('\\btanker\\s+(?:eighty\\s+(?:two|to|too)|eight\\s+two|ate\\s+two|8\\s+2|82\\s*nd|82)\\b'), 'tanker 82', 'Tanker 82'],
+    [R('\\btanker\\s+(88|89|90|82|118)\\s+and\\s+(88|89|90|82|118)\\b'), 'tanker $1 and tanker $2', 'two tankers'],
+    [R('\\b' + CPFX + '\\s+(?:5|five|fife)\\s*(?:bt|b\\s+t|bravo\\s+(?:tango|tangle|tangled|tengo|tanko|tank\\s+o|tangoe|tag\\s+o))\\b'), 'copter 5 bravo tango', 'Copter 5 Bravo Tango'],
+    [R('\\b(?:five|fife)\\s+bravo\\s+(?:tango|tangle|tengo|tanko)\\b'), '5 bravo tango', 'Copter 5 Bravo Tango'],
+    [R('\\bbravo\\s+(?:tangle|tangled|tengo|tanko|tangoe)\\b'), 'bravo tango', 'Bravo Tango'],
+    [R('\\b' + CPFX + '\\s+(?:2|two|to|too)\\s*(?:bk|b\\s+k|bravo\\s+(?:kilo|kilos|killo|keel\\s*o|keelo|key\\s+low|kill\\s+o))\\b'), 'copter 2 bravo kilo', 'Copter 2 Bravo Kilo'],
+    [R('\\bbravo\\s+(?:keel\\s*o|keelo|key\\s+low|killo|kill\\s+o)\\b'), 'bravo kilo', 'Bravo Kilo'],
+    [R('\\b' + CPFX + '\\s+(?:(?:four|for|4)\\s+(?:oh|zero|o|0)\\s+(?:four|for|4)|four\\s+hundred\\s+(?:and\\s+)?four|40\\s+4|4\\s+04|404\\s*th|404)\\b'), 'copter 404', 'Copter 404'],
+    [R('\\b(?:copper|coptor|kopter|captor|cop\\s+her|chopper|helicopter|heli)\\s+(?=(?:5|five|2|two|4|four)\\b)'), 'copter ', 'copter prefix'],
+    [R('\\bengine\\s+(?:twenty\\s+three\\s+sixty\\s+two|twenty\\s+three\\s+six\\s+two|23\\s+sixty\\s+two|23\\s+62|two\\s+three\\s+six\\s+two|2\\s+3\\s+6\\s+2|236\\s+2|2\\s+362|two\\s+thousand\\s+three\\s+hundred\\s+(?:and\\s+)?sixty\\s+two|2362)\\b'), 'engine 2362', 'Engine 2362'],
+    [R('\\b(?:new\\s+u|new\\s+you|any\\s+you|and\\s+you|knee\\s+you|n\\s*e\\s*u|neu|new|nu|n\\s+e\\s+you)\\s+west\\b'), 'neu west', 'NEU West'],
+    [R('\\b(?:cedar|seeder|ceder|seater|cedars)\\s+(?:air\\s*(?:attack|tack|attach|tac|tak|track)|airtac|airtack)\\b'), 'cedar air attack', 'Cedar Air Attack'],
+    [R('\\bair\\s*(?:attack|tack|attach|attacks|track|a\\s+tack)\\s+(?:two\\s+thirty|two\\s+three\\s+(?:zero|oh)|2\\s+3\\s+0|2\\s+30|2:30|to\\s+(?:30|thirty)|too\\s+(?:30|thirty)|two\\s+30|230)\\b'), 'air attack 230', 'Air Attack 230'],
+    [R('\\b(?:november\\s+)?(?:(?:four|for|4)\\s+(?:one|won|1)\\s+(?:two|to|too|2)|four\\s+twelve|4\\s+12|412)\\s*(?:sierra\\s+papa|s\\s*p)\\b|\\bnovember\\s+412\\b|\\bn\\s*412\\s*sp\\b'), 'n412sp', 'N412SP'],
+
+    // ── 2. frequencies ─────────────────────────────────────────────
+    [R('\\bair\\s*(?:tactics|tactic|tac|tack|tech|tax|tact|tacks|t)\\s+(?:4|four|for)\\b(?!\\s*(?:tanker|copter|engine|\\d))'), 'air tactics 4', 'Air Tactics 4'],
+    [R('\\bairtac\\s+(?:4|four|for)\\b'), 'air tactics 4', 'Air Tactics 4'],
+    [R('\\bair\\s+tactic\\b'), 'air tactics', 'Air Tactics'],
+    [R('\\b(?:one\\s+twenty\\s+two|one\\s+two\\s+two|122)\\s*(?:point|decimal|\\.)?\\s*(?:nine\\s+twenty\\s+five|nine\\s+two\\s+five|9\\s*25|9\\s+2\\s+5|92\\s*5|925)\\b'), '122.925', '122.925'],
+    [R('\\b(?:one\\s+twenty\\s+seven|one\\s+two\\s+seven|127)\\s*(?:point|decimal|\\.)?\\s*(?:three\\s+twenty\\s+five|three\\s+two\\s+five|3\\s*25|3\\s+2\\s+5|32\\s*5|325)\\b'), '127.325', '127.325'],
+    [R('\\b(?:roder|rotor|motor|router|roter|rotar|rotary|rodor|water)\\s+(?:victor|vector|victory|vic\\s+tor)\\b'), 'rotor victor', 'Rotor Victor'],
+    [R('\\bc\\s+d\\s+f\\b'), 'cdf', 'CDF'],
+
+    // ── 3. numbers: altitudes, miles, altimeter ────────────────────
+    [R('\\b(?:for|fore)\\s+thousand\\b'), 'four thousand', '4,000'],
+    [R('\\b(?:to|too)\\s+thousand\\b'), 'two thousand', '2,000'],
+    [R('\\b(?:tree|free)\\s+thousand\\b'), 'three thousand', '3,000'],
+    [R('\\b(?:one|won|1)\\s+(?:two|to|too|2)\\s+(nautical\\s+)?miles\\b'), '12 $1miles', '12 miles'],
+    [R('\\b(?:all\\s+timeter|all\\s+to\\s+meter|alti\\s+meter|alt\\s+meter|ultimeter|altimeters|altimeter\'s|altimetre)\\b'), 'altimeter', 'altimeter'],
+    [R('\\b(?:thirty|30)\\s+(?:point\\s+)?(?:oh|zero|o|0)\\s+(?:two|to|too|2)\\b|\\bthree\\s+(?:zero|oh)\\s+(?:point\\s+)?(?:zero|oh)\\s+two\\b|\\b30\\s+(?:point\\s+)?02\\b|\\b30\\.0\\s+2\\b|\\b30\\s+point\\s+0\\s*2\\b|\\bthirty\\s+point\\s+(?:zero|oh)\\s+two\\b|\\b30\\.\\s+02\\b'), '30.02', '30.02'],
+    [R('\\b(?:29\\s+92|twenty\\s+nine\\s+ninety\\s+two|two\\s+nine(?:r)?\\s+nine(?:r)?\\s+two|29\\s+point\\s+92|29\\.9\\s+2)\\b'), '29.92', '29.92'],
+
+    // ── 4. coverage level ──────────────────────────────────────────
+    [R('\\b(?:cl|c\\s+l|c\\.l\\.?|see\\s+(?:l|el|elle)|sea\\s+level|cover\\s+level|coverage\\s+levels?)\\s*(?:of\\s+|is\\s+)?(\\d|one|won|two|to|too|three|tree|free|four|for|fore|five|six|sex|seven|eight|ate)\\b(?!\\s*(?:thousand|hundred|the\\b|tie|tag|\\d))'),
+      function(m, g){ return 'coverage level ' + (dig(g[0]) || g[0]); }, 'coverage level'],
+
+    // ── 5. phrases ─────────────────────────────────────────────────
+    [R('\\bhave\\s+(?:you|you\'re|ya|yer)\\s+finals?\\b'), 'have your final', 'have your final'],
+    [R('\\b(?:half|of)\\s+your\\s+final\\b'), 'have your final', 'have your final'],
+    [R('\\bclear(?:ed)?\\s+(to|2|too|two|the|a)\\s+(drop|drops|dropped|draw|drab|drob|job|drive|drug|drap)\\b'),
+      function(m, g, s){ if(g[1] === 'drop' && g[0] !== 'the' && g[0] !== 'a') return m === 'cleared to drop' ? m : 'cleared to drop';
+        return finalCtx(s.replace(m, ' ')) ? 'cleared to drop' : m; }, 'cleared to drop'],
+    [R('\\bgo\\s+(?:a\\s+)?round\\b|\\bgo-around\\b|\\bgoaround\\b'), 'go around', 'go around'],
+    [R('\\b(tanker\\s+(?:88|89|90|82|118))\\s+(?:a\\s+)?round\\b(?=\\s*$|\\s+(?:go|around|climb|turn|break|abort|now|you|left|right)\\b)'), '$1 go around', 'go around'],
+    [R('\\b(tanker\\s+(?:88|89|90|82|118))\\s+around\\b(?=\\s*$|\\s+(?:go|around|climb|turn|break|abort|now|you|left|right)\\b)'), '$1 go around', 'go around'],
+    [R('\\bclear(?:ed)?\\s+(?:to\\s+|two\\s+|too\\s+|2\\s+)?(?:manure|man\\s+over|man\\s+ever|menu\\s*ver|man\\s+you\\s+ver|man\\s+oover|manoeuvre|maneuvre|maneuvered|maneuvering|maneuvers|manuever|manuver|manouver|maneuver)\\b'), 'cleared to maneuver', 'cleared to maneuver'],
+    [R('\\b(?:manoeuvre|maneuvre|manuever|manuver|manouver)\\b'), 'maneuver', 'maneuver'],
+    [R('\\b(?:load|loaded|lowed)\\s*(?:in|and|an|n|&)?\\s+(?:return|returned|returns|returning)\\b|\\bloading\\s+return\\b|\\bload\\s*&\\s*return\\b'), 'load and return', 'load and return'],
+    [R('\\b(?:load|loaded)\\s*(?:in|and|an|n|&)?\\s+hold\\b|\\bload\\s*&\\s*hold\\b'), 'load and hold', 'load and hold'],
+    [R('\\b(?:rtb|r\\s+t\\s+b|our\\s+tb)\\b'), 'return to base', 'RTB'],
+    [R('\\b(?:hole|whole|holed|old)\\s+(?=(?:at\\s+the\\s+(?:pond|pawn|dip)|out\\s+at|short\\s+of|outside|in\\s+the\\s+orbit|your\\s+position)\\b)'), 'hold ', 'hold'],
+    [R('\\bpilgrim(?:\'?s)?\\s+(?:pawn|pawns|pawned|palm|palms|pon|pound|pond)\\b'), 'pilgrim pond', 'Pilgrim Pond'],
+    [R('\\bthe\\s+(?:pawn|pawned|pawns|palm)\\b'), 'the pond', 'the pond'],
+    [R('\\bout\\s+(?:of\\s+)?the\\s+(?:deep|dipped|dip)\\b|\\boutta\\s+the\\s+dip\\b'), 'out of the dip', 'out of the dip'],
+    [R('\\b(?:dipsite|dip\\s+sight|deep\\s+site|dip\\s+side)\\b'), 'dip site', 'dip site'],
+    [R('\\b(your|the|a|known|no|primary|main|only|other)\\s+has\\s+heard\\b'), '$1 hazard', 'hazard'],
+    [R('\\bhas\\s+heard(?=s?\\s+(?:is|are)\\b)'), 'hazard', 'hazard'],
+    [R('\\bhazzard(s?)\\b'), 'hazard$1', 'hazard'],
+    [R('\\b(?:powerlines|power\\s+line|par\\s+lines|power\\s+lions|power\\s+lies)\\b(?!s)'), 'power lines', 'power lines'],
+    [R('\\b(left|right)\\s+(?:plank|planck|flake|flag|frank|blank|flanks|flunk|flang|flak|flanc|flink)\\b'), '$1 flank', 'flank'],
+    [R('\\b(?:write|rite|wright)\\s+(flank|side)\\b'), 'right $1', 'right flank'],
+    [R('\\bthe\\s+(?:heal|he\'ll|heels)\\b'), 'the heel', 'heel'],
+    [R('\\b(anchor\\w*\\s+(?:at|on|to|in)|from|target\\s+is|drop\\s+is|start(?:ing)?\\s+at|work(?:ing)?)\\s+the\\s+hill\\b'), '$1 the heel', 'heel'],
+    [R('\\bthe\\s+had\\b'), 'the head', 'head'],
+    [R('\\b(?:retarded|retarding|retardent|re\\s+tardant|retard\\s+ant)\\b'), 'retardant', 'retardant'],
+    [R('\\b(?:returned\\s+it|retard\\s+and|retard\\s+in)\\b(?=\\s+(?:line|drop|inbound|coming|incoming|is\\s+coming|on\\s+the)\\b)'), 'retardant', 'retardant'],
+    [R('\\b(?:tying\\s+in|tying|tie\\s+in|tied\\s+in|time\\s+in|thai\\s+in|tie\\s+and)\\s*(?:to|into|two|too)\\s+the\\b|\\btie\\s+into\\s+the\\b'),
+      function(m){ return m === 'tie in to the' ? m : 'tie in to the'; }, 'tie in'],
+    [R('\\b(?:structures|structural|struct)\\s+(protection|defense|defence)\\b'), function(m, g){ return 'structure ' + (g[0] === 'defence' ? 'defense' : g[0]); }, 'structure protection'],
+    [R('\\bstructure\\s+(?:defence|offense|the\\s+fence|a\\s+fence)\\b'), 'structure defense', 'structure defense'],
+    [R('\\bpoints?\\s+protections?\\b'), 'point protection', 'point protection'],
+    [R('\\bexits?\\s+(?:straight|strait|straits)\\s*-?\\s*out\\b'), 'exit straight out', 'exit straight out'],
+    [R('\\b(?:hard|art|heart)\\s+(?:sealing|ceiling|ceilings|seeling)\\b|\\bhard\\s+(?:feeling|selling)\\b(?=\\s+(?:of|at|is|\\d|two|to)\\b)'), 'hard ceiling', 'hard ceiling'],
+    [R('\\b(?:no|know|non)\\s+(?:diver|divers|diverts|the\\s+vert|to\\s+vert|de\\s+vert|di\\s+vert|divert)\\b|\\bnodivert\\b'), 'no divert', 'no divert'],
+    [R('\\b(?:tag|tagged|tack)\\s*(?:and|an|in|n|&|end)?\\s+(?:extend|extent|extended|extends|xtend)\\b|\\btagging\\s+extend\\b'), 'tag and extend', 'tag and extend'],
+    [R('\\b(?:fall|fool|fold)\\s+load\\b'), 'full load', 'full load'],
+    [R('\\bhave\\s+load\\b(?!s)'), 'half load', 'half load'],
+    [R('\\b(?:ridge\\s*line|rich\\s*line|bridge\\s*line|ridgeland|ridge\\s+lion)\\s+(?:road|rd)\\b'), 'ridgeline road', 'Ridgeline Road'],
+    [R('\\b(?:seeder|ceder)\\b'), 'cedar', 'Cedar'],
+    [R('\\bcedar\\s+bridge\\b'), 'cedar ridge', 'Cedar Ridge'],
+    [R('\\b(?:smarts\\s+ville|smart\\s+ville|smartville)\\b'), 'smartsville', 'Smartsville'],
+    [R('\\bl\\s+a\\s+t\\b'), 'lat', 'LAT']
+  ];
+
+  // Altimeter: "altimeter is thirty oh two" / "three zero zero two" / "30 0 2" / "3002" -> "altimeter 30.02"
+  function fixAltimeter(s, log){
+    return s.replace(/\baltimeter((?:\s+(?:is|setting|now|of|reads|will\s+be))*)\s+((?:(?:[\d.]+|zero|oh|o|one|won|two|to|too|three|tree|four|for|five|six|seven|eight|ate|nine|niner|twenty|thirty|ninety|eighty|point|decimal)(?:\s+|$)){1,7})/g,
+      function(m, pre, body){
+        var toks = body.trim().split(/\s+/), out = '', used = 0;
+        for(var i = 0; i < toks.length && out.length < 4; i++){
+          var t = toks[i], u;
+          if(t === 'point' || t === 'decimal'){ used = i + 1; continue; }
+          if(/^[\d.]+$/.test(t)){ var d = t.replace(/\./g, ''); if(out.length + d.length > 4) break; out += d; used = i + 1; continue; }
+          if(TENS[t]){ u = toks[i+1] && dig(toks[i+1]); if(u && u !== '0'){ out += TENS[t] + u; i++; } else out += TENS[t] + '0'; used = i + 1; continue; }
+          u = dig(t); if(!u) break; out += u; used = i + 1;
+        }
+        if(!/^(2[89]|30)\d\d$/.test(out)) return m;
+        var spoken = toks.slice(0, used).join(' '), val = out.slice(0, 2) + '.' + out.slice(2);
+        var rest = toks.slice(used).join(' ');
+        if(spoken !== val) log.push([spoken, val]);
+        return 'altimeter' + pre + ' ' + val + ' ' + rest + (rest ? ' ' : '');
+      });
+  }
+
+  function pre(text){
+    var s = ' ' + String(text == null ? '' : text).toLowerCase().replace(/[\u2018\u2019]/g, "'").replace(/[\u201c\u201d]/g, '"') + ' ';
+    s = s.replace(/(\d),(\d{3})\b/g, '$1$2')              // 3,000 -> 3000
+         .replace(/\bair\s+attack\s+2:30\b/g, 'air attack 230').replace(/\btanker\s+1:18\b/g, 'tanker 118')
+         .replace(/&/g, ' and ').replace(/\//g, ' ')
+         .replace(/([a-z0-9])-(?=[a-z0-9])/g, '$1 ')        // eighty-eight, 8-8, go-around, tie-in
+         .replace(/[!?;:,"()]/g, ' ')
+         .replace(/\.(?!\d)/g, ' ')                         // sentence periods, n.e.u.  (keeps 30.02 / 122.925)
+         .replace(/\s+/g, ' ');
+    return s;
+  }
+
+  function run(text){
+    var log = [], s = pre(text);
+    for(var k = 0; k < T.length; k++){
+      var re = T[k][0], rep = T[k][1];
+      re.lastIndex = 0;
+      s = s.replace(re, function(){
+        var a = Array.prototype.slice.call(arguments), m = a[0], full = a[a.length - 1];
+        var groups = a.slice(1, a.length - 2);
+        var r = typeof rep === 'function' ? rep(m, groups, full)
+              : rep.replace(/\$(\d)/g, function(_, n){ return groups[n - 1] == null ? '' : groups[n - 1]; });
+        if(r !== m) log.push([m.trim(), r.trim()]);
+        return r;
+      });
+      s = s.replace(/\s+/g, ' ');
+    }
+    s = fixAltimeter(s, log).replace(/\s+/g, ' ').trim();
+    return { text: s, log: log };
+  }
+
+  var AC = function(text){ return run(text).text; };
+  AC.table = T;
+  AC.changed = function(text){ return run(text).log; };
+  AC.version = 'agentB-1';
+  window.AUTOCORRECT = AC;
+})();
+
 </script>
 </body>
 </html>

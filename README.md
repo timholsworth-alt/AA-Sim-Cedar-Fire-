@@ -1,6 +1,6 @@
 # Cedar Fire — ATGS Trainer
 
-A browser-based radio trainer for Air Tactical Group Supervisor students. You are Air Attack 230 in the back seat of an OV-10 over the Cedar Fire. Make your calls in the blind, clear tankers and copters into the FTA, give target descriptions, clear drops on final and give departure briefings, all by voice. Every call is graded against the CAL FIRE Standards for Aerial Supervision (CSAS, March 2025).
+A browser-based radio trainer for Air Tactical Group Supervisor students. You are Air Attack 230 in the back seat of an OV-10 over the Cedar Fire. Make your calls in the blind, clear tankers and copters into the FTA, give target descriptions, clear drops on final and give departure briefings, all by voice. Every call is graded against the CAL FIRE Standards for Aerial Supervision (CSAS, March 2025), with speech auto-correct for the radio vocabulary.
 
 ## Use it
 Open the GitHub Pages address for this repository in **Chrome or Edge**, click **Check microphone**, then **Launch**.
