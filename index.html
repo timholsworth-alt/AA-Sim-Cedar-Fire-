@@ -219,15 +219,25 @@ button{font:inherit;color:inherit;}
 .ledger div{display:flex;justify-content:space-between;padding:2px 0;}
 .ledger .p{color:var(--ok);} .ledger .n{color:var(--amber);}
 
-#intro{background:linear-gradient(90deg,rgba(14,15,14,.86) 0%,rgba(14,15,14,.66) 46%,rgba(14,15,14,0) 78%);
+#intro{background:linear-gradient(0deg,rgba(14,15,14,.94) 0,rgba(14,15,14,.94) 96px,rgba(14,15,14,0) 170px),linear-gradient(90deg,rgba(14,15,14,.86) 0%,rgba(14,15,14,.66) 46%,rgba(14,15,14,0) 78%);
   justify-content:flex-start;align-items:stretch;padding:0;}
 #intro .inner{max-width:540px;max-height:100%;overflow-y:auto;padding:clamp(18px,4vh,56px) clamp(22px,5vw,64px);display:flex;flex-direction:column;}
 #intro .inner>:first-child{margin-top:auto;} #intro .inner>:last-child{margin-bottom:auto;}
-#intro h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(52px,min(9vw,13vh),112px);line-height:.86;margin:0;letter-spacing:-1px;}
-#intro .who{font-family:'Barlow Condensed',sans-serif;font-size:20px;color:var(--amber);margin:12px 0 12px;}
+#intro h1{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(44px,min(7vw,9.5vh),84px);line-height:.88;margin:0;letter-spacing:-1px;}
+#intro .who{font-family:'Barlow Condensed',sans-serif;font-size:20px;color:var(--amber);margin:8px 0 8px;}
 #intro p{line-height:1.55;color:#DAD5C8;margin:0 0 10px;max-width:46ch;}
-#intro .note{font-size:12.5px;color:var(--muted);margin-top:16px;}
+#intro .note{font-size:12.5px;color:var(--muted);margin-top:10px;}
 #loadMsg{font-size:13px;color:var(--muted);margin-top:10px;min-height:1em;}
+#scnRow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 12px;font-size:13px;color:var(--muted);}
+#scnRow b{font-family:'Barlow Condensed',sans-serif;font-size:17px;letter-spacing:1px;color:var(--placard);margin-right:4px;}
+#scnRow input{width:7.5ch;background:var(--panel-lo);border:1px solid var(--rule);border-radius:3px;color:var(--placard);padding:4px 6px;font:inherit;text-transform:uppercase;}
+#scnMsg{flex-basis:100%;font-size:12.5px;min-height:0;}
+#diffRow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 4px;max-width:46ch;}
+#diffRow .dl{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;color:var(--muted);margin-right:4px;}
+#diffRow .tbtn{font-size:14px;padding:5px 12px;color:var(--placard);}
+#diffRow .tbtn[aria-pressed="true"]{background:var(--amber);border-color:var(--amber);color:#1b1b1b;font-weight:600;}
+#diffDesc{flex-basis:100%;font-size:12.5px;line-height:1.45;color:var(--muted);min-height:1.45em;}
+#diffTag{color:var(--amber)!important;}
 
 @media (max-width:860px){
   :root{--side:0px;--bar:204px;}
@@ -261,7 +271,7 @@ button{font:inherit;color:inherit;}
     <path d="M0,0 L1000,0 L1000,9 Q500,26 0,9 Z" fill="#1d201d" opacity=".85"/>
   </svg>
   <div id="labels"></div>
-  <div id="hdgTape"><b id="hdgV">000</b><span id="hdgS">right orbit</span><span class="sep"></span><span id="altV" title="Air Attack altitude MSL">4,000</span><span class="sep"></span><span id="qnhV" title="Altimeter setting">30.02</span></div>
+  <div id="hdgTape"><b id="hdgV">000</b><span id="hdgS">right orbit</span><span class="sep"></span><span id="altV" title="Air Attack altitude MSL"></span><span class="sep"></span><span id="qnhV" title="Altimeter setting"></span></div>
   <div id="nextStep"></div>
   <div id="prompt"><div id="pFrom"></div><div id="pMsg"></div></div>
   <div id="legBanner"></div>
@@ -289,7 +299,7 @@ button{font:inherit;color:inherit;}
 <button id="logToggle" class="tbtn" type="button">Radio log</button>
 <aside id="side">
   <div class="inc">
-    <h1>Cedar Fire<small id="incType">Type 3</small></h1>
+    <h1>Cedar Fire<small id="incType">Type 3</small><small id="diffTag">Standard</small></h1>
     <div class="gauges">
       <div class="g" id="gAc"><b id="vAc">10</b><span>acres</span></div>
       <div class="g"><b id="vCt">0%</b><span>contained</span></div>
@@ -331,6 +341,14 @@ button{font:inherit;color:inherit;}
     <div class="who">Air Attack 230, back seat of the OV-10</div>
     <p>A timber understory fire is running upslope off Ridgeline Road with homes on the north side. Tankers 88 and 89 and Copter 5 Bravo Tango are on the order.</p>
     <p>Make your 12- and 7-mile calls in the blind on Air Tactics 4, 122.925 and Rotor Victor, in that order. Then clear aircraft in with all five components, give target descriptions, and clear tankers to drop on final. Every call is graded against the CAL FIRE CSAS standard scripts.</p>
+    <div id="scnRow">Scenario <b id="scnCode"></b>
+      <button class="tbtn" type="button" data-scn="random" aria-pressed="false">Random</button>
+      <button class="tbtn" type="button" data-scn="standard" aria-pressed="false">Standard</button>
+      <input id="scnIn" type="text" maxlength="6" placeholder="Code" autocomplete="off" spellcheck="false" aria-label="Scenario code">
+      <button class="tbtn" type="button" id="scnGo">Fly code</button>
+      <button class="tbtn" type="button" id="scnNew">New scenario</button>
+      <span id="scnMsg"></span></div>
+    <div id="diffRow"><span class="dl">Level</span><button class="tbtn" type="button" data-lv="guided" aria-pressed="false">Guided</button><button class="tbtn" type="button" data-lv="standard" aria-pressed="false">Standard</button><button class="tbtn" type="button" data-lv="advanced" aria-pressed="false">Advanced</button><div id="diffDesc" aria-live="polite"></div></div>
     <div><button class="cta" id="launchBtn" type="button" disabled>Loading terrain…</button>
       <button class="tbtn" id="micTestBtn" type="button" style="margin-left:10px;color:var(--placard)">Check microphone</button></div>
     <div id="loadMsg"></div>
@@ -340,7 +358,8 @@ button{font:inherit;color:inherit;}
       <div id="mtHeard"></div>
       <div id="mtResult"></div>
     </div>
-    <div class="note">Version 3.3 — graded to the CAL FIRE CSAS (March 2025). Use Chrome or Edge. Hold a radio key (or <kbd>Space</kbd>) and talk; your call goes out when you release. A headset mic works best.</div>
+    <div id="progRow"></div>
+    <div class="note">Version 3.4 — graded to the CAL FIRE CSAS (March 2025). Use Chrome or Edge. Hold a radio key (or <kbd>Space</kbd>) and talk; your call goes out when you release. A headset mic works best.</div>
   </div>
 </div>
 
@@ -369,8 +388,12 @@ button{font:inherit;color:inherit;}
     <div id="sumBody"></div>
     <button class="cta" id="againBtn" type="button">Fly it again</button>
     <button class="tbtn" id="sumBtn" type="button" style="margin-left:10px">Keep flying</button>
+    <div style="margin-top:12px"><button class="tbtn" id="progPrintBtn" type="button">Print debrief</button>
+      <button class="tbtn" id="progOpenBtn" type="button" style="margin-left:10px">Progress</button></div>
   </div>
 </div>
+
+<div class="modal" id="progress"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -399,6 +422,80 @@ function compassToTheta(c){const r=c*Math.PI/180;return Math.atan2(-Math.cos(r),
 function thetaToCompass(t){return ((Math.atan2(Math.cos(t),-Math.sin(t))*180/Math.PI)+360)%360;}
 function dirName(c){return ['north','northeast','east','southeast','south','southwest','west','northwest'][Math.round(((c%360)+360)%360/45)%8];}
 function dirAbbr(c){return ['N','NE','E','SE','S','SW','W','NW'][Math.round(((c%360)+360)%360/45)%8];}
+
+// ════════════════════════════════════════════════════════════════════
+//  SCENARIO — every value that changes from run to run, in one place.
+//  Everything else (parser, grading, hints, readbacks, HUD, scripts) reads
+//  SCN; nothing else holds a scenario number. 'standard' is the v3.3 fire
+//  exactly. Any other run is a 5-character code (4 data + 1 check
+//  character) that replays the same scenario wherever it is entered.
+//  Selection: URL ?scn= beats localStorage 'cedarScn' ('standard' |
+//  'random' | a code); with neither set, a new random scenario.
+//  The 3D world (terrain, homes, road, pond) is the same in every scenario;
+//  altitudes are the nominal MSL stack used on the radio and the HUD.
+// ════════════════════════════════════════════════════════════════════
+const SCN=(function(){
+  const AB='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';               // no I, O, 0 or 1
+  const ALTIMS=[];for(let v=2980;v<=3020;v++)if(v!==3000)ALTIMS.push(v);   // 29.80–30.20; 30.00 is left out ("3000" reads as an altitude)
+  const ELEVS=[1000,1500,2000,2500,3000,3500];               // foothill fire elevations, 500-ft steps
+  // Wind from 215–225: the head runs 035–045 upslope with the homes off the left flank. Tested and
+  // rejected: 230–250 (head 050–070). With this fixed layout the homes sit behind the left flank
+  // and the model tactics (left flank, then the head after the shift) lose homes at moderate wind.
+  const DIRS=[215,220,225];
+  const WINDS=[8,9,10,11,12,13,14,15];                       // mph
+  const SHIFTS=[165,170,175,180,185,190,195];                // the wind shift turns the head (345–015) onto the homes
+  const STD={mode:'standard',std:true,code:'STANDARD',altimV:3002,elev:1500,dir:220,wind:12,shiftDir:175,temp:94,rh:8};
+  function rng(seed){let a=seed>>>0;return ()=>{a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;};}
+  function checkCh(d){let c=0;for(let i=0;i<4;i++)c+=(2*i+1)*AB.indexOf(d[i]);return AB[c%32];}
+  function encode(n){n=(n>>>0)&0xFFFFF;let d='';for(let i=0;i<4;i++){d=AB[n&31]+d;n>>>=5;}return d+checkCh(d);}
+  function decode(code){
+    const c=String(code||'').toUpperCase().replace(/[\s-]/g,'');
+    if(!/^[A-Z2-9]{5}$/.test(c)||[...c].some(ch=>AB.indexOf(ch)<0)||checkCh(c)!==c[4])return null;
+    let n=0;for(let i=0;i<4;i++)n=n*32+AB.indexOf(c[i]);return n;
+  }
+  function gen(n,mode){
+    const r=rng(Math.imul(n+1,0x9E3779B1)^0x5CE7A11),pk=a=>a[Math.floor(r()*a.length)];
+    return {mode,std:false,code:encode(n),altimV:pk(ALTIMS),elev:pk(ELEVS),dir:pk(DIRS),wind:pk(WINDS),shiftDir:pk(SHIFTS),
+      temp:85+Math.floor(r()*18),rh:6+Math.floor(r()*10)};
+  }
+  function build(o){
+    const x=Object.assign({},o);
+    x.altim=(o.altimV/100).toFixed(2);                       // "30.02"
+    x.aa=o.elev+2500;                                        // Air Attack: 2,500 AGL, right-hand orbit
+    x.tk=o.elev+1500;                                        // airtankers: 1,500 AGL, 1,000 below Air Attack
+    x.hc=o.elev+500;                                         // copters: 500 AGL hard ceiling
+    x.tkIn=x.aa+500;                                         // fixed wing checking in at 12 miles
+    x.hIn=o.elev+1000;                                       // copters checking in
+    x.n412=x.aa+500;                                         // the transiting Cessna
+    x.n412Above=x.aa+1500;                                   // suggested altitude to stay above the fire
+    return Object.freeze(x);
+  }
+  function pick(){
+    let want=null,src='default';
+    try{const q=new URLSearchParams(location.search).get('scn');if(q){want=q;src='url';}}catch(e){}
+    if(want==null){try{const v=localStorage.getItem('cedarScn');if(v){want=v;src='storage';}}catch(e){}}
+    want=String(want||'random').trim();
+    let o;
+    if(/^(?:standard|std)$/i.test(want))o=STD;
+    else{const n=decode(want);o=n!=null?gen(n,'code'):gen(Math.floor(Math.random()*0x100000),'random');
+      if(n==null&&!/^random$/i.test(want))o.bad=want;}         // an unreadable code falls back to a random scenario
+    o=Object.assign({},o,{src});
+    return build(o);
+  }
+  const X=pick();
+  const api=Object.assign({},X,{
+    AB,ALTIMS,ELEVS,DIRS,WINDS,SHIFTS,encode,decode,
+    make:code=>{if(/^(?:standard|std)$/i.test(code))return build(STD);const n=decode(code);return n==null?null:build(gen(n,'code'));},
+    // Select a scenario ('standard', 'random' or a code) and reload into it
+    choose(v){
+      let u=null;try{u=new URL(location.href);}catch(e){}
+      if(u&&u.searchParams.has('scn')){u.searchParams.set('scn',v);location.replace(u.href);return;}
+      try{localStorage.setItem('cedarScn',v);location.reload();}
+      catch(e){if(u){u.searchParams.set('scn',v);location.replace(u.href);}}
+    }
+  });
+  return Object.freeze(api);
+})();
 
 // ════════════════════════════════════════════════════════════════════
 //  GEOGRAPHY — one coherent place, used by every system
@@ -1092,7 +1189,7 @@ function startPattern(ac){
      else{[L.x1,L.x2]=[L.x2,L.x1];[L.z1,L.z2]=[L.z2,L.z1];}}}
   const len=Math.hypot(L.x2-L.x1,L.z2-L.z1),dx=(L.x2-L.x1)/len,dz=(L.z2-L.z1)/len;
   const nx=ac._rightPat?-dz:dz,nz=ac._rightPat?dx:-dx;
-  const off=780,fin=2300,yP=FIRE_TOP+290;   // maneuvering altitude: under 1,000 AGL (CSAS)
+  const off=780,fin=DIFF.finalLen,yP=FIRE_TOP+290;   // maneuvering altitude: under 1,000 AGL (CSAS)
   const DW={x:L.x2+nx*off+dx*420,z:L.z2+nz*off+dz*420},BASE={x:L.x1-dx*fin+nx*off,z:L.z1-dz*fin+nz*off};
   const FS={x:L.x1-dx*fin,z:L.z1-dz*fin},gStart=hAt(L.x1,L.z1);
   ac._finalCalled=false;ac._warned=false;ac._warned2=false;ac._lateGrace=false;ac._lateStarted=false;ac.cleared=false;
@@ -1120,9 +1217,9 @@ function finalAlong(ac,al,fin,dx,dz){
     flashLeg(`${ac.short} final — needs drop clearance`,'#8a2a1a');
     setNextStep(`"${ac.spokenCS}, I have your final; clear to drop."`);
     setAwaiting(ac);
-    after(8,()=>{if(ac.status==='on_final'&&!ac.cleared&&!ac._warned){ac._warned=true;
+    after(DIFF.finalWarn[0],()=>{if(ac.status==='on_final'&&!ac.cleared&&!ac._warned){ac._warned=true;
       rtx(ac.callsign,`${ac.spokenCS} on final, standing by for drop clearance.`,'rx',ac.role,'tac');}});
-    after(15,()=>{if(ac.status==='on_final'&&!ac.cleared&&!ac._warned2){ac._warned2=true;
+    after(DIFF.finalWarn[1],()=>{if(ac.status==='on_final'&&!ac.cleared&&!ac._warned2){ac._warned2=true;
       rtx(ac.callsign,`${ac.spokenCS}, short final, need clearance or we go around.`,'rx',ac.role,'tac');}});
   }
   if(al>=fin-15){
@@ -1224,8 +1321,8 @@ function schedReload(ac){
     ac.onCanvas=true;ac.obj.visible=true;ac.status='inbound';ac._held7=false;ac._established=false;routeHold(ac);
     const where=dirName(thetaToCompass(b));
     ac.clr=null;ac.clearedAlt=null;
-    rtx(ac.callsign,`Cedar Air Attack, ${ac.spokenCS}, 12 miles from the ${where} at 4,500, on Air Tactics 4, reloaded.`,'rx',ac.role,'tac');
-    ac._nextCall=S.opsElapsed+40;
+    rtx(ac.callsign,`Cedar Air Attack, ${ac.spokenCS}, 12 miles from the ${where} at ${fmtAlt(SCN.tkIn)}, on Air Tactics 4, reloaded.`,'rx',ac.role,'tac');
+    ac._nextCall=S.opsElapsed+DIFF.recall;
     after(1.6,()=>{if(ac.status==='inbound')setAwaiting(ac);});
   });
 }
@@ -1305,12 +1402,45 @@ function updateCamera(dt){
 </script>
 <script>
 // ════════════════════════════════════════════════════════════════════
+//  DIFFICULTY — one parameter set per level, read by the rest of the code.
+//  'standard' is v3.3 exactly. ?diff= beats localStorage 'cedarDiff';
+//  unset → standard. Curveballs and their intro control are in the
+//  DIFFICULTY script block at the end of the page.
+// ════════════════════════════════════════════════════════════════════
+const DIFF_LEVELS={
+  guided:{name:'Guided',hints:true,hintLock:false,modelOnMiss:true,promptSec:60,fireSpeed:.75,recall:55,divertWait:110,n412Wait:90,
+    finalLen:3000,finalWarn:[11,20],blPass:4,sizeupMin:2,tEngine:150,tDivert:270,fbGap:360,windShift:[480,480],arr:{h5bt:120},
+    curveballs:0,chatter:null,
+    desc:'Hints and scripts stay up longer, aircraft give you more time, the fire grows slower and the big events are spread out. A model answer follows any incomplete call.'},
+  standard:{name:'Standard',hints:null,hintLock:false,modelOnMiss:false,promptSec:30,fireSpeed:1,recall:40,divertWait:75,n412Wait:60,
+    finalLen:2300,finalWarn:[8,15],blPass:5,sizeupMin:3,tEngine:150,tDivert:215,fbGap:300,windShift:[360,360],arr:{},
+    curveballs:0,chatter:null,
+    desc:'The exercise as written. Hints can be turned on or off.'},
+  advanced:{name:'Advanced',hints:false,hintLock:true,modelOnMiss:false,promptSec:30,fireSpeed:1.1,recall:30,divertWait:50,n412Wait:45,
+    finalLen:2300,finalWarn:[6,12],blPass:6,sizeupMin:4,tEngine:120,tDivert:180,fbGap:240,windShift:[240,330],arr:{h5bt:60},
+    curveballs:3,chatter:[70,130],
+    desc:'Hints locked off, tighter timing, a busier frequency and unannounced curveballs that you have to catch and handle yourself.'}};
+const DIFF=(function(){
+  let lv=null,seed=(Date.now()%2147483647)>>>0;
+  try{const q=new URLSearchParams(location.search);const d=(q.get('diff')||'').toLowerCase();if(DIFF_LEVELS[d])lv=d;
+    const sd=q.get('seed');if(sd&&/^\d+$/.test(sd))seed=(+sd)>>>0;}catch(e){}
+  if(!lv){try{const st=localStorage.getItem('cedarDiff');if(DIFF_LEVELS[st])lv=st;}catch(e){}}
+  const D={level:lv||'standard',seed,helpOpens:0,blockRecall:20,droneMax:100,cbGap:90,
+    // seedable RNG (mulberry32) — curveball choice and timing only; never touches rnd()/Math.random
+    reseed(n){D._s=(n>>>0)||1;D.seed=D._s;return D.seed;},
+    rng(){let t=(D._s=(D._s+0x6D2B79F5)>>>0);t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;},
+    set(l,save){if(!DIFF_LEVELS[l]||D.locked)return false;Object.assign(D,DIFF_LEVELS[l],{level:l});
+      D.windShiftAt=D.windShift[0];if(save){try{localStorage.setItem('cedarDiff',l);}catch(e){}}return true;}};
+  D._s=seed||1;D.set(D.level,false);
+  return D;})();
+window.DIFF=DIFF;
+// ════════════════════════════════════════════════════════════════════
 //  STATE
 // ════════════════════════════════════════════════════════════════════
 const S={simT:0,secAcc:0,elapsed:0,launched:false,blindPhase:false,blindT:0,opsActive:false,opsElapsed:0,
   critiqueShown:false,conditionsReported:false,neuReminded:false,engineAtScene:false,engineLineCleared:false,engineAsked:false,
   fbTimer:0,fbDue:0,windShifted:false,windShiftAt:0,windRebriefed:false,
-  wx:{wind:12,dir:220,temp:94,rh:8},fireSpeed:1,retDropped:0,lastStats:null,incLevel:3,
+  wx:{wind:SCN.wind,dir:SCN.dir,temp:SCN.temp,rh:SCN.rh},fireSpeed:1,retDropped:0,lastStats:null,incLevel:3,
   aircraft:[],procedures:[],awaitingAC:null,awaitingQueue:[],
   blindCount:0,blindCalls:[],blindFreqCount:{tac:0,vhf:0,rv:0},
   score:{total:0,blind:0,timing:0,freq:0,ops:0,ledger:[]},hints:true,extrasOrdered:false,selFreq:'tac',review:false,zoom:1.5,noDivert:false,divertDue:0,divertDone:false,ordered:{},heliCallT:-99,pending:null,paused:false,userPaused:false,micTest:false,vol:1,
@@ -1629,7 +1759,7 @@ function micFinalize(why){
   const text=micText(),f=F.freq,peak=MIC.peak;
   MIC.fin=null;MIC.k0=null;MIC.carry='';MIC.sFin=[];MIC.sItr='';
   mlog(`heard (${why}): "${text}"`);
-  if(MIC.running||MIC.starting){MIC.byUs=true;try{recog.abort();}catch(e){}}   // onend re-warms
+  if(MIC.running||MIC.starting){MIC.byUs=true;MIC.ready=false;try{recog.abort();}catch(e){}}   // onend re-warms
   else setTimeout(micWarm,120);
   micState();
   if(text){MIC.empties=0;deliver(text.charAt(0).toUpperCase()+text.slice(1),f);}
@@ -1659,7 +1789,7 @@ function micTestStatus(){
   s.textContent=MIC.supported===false?'This browser has no speech recognition. Use Chrome or Edge.'
     :MIC.blocked?'The microphone is blocked for this page. Click the lock icon by the address bar, allow Microphone, then reload.'
     :!MIC.granted?(MIC.why||'Waiting for microphone permission…')
-    :MIC.ready?`Microphone ready${MIC.device?' — '+MIC.device.replace(/\s*\([0-9a-f]{4}:[0-9a-f]{4}\)/i,''):''}. Hold Space and say: “Tanker 88, cleared in at 3,000.”`
+    :MIC.ready?`Microphone ready${MIC.device?' — '+MIC.device.replace(/\s*\([0-9a-f]{4}:[0-9a-f]{4}\)/i,''):''}. Hold Space and say: “Tanker 88, cleared ${SCN.std?'in at 3,000':'to maneuver'}.”`
     :'Microphone allowed — opening the speech recognizer…';
 }
 function micTestResult(text){
@@ -1690,7 +1820,7 @@ function setNextStep(m){$('nextStep').textContent=m||'';$('nextStep').style.disp
 let promptToken=0;
 function showPromptRaw(from,msg){
   if(!S.hints)return;$('pFrom').textContent=from;$('pMsg').textContent=msg;$('prompt').classList.add('show');
-  const tk=++promptToken;after(30,()=>{if(tk===promptToken)hidePrompt();});
+  const tk=++promptToken;after(DIFF.promptSec,()=>{if(tk===promptToken)hidePrompt();});
 }
 function showPrompt(ac,msg){showPromptRaw(`${ac.spokenCS} is waiting on you`,msg);}
 function hidePrompt(){$('prompt').classList.remove('show');}
@@ -1736,7 +1866,7 @@ function normCall(text){
      .replace(/\b(5|five|2|two)\s*bt\b/g,'$1 bravo tango').replace(/\b(2|two)\s*bk\b/g,'$1 bravo kilo').replace(/\bbravo\s+(?:tangle|tangled|tengo|tanko)\b/g,'bravo tango')
      .replace(/\b(?:copper|coptor|cop\s+her|kopter)\s+(?=5|five|2|two)/g,'copter ')
      .replace(/\bair\s*(?:tack|attach|attacks|a\s+tack)\b/g,'air attack')
-     .replace(/\b(?:for|fore)\s+thousand\b/g,'4000').replace(/\b(?:to|too)\s+thousand\b/g,'2000').replace(/\btree\s+thousand\b/g,'3000')
+     .replace(/\b(?:for|fore)\s+thousand\b/g,'four thousand').replace(/\b(?:to|too)\s+thousand\b/g,'two thousand').replace(/\btree\s+thousand\b/g,'three thousand')
      .replace(/\b(left|right)\s+(?:plank|flake|flag|blank|flanc|flink|frank)\b/g,'$1 flank')
      .replace(/\bcl\s*(\d)\b/g,'coverage level $1').replace(/\bcoverage\s+levels?\b/g,'coverage level')
      .replace(/\bseeder\b/g,'cedar').replace(/\bridge\s+line\b/g,'ridgeline').replace(/\bhazzards?\b/g,'hazard').replace(/\bretarded\b/g,'retardant')
@@ -1770,8 +1900,14 @@ function parseAltim(s){
   m=s.match(/\b(2[89]|30)(\d{2})\b(?!\s*(?:feet|ft|msl|miles?))/);if(m&&!/altimet/.test(s)&&!/^(?:00|50)$/.test(m[2]))return m[1]+'.'+m[2];
   const i=s.search(/altimet/);if(i<0)return null;
   const toks=s.slice(i).split(' ').slice(1,8);let dig='';
-  for(const t of toks){
+  const TENSW={twenty:2,thirty:3,forty:4,fifty:5,sixty:6,seventy:7,eighty:8,ninety:9};
+  for(let k=0;k<toks.length;k++){const t=toks[k];
     if(t==='is'||t==='setting'||t==='of'||t==='now')continue;
+    if(dig.length===2&&!/^\d+$/.test(t)){      // the hundredths said as one number: "thirty twelve", "twenty nine eighty five"
+      const v=Object.prototype.hasOwnProperty.call(NUMW,t)?NUMW[t]:null;
+      if(v!=null&&v>=10&&v<=19){dig+=String(v);break;}
+      if(TENSW[t]){const u=numOf(toks[k+1]);if(u!=null&&u>=1&&u<=9&&!/^\d/.test(toks[k+1]||'')){dig+=TENSW[t]+''+u;}else dig+=TENSW[t]+'0';break;}
+    }
     if(/^\d+$/.test(t))dig+=t;else if(t==='thirty')dig+='30';else if(t==='twenty')dig+='2';
     else if(Object.prototype.hasOwnProperty.call(NUMW,t)&&NUMW[t]<10)dig+=String(NUMW[t]);else break;
     if(dig.length>=4)break;
@@ -1813,7 +1949,7 @@ function gradeClearance(s,ac){
 // Buckhorn incident, in the vicinity of Redding, Air Attack 240, 12 miles from the
 // West at 3,000, advise on Air T 21"
 const BL_EL=[['rx','receiving unit'],['vic','incident vicinity'],['cs','call sign'],['loc','distance and direction'],['alt','altitude'],['adv','"advise on" frequency']];
-const BL_PASS=5;   // 5 of 6 elements counts as a complete call; the missing one is still noted
+const BL_PASS=DIFF.blPass;   // 5 of 6 (Standard) counts as a complete call; the missing one is still noted
 const BL_ORDER=['tac','vhf','rv'];
 const BL_FNAME={tac:'Air Tactics 4',vhf:'122.925',rv:'Rotor Victor'};
 function gradeBlind(s,freq,round){
@@ -1824,21 +1960,23 @@ function gradeBlind(s,freq,round){
   const mi=s.match(/\b(\d{1,2}|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen)\s*(?:nautical\s*)?(?:miles?|nm|mi)\b/);
   const dist=mi?numOf(mi[1]):null;
   const dir=/\b(?:north|south|east|west)(?:east|west)?\b/.test(s);g.loc=dist!=null&&dir;
-  g.alt=/\b[1-9]\d{3}\b/.test(s.replace(/122\.?925/g,' '));
+  const alts=(s.replace(/122\.?925/g,' ').match(/\b[1-9]\d{3}\b/g)||[]).map(Number);
+  g.alt=alts.length>0&&alts.includes(SCN.aa);         // your own altitude, for this scenario
   const fq={tac:/air\s*tac|tactics|\bair\s*t\b/,vhf:/\b122|one\s*two\s*two|one\s*twenty\s*two/,rv:/rotor\s*victor|\bvictor\b|\brotor\b|127\.?325|one\s*two\s*seven|one\s*twenty\s*seven/}[freq].test(s);
   g.adv=(/\badvise\b|\bcontact\b|\bcall\b|\breport\b|\bcheck\s*in\b|\bidentify\b|\bcome\s*up\b|\bup\s+on\b/.test(s))&&fq;
   const miss=BL_EL.filter(([k])=>!g[k]).map(([,n])=>n),notes=[],want=round===1?12:7;
   if(dist!=null&&!dir)notes.push('say which direction you are from the fire — "12 miles from the southwest"');
   if(/\badvise\b/.test(s)&&!fq)notes.push(`name the frequency you are on — "advise on ${BL_FNAME[freq]}"`);
   if(dist!=null&&Math.abs(dist-want)>1)notes.push(`you said ${dist} miles on the ${want}-mile call`);
+  if(alts.length&&!g.alt)notes.push(`you are inbound at ${fmtAlt(SCN.aa)}, not ${fmtAlt(alts[0])}`);
   return {g,miss,notes,dist};
 }
 
 // ── Target description (PMS 505e tactical briefing): orientation, target
 //    location, drop objective, coverage level, load portion, hazards, exit.
 const TD_EL=[['orient','orientation'],['loc','target location'],['obj','drop objective'],['cov','coverage level'],['load','load portion'],['haz','hazards'],['exit','exit']];
-function structSide(){
-  const th=spreadTheta(),hb=Math.atan2(-430,-105),d=angDiff(hb,th);
+function structSide(dir){
+  const th=dir==null?spreadTheta():compassToTheta((dir+180)%360),hb=Math.atan2(-430,-105),d=angDiff(hb,th);
   return Math.abs(d)<Math.PI/4?'head':d<0?'left':'right';
 }
 function parseAssignment(s){
@@ -1846,10 +1984,11 @@ function parseAssignment(s){
   // the assignment itself ("your drop is the left flank", "target is the head") beats orientation remarks
   const m=s.match(/(?:drop|target|line|load|work(?:ing)?|assignment|hit|start(?:ing)?|put\s+it|go|lay\s+it|want\s+(?:it|you|the\s+load))\s+(?:is\s+|will\s+be\s+|to\s+be\s+)?(?:on\s+|at\s+|across\s+|along\s+|down\s+)?(?:the\s+)?(?:fire'?s?\s+)?(left\s*flank|right\s*flank|left\s*side|right\s*side|left|right|head|heel|rear|structures?|homes?|houses?)\b/);
   if(m)return pick(m[1]);
-  const ex=s.match(/left\s*flank|right\s*flank|\bthe\s*head\b|\bthe\s*heel\b/);
-  if(ex&&!/tie\s*(?:it\s*)?(?:in\s*)?(?:in)?to\s*the\s*head/.test(ex[0]))return pick(ex[0]);
+  // orientation remarks ("the head is running northeast", "tie in to the head") are not the target
+  const t=s.replace(/(?:tie|tying)\s*(?:it\s*)?(?:in\s*)?(?:in)?to\s*the\s*head/g,' ').replace(/(?:the\s+)?head\s+(?:is\s+|was\s+)?(?:running|moving|making|pushing|heading)/g,' ');
+  const ex=t.match(/left\s*flank|right\s*flank|\bthe\s*head\b|\bthe\s*heel\b/);
+  if(ex)return pick(ex[0]);
   if(/between\s+the\s+fire\s+and\s+(?:the\s+)?(?:structures|homes|houses|road)|protect\s+(?:the\s+)?(?:structures|homes|houses)|structure\s+(?:protection|defense|defence)|point\s+protection|in\s+front\s+of\s+the\s+(?:structures|homes|houses)|pretreat\s+along|along\s+(?:the\s+)?(?:road|ridgeline)\s+(?:to|in\s+front)/.test(s))return structSide();
-  const t=s.replace(/(?:tie|tying)\s*(?:it\s*)?(?:in\s*)?(?:in)?to\s*the\s*head/g,' ').replace(/head\s+(?:is\s+)?(?:running|moving|making|pushing|heading)/g,' ');
   const f=t.match(/left\s*flank|right\s*flank|left\s*side|right\s*side|\bthe\s*head\b|across\s*the\s*head|pinch\s*the\s*head|\bthe\s*heel\b/);
   return f?pick(f[0]):null;
 }
@@ -1870,6 +2009,8 @@ function gradeTarget(s){
   g.exit=/\bexit|egress|climb\s*out|\bdepart|pull\s*(?:off|up)|break\s*(?:left|right)/.test(s);
   g.orient=/(?:head|fire|it)\s+(?:is\s+)?(?:running|moving|backing|making|pushing|heading|burning)|upslope|downslope|\bwind\b|smoke\s+(?:is\s+)?(?:laying|leaning|drifting)|use\s+the\s+(?:road|pond)|o.?clock/.test(s);
   const m=s.match(/(?:exit|maintain|climb\s*(?:out\s*)?to)\D{0,14}(\d{4})/);g.exitAlt=m?+m[1]:null;
+  // for grading the exit altitude: "exit straight out at 3,000" is longer than the readback match allows
+  const mg=s.match(/(?:exit|maintain|climb\s*(?:out\s*)?to)\D{0,24}?(\d{4})/);g.exitAltG=mg?+mg[1]:null;
   return {asn,g};
 }
 
@@ -1877,8 +2018,10 @@ function gradeTarget(s){
 const RB_EL=[['loc','target'],['dip','dip site'],['alt','hard ceiling'],['haz','hazards'],['calls','"call your dips and drops"']];
 function gradeRotor(s){
   const asn=parseAssignment(s);
-  return {asn,g:{loc:!!asn,dip:/pond|\bdip|water\s*source|pilgrim/.test(s),
-    alt:/\b\d{4}\s*(?:feet\s*)?(?:and\s+below|or\s+below|max)|(?:below|ceiling|maximum|max|not\s+above|at\s+or\s+below)\D{0,10}\d{4}|\bceiling\b/.test(s),
+  // the ceiling, if a number is given, has to be this fire's 500 AGL ceiling
+  const cm=s.match(/\b(\d{4})\s*(?:feet\s*)?(?:and\s+below|or\s+below|max)|(?:below|ceiling|maximum|max|not\s+above|at\s+or\s+below)\D{0,10}(\d{4})/),cv=cm?+(cm[1]||cm[2]):null;
+  return {asn,ceil:cv,g:{loc:!!asn,dip:/pond|\bdip|water\s*source|pilgrim/.test(s),
+    alt:cv!=null?cv===SCN.hc:/\bceiling\b/.test(s),
     haz:RX_HAZ.test(s),calls:/\bcall|report|on\s+and\s+off|dips?\s+and\s+drops?/.test(s)}};
 }
 // ── Departure briefing (PMS 505e): drop evaluation start / line / end + instructions
@@ -1896,6 +2039,7 @@ function recordRep(kind,label,got,of,miss,notes,extra){
   S.reps[kind].push({label,got,of,miss:miss||[],notes:notes||'',t:S.elapsed});
   adjustScore(kind,got+(extra||0),`${label} (${got}/${of})`);
   addLog(`${got}/${of}`,`${label}${miss&&miss.length?' — missing '+joinList(miss):' — complete'}${notes?'. '+notes.charAt(0).toUpperCase()+notes.slice(1)+'.':'.'}`,'fb');
+  if(DIFF.modelOnMiss&&miss&&miss.length&&DIFF.model)DIFF.model(kind,label);
 }
 
 // ════════════════════════════════════════════════════════════════════
@@ -1962,6 +2106,7 @@ function processXmit(text,freq){
     const named=addressees(s);
     if(!(named.length&&/\bclear|altimet|\bhold\b|maneuv|drop/.test(s))){recordCall(text,freq,s);return;}
   }
+  if(CB.onXmit(s,freq))return;
   if(freq==='tac2'){addLog('','CDF Tac 2 — no resources assigned on this frequency.','sys');return;}
   if(freq==='vhf'&&!S.blindPhase&&!(window.N412&&N412.waiting)&&!/sierra\s*papa|412|cessna/.test(s)){const named=addressees(s);if(!named.length){addLog('','Nothing heard back on 122.925 — your aircraft are on Air Tactics 4'+(S.aircraft.some(a=>a.freq==='rv')?' and Rotor Victor':'')+'.','sys');return;}}
   if(freq==='guard'){addLog('','Air Guard is for emergencies. Work your aircraft on Air Tactics 4.','sys');adjustScore('freq',-1,'non-emergency traffic on Air Guard');return;}
@@ -1990,6 +2135,7 @@ function processXmit(text,freq){
 function handleAC(ac,s,c){
   const cs=ac.spokenCS,r=ac.role,tag=r==='heli'?'heli':'rx';
   const say=m=>rtx(ac.callsign,m,tag,r,fqOf(ac));
+  if(CB.onAC(ac,s,c))return;
   // 0a — fences and checks: "Tanker 88, your fence is Ridgeline Road, stay south of it" /
   //      "Copter 5 Bravo Tango, check at the pond" — acknowledged, remembered, graded as ops credit
   if(c.fence&&!c.drop&&!c.clear&&!c.brief){
@@ -2141,12 +2287,14 @@ function targetDesc(ac,s,say,expectManeuver){
   if(fresh)P.tag=!!tagLine;else if(tagLine)P.tag=true;
   if(g.cov)P.cov=g.cov;if(g.load)P.load=g.load;if(g.tie)P.tie=g.tie;if(g.exitAlt)P.exitAlt=g.exitAlt;if(g.pwr)P.pwr=true;
   if(fresh){
-    const have={orient:g.orient,loc:!!asn||!!tagLine,obj:g.obj,cov:!!g.cov,load:!!g.load,haz:g.haz,exit:g.exit};
+    const exitBad=g.exitAltG!=null&&g.exitAltG!==SCN.tk;   // exit back to the tanker orbit altitude
+    const have={orient:g.orient,loc:!!asn||!!tagLine,obj:g.obj,cov:!!g.cov,load:!!g.load,haz:g.haz,exit:g.exit&&!exitBad};
     const miss=TD_EL.filter(([k])=>!have[k]).map(([,n])=>n),notes=[];
     const need=(asn||ac.assignment)==='head'?6:4;
     if(g.cov&&g.cov<need)notes.push(`coverage ${g.cov} is light for ${need===6?'a running head in timber':'timber litter and understory'} — use ${need}`);
     if(g.haz&&!g.pwr)notes.push('the hazard here is the power line along Ridgeline Road');
     if(g.tag&&!tagLine)notes.push('there is no retardant line to tag yet');
+    if(exitBad)notes.push(`exit to the tanker orbit, ${fmtAlt(SCN.tk)} (1,500 AGL), not ${fmtAlt(g.exitAltG)}`);
     recordRep('target',`Target description — ${ac.short}`,7-miss.length,7,miss,notes.join('; '));
     if(S.windShifted&&!S.windRebriefed&&asn&&S.elapsed-S.windShiftAt<180){S.windRebriefed=true;adjustScore('ops',3,'re-briefed after the wind shift');}
   }
@@ -2165,7 +2313,9 @@ function targetDesc(ac,s,say,expectManeuver){
 function rotorBrief(ac,s,say){
   const cs=ac.spokenCS,{asn,g}=gradeRotor(s);
   const miss=RB_EL.filter(([k])=>!g[k]).map(([,n])=>n);
-  recordRep('rotor',`Copter briefing — ${ac.short}`,5-miss.length,5,miss,g.haz&&!RX_PWR.test(s)?'the hazard here is the power line along Ridgeline Road':'');
+  const {ceil}=gradeRotor(s),rn=[];if(g.haz&&!RX_PWR.test(s))rn.push('the hazard here is the power line along Ridgeline Road');
+  if(ceil!=null&&ceil!==SCN.hc)rn.push(`hard ceiling is 500 AGL — ${fmtAlt(SCN.hc)} over a ${fmtAlt(SCN.elev)}-foot fire, not ${fmtAlt(ceil)}`);
+  recordRep('rotor',`Copter briefing — ${ac.short}`,5-miss.length,5,miss,rn.join('; '));
   ac.assignment=asn||ac.assignment||'right';
   say(`${cs} copies — ${asnLabel(ac.assignment)}, dipping Pilgrim Pond${RX_PWR.test(s)?', copy the power lines':''}. Will call out of the dip and off the drop.`);
   ac.status='maneuvering';markP('p3');markP('p4');hidePrompt();clearAwaiting(ac);
@@ -2192,12 +2342,14 @@ function clearIn(ac,s){
   const say=m=>rtx(ac.callsign,m,ac.role==='heli'?'heli':'rx',ac.role,fqOf(ac));
   if(fresh)ac.clr={pending:true,P:{},graded:false};
   const P=ac.clr.P;
-  CLR_EL.forEach(([k])=>{if(g[k])P[k]=g[k];});if(g.pwr)P.pwr=true;
+  const bad=clrWrong(g,s,ac);                 // said, but wrong for this scenario: graded and asked for again, like a missing element
+  CLR_EL.forEach(([k])=>{if(g[k]&&!bad[k])P[k]=g[k];});if(g.pwr)P.pwr=true;
   const miss=CLR_EL.filter(([k])=>!P[k]).map(([,n])=>n);
-  const issue=P.alt?altConflict(ac,P.alt,P.atgs||4000):null;
+  const issue=P.alt?altConflict(ac,P.alt,P.atgs):null;
   if(fresh&&!ac.clr.graded){
     ac.clr.graded=true;
     const notes=[],gm=miss.slice();if(g.haz&&!g.pwr)notes.push('the hazard here is the power line along Ridgeline Road');
+    CLR_EL.forEach(([k])=>{if(bad[k])notes.push(bad[k]);});
     if(issue){gm.push('a safe clearance altitude');notes.unshift('unsafe altitude — '+issue.replace(/\.$/,''));}
     if(ac.flight&&!/\bflight\b/.test(s))notes.push(`address the flight — "${ac.spokenCS} flight"`);
     recordRep('clear',`FTA clearance — ${ac.short}${ac.flight?' flight':''}`,5-gm.length,5,gm,notes.join('; '));
@@ -2205,8 +2357,8 @@ function clearIn(ac,s){
   if(P.alt){
     if(issue){delete P.alt;ac.status='waiting_clearance';
       say(`${cs} — ${issue} Say again clearance altitude.`);
-      addLog('!',`Vertical separation (CSAS): ${issue} Air Attack 2,500 AGL right-hand; tankers 1,500 AGL left-hand, same altitude; copters 500 AGL hard ceiling. Fire elevation is about 1,500.`,'fb');
-      showPrompt(ac,`Give ${cs} a clearance altitude that keeps separation (${ac.role==='heli'?'copters at or below 2,000 — 500 AGL hard ceiling':'tankers at 3,000 — 1,500 AGL, 1,000 below Air Attack, all tankers the same altitude'}).`);return;}
+      addLog('!',`Vertical separation (CSAS): ${issue} Air Attack 2,500 AGL right-hand; tankers 1,500 AGL left-hand, same altitude; copters 500 AGL hard ceiling. Fire elevation is about ${fmtAlt(SCN.elev)}.`,'fb');
+      showPrompt(ac,`Give ${cs} a clearance altitude that keeps separation (${ac.role==='heli'?`copters at or below ${fmtAlt(SCN.hc)} — 500 AGL hard ceiling`:`tankers at ${fmtAlt(SCN.tk)} — 1,500 AGL, 1,000 below Air Attack, all tankers the same altitude`}).`);return;}
   }
   if(miss.length){
     ac.status='waiting_clearance';
@@ -2226,13 +2378,35 @@ function clearIn(ac,s){
   if(!S.conditionsReported&&!S.neuReminded){S.neuReminded=true;addLog('','NEU West still needs your report on conditions when you get a chance.','sys');}
   setNextStep(`Give ${ac.short} a target description once it's established`);
 }
+// Clearance values that were given but don't match this scenario
+function clrWrong(g,s,ac){
+  const w={};
+  if(g.altim&&g.altim!==SCN.altim)w.altim=`wrong altimeter — it is ${SCN.altim}, you said ${g.altim}`;
+  if(g.atgs&&g.atgs!==SCN.aa)w.atgs=`wrong Air Attack altitude — you are at ${fmtAlt(SCN.aa)} (2,500 AGL), you said ${fmtAlt(g.atgs)}`;
+  if(g.others&&g.others!=='none'){const b=othersWrong(s,ac);
+    if(b.length)w.others=`wrong traffic altitude (${b.map(fmtAlt).join(', ')}) — ${trafficPhrase(ac).replace(/\.$/,'')}`;}
+  return w;
+}
+// Altitudes given for other aircraft that match no tanker / copter altitude in this scenario
+function othersWrong(s,ac){
+  const t=stripSelf(stripAltim(s),ac).replace(/air\s*attack\s*(?:230\s*)?(?:is\s*|will\s*be\s*|'s\s*)?(?:up\s*|orbiting\s*|holding\s*)?(?:at\s*)?\d{4}/g,' ')
+    .replace(/\b(?:clear(?:ed)?|you're|you\s+are)\s+(?:in(?:to)?\s+)?(?:the\s+)?(?:fta\s+|fire\s+traffic\s+area\s+)?(?:at\s+or\s+below\s+|at\s+|to\s+|for\s+)?\d{4}/g,' ');
+  const tk=new Set([SCN.tk]),hc=new Set([SCN.hc]);
+  S.aircraft.forEach(a=>{if(a!==ac&&a.clearedAlt)(a.role==='heli'?hc:tk).add(a.clearedAlt);});
+  const rx=/\b(tankers?|s2s?|seat|lead\s*plane|copters?|helicopters?|helos?|heli|hawk|rotor\s*wing|traffic|flight)\b[^]{0,40}?\b(\d{4})\b/g,bad=[];let m;
+  while((m=rx.exec(t))){const v=+m[2];if(v%100)continue;           // altitudes are given in hundreds
+    const h=/copter|heli|helo|hawk|rotor/.test(m[1]),fw=/tanker|s2|seat/.test(m[1]);
+    if(!(h?hc.has(v):fw?tk.has(v):tk.has(v)||hc.has(v)))bad.push(v);}
+  return bad;
+}
 function inFTA(){return S.aircraft.filter(a=>a.onCanvas&&['orbit','maneuvering','on_final','dropping'].includes(a.status));}
 // CSAS: ATGS orbit 2,500 AGL; tanker orbit 1,500 AGL with 1,000 ft minimum below
 // the ATGS; no vertical stacking of tankers; copters under a 500 AGL hard ceiling.
-// Fire elevation here is about 1,500 MSL.
-const FIRE_ELEV=1500;
+// Fire elevation comes from the scenario (SCN.elev, MSL).
+const FIRE_ELEV=SCN.elev;
 function altConflict(ac,alt,atgs){
   const others=inFTA().filter(a=>a!==ac&&a.clearedAlt);
+  atgs=Math.min(atgs||SCN.aa,SCN.aa);       // separate from where Air Attack really is, and from where you said it is
   if(ac.role==='tanker'){
     if(alt>atgs-1000)return `${fmtAlt(alt)} is inside 1,000 feet of Air Attack.`;
     if(alt<FIRE_ELEV+1500)return `${fmtAlt(alt)} is below the 1,500 AGL tanker orbit.`;
@@ -2241,18 +2415,19 @@ function altConflict(ac,alt,atgs){
     const h=others.find(a=>a.role==='heli'&&a.clearedAlt>alt-500);if(h)return `${fmtAlt(alt)} is within 500 feet of ${h.short}.`;
   } else {
     if(alt>FIRE_ELEV+500)return `${fmtAlt(alt)} is above the 500 AGL copter ceiling.`;
+    if(alt<=FIRE_ELEV)return `${fmtAlt(alt)} is at or below the fire elevation — the copter ceiling is 500 AGL.`;
     const t=others.find(a=>a.role==='tanker'&&a.clearedAlt<alt+500);if(t)return `${fmtAlt(alt)} is within 500 feet of the tankers.`;
   }
   return null;
 }
-function suggestAlt(ac){return ac.role==='heli'?2000:3000;}
+function suggestAlt(ac){return ac.role==='heli'?SCN.hc:SCN.tk;}
 function trafficPhrase(ac){
   const o=inFTA().filter(a=>a!==ac);
   if(!o.length)return 'No other aircraft in the FTA.';
-  return o.map(a=>a.role==='heli'?`${a.spokenCS} at or below ${fmtAlt(a.clearedAlt||2000)}`:`${a.spokenCS} at ${fmtAlt(a.clearedAlt||3000)}, left-hand orbit`).join(', ')+'.';
+  return o.map(a=>a.role==='heli'?`${a.spokenCS} at or below ${fmtAlt(a.clearedAlt||SCN.hc)}`:`${a.spokenCS} at ${fmtAlt(a.clearedAlt||SCN.tk)}, left-hand orbit`).join(', ')+'.';
 }
 function missingExample(ac,miss){
-  const m={altimeter:'altimeter 30.02','clearance altitude':`cleared in at ${fmtAlt(suggestAlt(ac))}`,'Air Attack altitude':'Air Attack is at 4,000',
+  const m={altimeter:`altimeter ${SCN.altim}`,'clearance altitude':`cleared in at ${fmtAlt(suggestAlt(ac))}`,'Air Attack altitude':`Air Attack is at ${fmtAlt(SCN.aa)}`,
     'other aircraft altitudes':trafficPhrase(ac).replace(/\.$/,''),hazards:'power lines along Ridgeline Road are your hazard'};
   return `"${ac.spokenCS}, ${miss.map(k=>m[k]).join(', ')}."`;
 }
@@ -2260,13 +2435,13 @@ function hintFor(ac){
   const cs=ac.spokenCS,head=dirName((S.wx.dir+180)%360);
   if(ac.status==='inbound'||ac.status==='waiting_clearance'){
     if(ac.clr&&ac.clr.pending){const miss=CLR_EL.filter(([k])=>!ac.clr.P[k]).map(([,n])=>n);if(miss.length)return missingExample(ac,miss);}
-    return `"${csFor(ac)}, Cedar Air Attack, altimeter 30.02, you're cleared in ${ac.role==='heli'?'at or below 2,000':'at 3,000'}. Cedar Air Attack is at 4,000. ${trafficPhrase(ac)} Power lines along Ridgeline Road are your hazard."`;
+    return `"${csFor(ac)}, Cedar Air Attack, altimeter ${SCN.altim}, you're cleared in ${ac.role==='heli'?'at or below '+fmtAlt(SCN.hc):'at '+fmtAlt(SCN.tk)}. Cedar Air Attack is at ${fmtAlt(SCN.aa)}. ${trafficPhrase(ac)} Power lines along Ridgeline Road are your hazard."`;
   }
   if(ac.status==='orbit'){
-    if(ac.role==='heli')return `${ac.freq==='rv'?'On Rotor Victor: ':''}"${cs}, objective is direct attack on the right flank. Dip site is Pilgrim Pond, southwest of the fire. Hard ceiling 2,000. Caution power lines along Ridgeline Road. Call your dips and drops."`;
+    if(ac.role==='heli')return `${ac.freq==='rv'?'On Rotor Victor: ':''}"${cs}, objective is direct attack on the right flank. Dip site is Pilgrim Pond, southwest of the fire. Hard ceiling ${fmtAlt(SCN.hc)}. Caution power lines along Ridgeline Road. Call your dips and drops."`;
     if(ac.targetReady)return `"${cs}, cleared to maneuver."`;
-    if(S.windShifted)return `"${cs}, wind has shifted — the head is running ${head} at the homes on Ridgeline Road. Objective is point protection: your target is the head, between the fire and the structures. Coverage level 6, full load. Caution power lines along the road. Exit straight out at 3,000."\nThen: "${cs}, cleared to maneuver."`;
-    return `"${cs}, the head is running ${head} upslope with homes on Ridgeline Road off the left flank. Objective is direct attack: your target is the left flank, anchor at the heel and tie in to the head. Coverage level 4, full load. Caution power lines along Ridgeline Road. Exit straight out at 3,000."\nThen: "${cs}, cleared to maneuver."`;
+    if(S.windShifted)return `"${cs}, wind has shifted — the head is running ${head} at the homes on Ridgeline Road. Objective is point protection: your target is the head, between the fire and the structures. Coverage level 6, full load. Caution power lines along the road. Exit straight out at ${fmtAlt(SCN.tk)}."\nThen: "${cs}, cleared to maneuver."`;
+    const ss=asnLabel(structSide());return `"${cs}, the head is running ${head} upslope with homes on Ridgeline Road off the ${ss}. Objective is direct attack: your target is the ${ss}, anchor at the heel and tie in to the head. Coverage level 4, full load. Caution power lines along Ridgeline Road. Exit straight out at ${fmtAlt(SCN.tk)}."\nThen: "${cs}, cleared to maneuver."`;
   }
   if(ac.status==='on_final')return `"${cs}, I have your final; clear to drop."`;
   if(ac.status==='maneuvering'&&ac.currentLeg)return `Watch ${cs} on ${ac.currentLeg} (CSAS: observe and acknowledge). The verbal call that's required: "I have your final; clear to drop."`;
@@ -2340,7 +2515,7 @@ function neuTraffic(s){
   const looksReport=/acres?|timber|understory|brush|grass|rate|spread|flank|threat|structure|slope|assum|at\s+scene|on\s+scene|potential|fuel|power\s*lines?|values|resources|cedar\s+air\s+attack|homes?/.test(s);
   if(looksReport&&!S.conditionsReported){
     const R=SIZEUP.grade(s),EL=SIZEUP.EL,got=EL.length-R.miss.length;
-    if(got<3){after(1.4,()=>rtx('NEU WEST','Air Attack 230, NEU West, say again your size-up.','dsp','dispatch','neu'));return;}
+    if(got<DIFF.sizeupMin){after(1.4,()=>rtx('NEU WEST','Air Attack 230, NEU West, say again your size-up.','dsp','dispatch','neu'));return;}
     S.conditionsReported=true;markP('p2');
     recordRep('report','Size-up to NEU West',got,EL.length,R.miss,R.notes.join('; '));
     after(1.6,()=>{
@@ -2363,7 +2538,7 @@ function neuTraffic(s){
 //  in order: Air Tactics, 122.925, Rotor Victor. Every call graded.
 // ════════════════════════════════════════════════════════════════════
 function blindModel(f,round){
-  return `"Any aircraft at scene or responding to the Cedar incident, in the vicinity of Cedar Ridge, Air Attack 230, ${round===1?12:7} miles from the ${S.bl.dir} at 4,000, advise on ${BL_FNAME[f]}."`;
+  return `"Any aircraft at scene or responding to the Cedar incident, in the vicinity of Cedar Ridge, Air Attack 230, ${round===1?12:7} miles from the ${S.bl.dir} at ${fmtAlt(SCN.aa)}, advise on ${BL_FNAME[f]}."`;
 }
 function blindPrompt(){
   if(!S.blindPhase)return;
@@ -2410,6 +2585,7 @@ function beginOps(){
   $('crit').classList.remove('show');$('blindBar').classList.remove('show');
   S.blindPhase=false;S.critiqueShown=true;S.opsActive=true;S.opsElapsed=0;markP('p0');hidePrompt();syncPause();
   setNextStep('Call the IC (Engine 2362) on CDF A/G 3, then NEU West — tankers will call on Air Tactics 4');
+  CB.plan();
   addLog('','Operations. Aircraft will call you on frequency.','sys');
 }
 
@@ -2438,8 +2614,8 @@ function spawnAC(ac){
   const go=()=>{
     if(inPattern()){after(3,go);return;}
     const fl=wings.length&&ac.flight?`, flight of ${wings.length+1} with ${wings.map(w=>w.spokenCS).join(' and ')}`:'';
-    rtx(ac.callsign,`Cedar Air Attack, ${ac.spokenCS}${fl}, 12 miles from the ${where} at ${ac.role==='heli'?'2,500':'4,500'}, on Air Tactics 4.`,ac.role==='heli'?'heli':'rx',ac.role,fq);
-    ac.checkInT=S.elapsed;ac._nextCall=S.opsElapsed+40;
+    rtx(ac.callsign,`Cedar Air Attack, ${ac.spokenCS}${fl}, 12 miles from the ${where} at ${fmtAlt(ac.role==='heli'?SCN.hIn:SCN.tkIn)}, on Air Tactics 4.`,ac.role==='heli'?'heli':'rx',ac.role,fq);
+    ac.checkInT=S.elapsed;ac._nextCall=S.opsElapsed+DIFF.recall;
     after(1.8,()=>{if(ac.status==='inbound'||ac.status==='waiting_clearance')setAwaiting(ac);});
   };
   after(.8,go);
@@ -2455,13 +2631,13 @@ function opsTick(){
       recordRep('depart',`Departure briefing — ${ac.short}`,0,4,DB_EL.map(([,n])=>n),`${ac.short} left the FTA without one`);}
     if(isWing(ac)){if(ac.status==='inbound'&&d<WORLD.holdR+240){ac._held7=true;ac.status='waiting_clearance';}}
     else if(ac.status==='inbound'&&d<WORLD.holdR+240&&!ac._held7){
-      ac._held7=true;ac.status='waiting_clearance';ac._nextCall=S.opsElapsed+40;
+      ac._held7=true;ac.status='waiting_clearance';ac._nextCall=S.opsElapsed+DIFF.recall;
       rtx(ac.callsign,`Cedar Air Attack, ${csFor(ac)}, holding at 7 miles, standing by for clearance.`,tag,ac.role,fq);
       after(1.6,()=>{if(ac.status==='waiting_clearance')setAwaiting(ac);});
     }
     if(!isWing(ac)&&(ac.status==='inbound'||ac.status==='waiting_clearance')&&ac._nextCall!==undefined&&S.opsElapsed>=ac._nextCall){
       if(inPattern()){ac._nextCall=S.opsElapsed+10;}
-      else{ac._nextCall=S.opsElapsed+40;
+      else{ac._nextCall=S.opsElapsed+DIFF.recall;
         rtx(ac.callsign,`Cedar Air Attack, ${csFor(ac)} — ${ac.status==='inbound'?'12 miles':'holding outside at 7 miles'}, standing by for clearance.`,tag,ac.role,fq);
         after(1.5,()=>{if(ac.status==='inbound'||ac.status==='waiting_clearance')setAwaiting(ac);});}
     }
@@ -2473,33 +2649,34 @@ function opsTick(){
       after(2,()=>{if(ac.status==='orbit'){setAwaiting(ac);setNextStep(`Brief ${ac.short} on the drop`);}});
     }
   });
-  if(!S.engineAsked&&!S.engineLineCleared&&S.opsElapsed>=150){
+  if(!S.engineAsked&&!S.engineLineCleared&&S.opsElapsed>=DIFF.tEngine){
     S.engineAsked=true;S.engineAtScene=true;
     rtx('ENGINE 2362','Air Attack 230, Engine 2362, we have a good anchor on Ridgeline Road west of the structures. Requesting to advance east along the road to protect the homes.','gnd','ground','cdf');
     after(1,()=>{showPromptRaw('Engine 2362 is waiting on you','On CDF A/G 3: "Engine 2362, Air Attack 230, line is clear, you\u2019re clear to advance." — or hold them if a drop is coming.');
       setNextStep('Answer E-2362 on CDF A/G 3');});
   }
-  if(S.conditionsReported){S.fbTimer++;if(S.fbTimer>=300){S.fbTimer=0;S.fbDue=S.elapsed||1;
+  if(S.conditionsReported){S.fbTimer++;if(S.fbTimer>=DIFF.fbGap){S.fbTimer=0;S.fbDue=S.elapsed||1;
     rtx('NEU WEST','Air Attack 230, NEU West, requesting an updated size and fire behavior when able.','dsp','dispatch','neu');
     setNextStep('Give NEU West an update — acres, rate of spread, containment');}}
-  if(!S.divertDone&&S.opsElapsed>=215&&!S.divertDue){
+  if(!S.divertDone&&S.opsElapsed>=DIFF.tDivert&&!S.divertDue&&!CB.cur){
     if(S.noDivert){S.divertDone=true;rtx('NEU WEST','Air Attack 230, NEU West, information: new start near Smartsville. Your Grass Valley tankers remain no divert.','dsp','dispatch','neu');}
     else{S.divertDue=S.elapsed||1;
       rtx('NEU WEST','Air Attack 230, NEU West, new start near Smartsville. Can you release a tanker, or do you need no divert on the Grass Valley tankers?','dsp','dispatch','neu');
       after(1,()=>{if(!S.divertDue)return;showPromptRaw('NEU West is waiting on you','On NEU West: "NEU West, Air Attack 230, negative. Structures threatened on Ridgeline Road. Request no divert on Tanker 88 and Tanker 89."');setNextStep('Answer NEU West about the divert');});}
   }
-  if(S.divertDue&&S.elapsed-S.divertDue>75){
+  if(S.divertDue&&S.elapsed-S.divertDue>DIFF.divertWait){
     S.divertDue=0;S.divertDone=true;hidePrompt();
     rtx('NEU WEST','Air Attack 230, NEU West, no response. Tanker 89 is diverted to the Smartsville incident.','dsp','dispatch','neu');
     addLog('!','With structures threatened, request "no divert" from dispatch to keep your tankers on the fire.','fb');divertAC(S.aircraft.find(a=>a.id==='t89'));
   }
-  if(!S.windShifted&&S.opsElapsed>=360){
-    S.windShifted=true;S.windShiftAt=S.elapsed;S.wx.dir=(S.wx.dir+315)%360;S.wx.wind=Math.min(30,S.wx.wind+3);
-    rtx('ENGINE 2362','Air Attack 230, Engine 2362, wind\u2019s come around out of the south and it\u2019s gusting. Fire\u2019s making a run north toward the structures on Ridgeline.','gnd','ground','cdf');
-    flashLeg('Wind shift — head now running north','#6a4508');
+  if(!S.windShifted&&S.opsElapsed>=DIFF.windShiftAt&&!CB.cur){
+    S.windShifted=true;S.windShiftAt=S.elapsed;S.wx.dir=SCN.shiftDir;S.wx.wind=Math.min(30,S.wx.wind+3);
+    rtx('ENGINE 2362',`Air Attack 230, Engine 2362, wind\u2019s come around out of the ${dirName(SCN.shiftDir)} and it\u2019s gusting. Fire\u2019s making a run ${dirName(SCN.shiftDir+180)} toward the structures on Ridgeline.`,'gnd','ground','cdf');
+    flashLeg(`Wind shift — head now running ${dirName(SCN.shiftDir+180)}`,'#6a4508');
     setNextStep('Re-brief your tankers onto the new head');
     addLog('','The head has turned toward the homes. Re-brief tankers with a new assignment.','sys');
   }
+  CB.tick();
 }
 function fireTop(){let m=FIRE_H;for(let i=0;i<FIRE.N;i+=2){const t=rayTheta(i),r=FIRE.r[i];m=Math.max(m,hAt(Math.cos(t)*r,Math.sin(t)*r));}return m;}
 function checkBreaches(){
@@ -2627,11 +2804,11 @@ function renderOrderMenu(){
     `<button type="button" data-id="nodivert"${S.noDivert?' disabled':''}>No divert on the Grass Valley tankers<small>${S.noDivert?'in effect':'keeps Tanker 88 and 89 on this fire'}</small></button>`;
 }
 function toggleOrderMenu(on){const m=$('orderMenu');if(on===undefined)on=!m.classList.contains('show');if(on)renderOrderMenu();m.classList.toggle('show',on);}
-const SKILLS=[['blind','Calls in the blind','7 elements each, in frequency order'],['clear','FTA clearances','altimeter, clearance altitude, Air Attack altitude, other aircraft, hazards'],
+const SKILLS=[['blind','Calls in the blind','6 elements each, in frequency order'],['clear','FTA clearances','altimeter, clearance altitude, Air Attack altitude, other aircraft, hazards'],
   ['target','Target descriptions','orientation, target, objective, coverage, load, hazards, exit'],['dropclr','Drop clearances','"I have your final, clear to drop"'],
   ['depart','Departure briefings','start, line, end, instructions'],['ic','IC contact','verify no other aircraft; objectives and priorities'],['rotor','Copter briefings','target, dip site, altitude, hazards, calls'],['airspace','Incident airspace','callsign, remain clear / TFR, altitude or distance'],['report','Reports to NEU West','CSAS size-up: on scene, location, size, potential, fuel, ROS, behavior, values, strategy, resources']];
 function showSummary(){
-  S.paused=true;
+  CB.flush();S.paused=true;
   const st=fireStats(),saved=houseObjs.filter(hh=>!hh.lost).length;
   let sumPct=0,nSk=0;
   const cards=SKILLS.map(([k,name,std])=>{
@@ -2642,15 +2819,29 @@ function showSummary(){
     return `<div class="rc${pct<80?' low':''}"><span>${name} <span style="color:var(--dim)">— ${R.length} rep${R.length>1?'s':''}</span></span><b>${pct}%</b><em>${top.length?'Most missed: '+top.join(', '):'Every element, every time.'}</em></div>`;}).join('');
   const avg=nSk?Math.round(sumPct/nSk):0;
   $('sumTitle').textContent=!nSk?'Exercise ended':avg>=90?'Sharp radio work':avg>=75?'Solid — keep the reps going':avg>=55?'Getting there':'Needs reps';
-  $('sumLead').textContent=`${fmt(S.elapsed)} on scene${nSk?`, ${avg}% across your calls`:''}. ${saved} of ${houseObjs.length} structures saved, ${Math.round(st.acres)} acres, ${Math.round(st.contain)}% contained.`;
+  $('sumLead').textContent=`${DIFF.name} level${DIFF.hintLock?', hints locked off':''}. ${fmt(S.elapsed)} on scene${nSk?`, ${avg}% across your calls`:''}. ${saved} of ${houseObjs.length} structures saved, ${Math.round(st.acres)} acres, ${Math.round(st.contain)}% contained.`;
   const sf=S.safety,safety=[['Deconfliction violations',sf.deconf],['Drops near E-2362 without warning',sf.unwarned],['Go-arounds (no clearance on final)',sf.goaround],
     ['Wind shift re-brief',S.windShifted?(S.windRebriefed?'done':'missed'):'not reached'],
     ['No divert for the structure threat',S.noDivert?'requested':sf.diverted?`not requested — ${sf.diverted} diverted`:'not requested']];
+  if(DIFF.hintLock)safety.push(['Scripts page opened',DIFF.helpOpens]);
   $('sumBody').innerHTML=`<div class="mlabel">Report card</div>`+cards+`<div class="mlabel">Safety and outcome</div>`+
     safety.map(([a,b])=>`<div class="row"><span>${a}</span><b${(typeof b==='number'&&b>0)||b==='missed'?' style="color:var(--amber)"':''}>${b}</b></div>`).join('')+
+    `<div class="mlabel">Scenario ${SCN.std?'Standard':SCN.code}</div><div class="model">Altimeter ${SCN.altim}. Fire elevation ${fmtAlt(SCN.elev)}: Air Attack ${fmtAlt(SCN.aa)}, tankers ${fmtAlt(SCN.tk)}, copters at or below ${fmtAlt(SCN.hc)}. Wind ${dirName(SCN.dir)} ${SCN.wind}, shifting ${dirName(SCN.shiftDir)}.</div>`+
+    `<div class="model">“Tanker 88, Cedar Air Attack, altimeter ${SCN.altim}, you're cleared in at ${fmtAlt(SCN.tk)}. Cedar Air Attack is at ${fmtAlt(SCN.aa)}. No other aircraft. Power lines along Ridgeline Road are your hazard.” — copters: “cleared in at or below ${fmtAlt(SCN.hc)}”.</div>`+
     `<div class="mlabel">Every rep</div><div class="ledger">${S.score.ledger.slice().reverse().map(l=>`<div><span>${fmt(l.t)} ${l.reason}</span><span class="${l.delta>=0?'p':'n'}">${l.delta>0?'+':''}${l.delta}</span></div>`).join('')}</div>`;
   $('summary').classList.add('show');
+  try{if(window.PROGRESS)PROGRESS.onSummary({scenarioCode:SCN.std?'STANDARD':SCN.code,scenarioName:SCN.std?'Cedar Fire':'Cedar Fire, elev '+fmtAlt(SCN.elev),difficulty:DIFF.name,hintsUsed:DIFF.hintLock?false:!!S.hints,models:debriefModels()});}catch(e){}
 }
+function debriefModels(){
+  // Model answers for the printed debrief, built from the scenario being flown.
+  const A=fmtAlt,head=dirName((SCN.dir+180)%360),ss=asnLabel(structSide(SCN.dir)),m={};
+  try{m.blind=blindModel('tac',1);}catch(e){}
+  m.clear=`Tanker 88, Cedar Air Attack, altimeter ${SCN.altim}, you\u2019re cleared in at ${A(SCN.tk)}. Cedar Air Attack is at ${A(SCN.aa)}. No other aircraft. Power lines along Ridgeline Road are your hazard.`;
+  m.target=`Tanker 88, the head is running ${head} upslope with homes on Ridgeline Road off the ${ss}. Objective is direct attack: your target is the ${ss}, anchor at the heel and tie in to the head. Coverage level 4, full load. Caution power lines along Ridgeline Road. Exit straight out at ${A(SCN.tk)}.`;
+  m.rotor=`Copter 5 Bravo Tango, objective is direct attack on the right flank. Dip site is Pilgrim Pond. Hard ceiling ${A(SCN.hc)}. Caution power lines along Ridgeline Road. Call your dips and drops.`;
+  return m;
+}
+
 
 // ════════════════════════════════════════════════════════════════════
 //  LOOP
@@ -2676,8 +2867,8 @@ function frame(){
   fireLight.position.set(0,FIRE_H+70,0);fireLight.intensity=(.9+st.active*1.1)*(.85+.15*Math.sin(S.simT*11)+.08*Math.sin(S.simT*23));
   skyMat.uniforms.smoke.value=clamp(st.acres/500,0,.45);
   $('hdgV').textContent=String(Math.round(aaHeading)%360).padStart(3,'0')+'°';
-  if(frame.n===undefined)frame.n=0;if(++frame.n%10===0){$('altV').textContent=(S.launched&&!S.opsActive?4000:4000).toLocaleString('en-US');}
-  $('hdgS').textContent=S.launched&&!S.opsActive?`${S.bl.nm.toFixed(1)} nm ${dirAbbr(S.bl.dirC)} of the fire, inbound at 4,000`:'right orbit';
+  if(frame.n===undefined)frame.n=0;if(++frame.n%10===0){$('altV').textContent=fmtAlt(SCN.aa);}
+  $('hdgS').textContent=S.launched&&!S.opsActive?`${S.bl.nm.toFixed(1)} nm ${dirAbbr(S.bl.dirC)} of the fire, inbound at ${fmtAlt(SCN.aa)}`:'right orbit';
   renderer.render(scene,camera);
   updateLabels();
   const lv=meterTick(),showLv=MIC.active||(S.micTest&&!S.launched)?lv:0,w=Math.round(showLv*100);
@@ -2690,6 +2881,7 @@ function frame(){
 function step(msg,fn){return new Promise(res=>{$('loadMsg').textContent=msg;setTimeout(()=>{fn();res();},30);});}
 async function boot(){
   if(!window.THREE){$('launchBtn').textContent='Couldn\u2019t load the 3D engine';$('loadMsg').textContent='Check your connection and reload the page.';return;}
+  $('qnhV').textContent=SCN.altim;$('altV').textContent=fmtAlt(SCN.aa);
   POND_H=rawH(POND.x,POND.z)-4;FIRE_H=hAt(0,0);
   initRenderer();
   await step('Building terrain…',buildTerrain);
@@ -2705,7 +2897,7 @@ async function boot(){
   clock.getDelta();requestAnimationFrame(frame);
 }
 function launch(){
-  if(S.launched)return;S.launched=true;
+  if(S.launched)return;S.launched=true;DIFF.apply();
   $('intro').classList.remove('show');$('blindBar').classList.add('show');$('viewBtns').style.visibility='visible';
   try{getACX().resume();}catch(e){}
   startEngineHum();requestMic();watchMicPermission();
@@ -2713,11 +2905,11 @@ function launch(){
   after(4,blindPrompt);
   try{if(!localStorage.getItem('cedarTips')){S.showTips=true;localStorage.setItem('cedarTips','1');}}catch(e){S.showTips=true;}
   if(S.showTips)after(1.5,()=>{addLog('','Tips: hold the key the whole time you talk; lead with the callsign; say numbers in thousands ("three thousand"). Press Scripts any time for the wording.','sys');});
-  setTimeout(()=>dispatchBeeps(()=>rtx('NEU WEST','Air Attack 230, Tanker 88, Tanker 89, Copter 5 Bravo Tango, vegetation fire, Cedar Ridge area off Ridgeline Road. elevation 1,500. Engine 2362 at scene, Cedar IC, reporting 10 acres in timber understory, dangerous rate of spread, structures threatened. Air Attack 230, Tanker 88, Tanker 89, Copter 5 Bravo Tango.','dsp','dispatch','neu')),900);
+  setTimeout(()=>dispatchBeeps(()=>rtx('NEU WEST',`Air Attack 230, Tanker 88, Tanker 89, Copter 5 Bravo Tango, vegetation fire, Cedar Ridge area off Ridgeline Road. elevation ${fmtAlt(SCN.elev)}. Engine 2362 at scene, Cedar IC, reporting 10 acres in timber understory, dangerous rate of spread, structures threatened. Air Attack 230, Tanker 88, Tanker 89, Copter 5 Bravo Tango.`,'dsp','dispatch','neu')),900);
 }
 
 // ── wiring
-function modalOpen(){return ['crit','summary','help'].some(id=>$(id).classList.contains('show'));}
+function modalOpen(){return ['crit','summary','help','progress'].some(id=>$(id).classList.contains('show'));}
 function syncPause(){S.paused=S.userPaused||modalOpen();$('pauseTag').classList.toggle('show',S.userPaused&&!modalOpen());}
 function setPause(on){
   if(!S.launched)return;S.userPaused=on;$('pauseBtn').setAttribute('aria-pressed',String(on));$('pauseBtn').textContent=on?'Resume':'Pause';syncPause();
@@ -2728,15 +2920,17 @@ function setPause(on){
 function saveSettings(){try{localStorage.setItem('cedarATGS3',JSON.stringify({hints:S.hints,review:S.review,zoom:S.zoom}));}catch(e){}}
 function setReview(on){S.review=on;$('reviewBtn').setAttribute('aria-pressed',String(on));}
 function openHelp(){
+  const A=fmtAlt,head=dirName((SCN.dir+180)%360),ss=asnLabel(structSide(SCN.dir));
+  if(S.launched)DIFF.helpOpens++;
   $('helpBody').innerHTML=`
   <h3>Radio</h3>
   <p>Hold a radio key with the mouse, or hold <kbd>Space</kbd> for Air Tactics 4, or a number key <kbd>1</kbd>–<kbd>7</kbd> for each radio left to right. Talk, then release to transmit. (Turn Review on to check each call first.) Mouse wheel or <kbd>+</kbd>/<kbd>-</kbd> changes your viewing height. Lead every call with the callsign you're talking to. <kbd>P</kbd> pauses. <kbd>\`</kbd> shows what the microphone is doing.</p>
-  <h3>Altitudes (fire elevation about 1,500)</h3>
-  <table><tr><td>Air Attack</td><td>4,000 (2,500 AGL)</td><td>right-hand orbit</td></tr>
-  <tr><td>Tankers</td><td>3,000 (1,500 AGL), all the same altitude</td><td>left-hand orbit and pattern</td></tr>
-  <tr><td>Copters</td><td>at or below 2,000 (500 AGL hard ceiling)</td><td>as assigned</td></tr></table>
+  <h3>Altitudes (fire elevation about ${A(SCN.elev)})</h3>
+  <table><tr><td>Air Attack</td><td>${A(SCN.aa)} (2,500 AGL)</td><td>right-hand orbit</td></tr>
+  <tr><td>Tankers</td><td>${A(SCN.tk)} (1,500 AGL), all the same altitude</td><td>left-hand orbit and pattern</td></tr>
+  <tr><td>Copters</td><td>at or below ${A(SCN.hc)} (500 AGL hard ceiling)</td><td>as assigned</td></tr></table>
   <h3>1. Calls in the blind — Air Tactics 4, then 122.925, then Rotor Victor, at 12 and 7 miles</h3>
-  <div class="model">“Any aircraft at scene or responding to the Cedar incident, in the vicinity of Cedar Ridge, Air Attack 230, 12 miles from the ${S.bl.dir} at 4,000, advise on Air Tactics 4.”</div>
+  <div class="model">“Any aircraft at scene or responding to the Cedar incident, in the vicinity of Cedar Ridge, Air Attack 230, 12 miles from the ${S.bl.dir} at ${A(SCN.aa)}, advise on Air Tactics 4.”</div>
   <h3>2. IC on CDF A/G 3, then size-up to NEU West</h3>
   <div class="model">“Engine 2362, Air Attack 230, any aircraft on scene? Say your objectives and priorities.”</div>
   <div class="model">“${SIZEUP.example}”</div>
@@ -2744,11 +2938,11 @@ function openHelp(){
   <h3>Transiting aircraft on 122.925</h3>
   <div class="model">“${N412.model}”</div>
   <h3>3. Clearance into the FTA — altimeter, assigned altitude, Air Attack altitude, other aircraft, hazards</h3>
-  <div class="model">“Tanker 88, Cedar Air Attack, altimeter 30.02, you're cleared in at 3,000. Cedar Air Attack is at 4,000. No other aircraft. Power lines along Ridgeline Road are your hazard.”</div>
+  <div class="model">“Tanker 88, Cedar Air Attack, altimeter ${SCN.altim}, you're cleared in at ${A(SCN.tk)}. Cedar Air Attack is at ${A(SCN.aa)}. No other aircraft. Power lines along Ridgeline Road are your hazard.”</div>
   <p>A flight checks in together (“Tanker 88, flight of 2 with Tanker 89”). Clear it with one call to “Tanker 88 flight”; each tanker reads back. Then brief and clear them to maneuver one at a time: “Tanker 88, cleared to maneuver number 1. Tanker 89, number 2.”</p>
   <h3>4. Tactical briefing — orientation, objective, target, coverage level, load, hazards, exit</h3>
-  <div class="model">“Tanker 88, the head is running northeast upslope with homes on Ridgeline Road off the left flank. Objective is direct attack: your target is the left flank, anchor at the heel and tie in to the head. Coverage level 4, full load. Caution power lines along Ridgeline Road. Exit straight out at 3,000.”</div>
-  <div class="model">Tag and extend: “Tanker 89, do you have the retardant on the left flank? Objective is direct attack, tag and extend, coverage level 4, full load. Caution power lines. Exit straight out at 3,000.”</div>
+  <div class="model">“Tanker 88, the head is running ${head} upslope with homes on Ridgeline Road off the ${ss}. Objective is direct attack: your target is the ${ss}, anchor at the heel and tie in to the head. Coverage level 4, full load. Caution power lines along Ridgeline Road. Exit straight out at ${A(SCN.tk)}.”</div>
+  <div class="model">Tag and extend: “Tanker 89, do you have the retardant on the ${ss}? Objective is direct attack, tag and extend, coverage level 4, full load. Caution power lines. Exit straight out at ${A(SCN.tk)}.”</div>
   <p>Timber litter and understory is coverage level 4; use 6 on a running head. A full S-2T load lays about 320 ft at coverage level 4 and 140 ft at coverage level 6.</p>
   <h3>5. Maneuver and drop</h3>
   <div class="model">“Tanker 88, cleared to maneuver.” … on final: “Tanker 88, I have your final; clear to drop.”</div>
@@ -2759,13 +2953,28 @@ function openHelp(){
   <h3>6. Departure briefing — start, line, end, then instructions</h3>
   <div class="model">“Tanker 88, good start, good line, good end. Load and return.”</div>
   <h3>7. Copters — target, dip site, hard ceiling, hazards, reports</h3>
-  <div class="model">“Copter 5 Bravo Tango, objective is direct attack on the right flank. Dip site is Pilgrim Pond. Hard ceiling 2,000. Caution power lines along Ridgeline Road. Call your dips and drops.”</div>
+  <div class="model">“Copter 5 Bravo Tango, objective is direct attack on the right flank. Dip site is Pilgrim Pond. Hard ceiling ${A(SCN.hc)}. Caution power lines along Ridgeline Road. Call your dips and drops.”</div>
   <p>Copters dip one at a time, in order. To move them off the tanker frequency: “Copter 5 Bravo Tango, switch to Rotor Victor (127.325)” — then talk to that copter on Rotor Victor. Hold them with “hold at the dip”, “hold out for the tanker”, “hold short of the fire” or “stay at the pond”; release them with “resume”, “back to work” or “tankers are clear”.</p>
   <p>Deconflict before a tanker drops: “Copter 5 Bravo Tango, hold at the pond” then “resume”, or “clear to target, number 2 behind Tanker 88”.</p>
   <h3>8. Ground</h3>
   <p>On CDF A/G 3, warn Engine 2362 before retardant comes in near them (“retardant inbound, clear the area”), and tell them when the drop is complete. Give NEU West a fire behavior update when they ask. Order more aircraft by type on NEU West (“request one large airtanker”, “one type 1 helicopter”, “one SEAT”) or from Order aircraft. With structures threatened: “NEU West, Air Attack 230, request no divert on Tanker 88 and Tanker 89.” Say “end exercise” for your report card.</p>`;
   $('help').classList.add('show');syncPause();
 }
+// ── scenario selector on the briefing screen (choosing reloads into the scenario)
+function scnUI(){
+  $('scnCode').textContent=SCN.std?'Standard':SCN.code;
+  document.querySelectorAll('#scnRow [data-scn]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.scn===(SCN.std?'standard':SCN.mode==='random'?'random':''))));
+  $('scnMsg').textContent=SCN.bad?`“${SCN.bad}” isn’t a scenario code — flying a random scenario instead.`
+    :SCN.std?'The original fire: altimeter 30.02, fire elevation 1,500, every run.':SCN.mode==='code'?'Replaying this code. Dispatch gives the fire elevation; work out your altitudes from it.':'New altimeter, fire elevation and wind. Dispatch gives the elevation; work out your altitudes. Share the code to fly the same scenario.';
+  document.querySelectorAll('#scnRow [data-scn]').forEach(b=>b.addEventListener('click',()=>SCN.choose(b.dataset.scn)));
+  const go=()=>{const v=$('scnIn').value.trim();if(/^(?:standard|std|random)$/i.test(v)){SCN.choose(v.toLowerCase()==='std'?'standard':v.toLowerCase());return;}
+    if(SCN.decode(v)==null){$('scnMsg').textContent=v?`“${v}” isn’t a scenario code (5 letters and digits, from the report card).`:'Type a 5-character scenario code.';return;}
+    SCN.choose(v.toUpperCase().replace(/[\s-]/g,''));};
+  $('scnGo').addEventListener('click',go);
+  $('scnIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go();}});
+  $('scnNew').addEventListener('click',()=>SCN.choose('random'));
+}
+scnUI();
 $('launchBtn').addEventListener('click',launch);
 $('micTestBtn').addEventListener('click',startMicTest);
 $('critBtn').addEventListener('click',beginOps);
@@ -2943,19 +3152,20 @@ boot();
   }
 
   window.SIZEUP={EL:EL,grade:grade,windFrom:windFrom,sizeOf:sizeOf,
-    example:'NEU West, Air Attack 230 is on scene at the Cedar Fire. Center point Cedar Ridge, off Ridgeline Road. '+
-      'The fire is 10 acres in timber understory, midslope, head running northeast upslope with a moderate rate of spread, '+
-      'southwest wind at 12. Potential for 100 acres. Homes threatened on Ridgeline Road off the left flank, power lines along the road. '+
+    get example(){var ss=asnLabel(structSide(SCN.dir));
+      return 'NEU West, Air Attack 230 is on scene at the Cedar Fire. Center point Cedar Ridge, off Ridgeline Road. '+
+      'The fire is 10 acres in timber understory, midslope, head running '+dirName(SCN.dir+180)+' upslope with a moderate rate of spread, '+
+      dirName(SCN.dir)+' wind at '+SCN.wind+'. Potential for 100 acres. Homes threatened on Ridgeline Road off the '+ss+', power lines along the road. '+
       'Engine 2362 is at scene. Two S-2Ts and a Type 2 copter assigned. '+
-      'Recommend direct attack, anchored at the heel on Ridgeline Road, retardant on the left flank to protect the homes and pinch off the head. '+
-      'Current resources are sufficient. Air Attack 230 will be Cedar Air Attack.'};
+      'Recommend direct attack, anchored at the heel on Ridgeline Road, retardant on the '+ss+' to protect the homes and pinch off the head. '+
+      'Current resources are sufficient. Air Attack 230 will be Cedar Air Attack.';}};
 
   // ══════════════════════════════════════════════════════════════════
   //  N412SP — transiting Cessna 182 on 122.925
   // ══════════════════════════════════════════════════════════════════
   var LABEL='Transiting aircraft on 122.925';
   var N_EL=[['cs','addressed N412SP by callsign'],['clear','remain-clear / avoidance instruction'],['alt','altitude or distance to stay outside']];
-  var MODEL='"November 4 1 2 Sierra Papa, Air Attack 230, a TFR is being established over the Cedar Fire. Remain clear of the fire area — suggest you stay south of the fire and above 5,500 (or: remain 5 miles clear)."';
+  var MODEL='"November 4 1 2 Sierra Papa, Air Attack 230, a TFR is being established over the Cedar Fire. Remain clear of the fire area — suggest you stay south of the fire and above '+fmtAlt(SCN.n412Above)+' (or: remain 5 miles clear)."';
   var RX_NAME=/sierra\s+pap\w*|\b412\s*(?:sp|s\s*p)?\b|\b4\s+1\s+2\b|\b4\s+12\b|\bfour\s+(?:one\s+two|twelve)\b|\bnovember\s+(?:4|four|for)\b|\bn\s*412\b|\bcessna\b|\blight\s+aircraft\b|\bthe\s+182\b/;
   var RX_CLEAR=/\bremain\s+(?:well\s+)?(?:clear|outside|south|north|east|west|above|out)\b|\bstay\s+(?:well\s+)?(?:clear|out|away|south|north|east|west|outside|above|\d+)|\bkeep\s+(?:well\s+)?(?:clear|out|away|south|north|east|west|outside|above)\b|\bavoid\w*\b|\btfr\b|\bt\s+f\s+r\b|\btemporary\s+flight\s+restriction|\bfire\s+traffic\s+area\b|\bfta\b|\bdeviate\b|\bdivert\b|\b(?:go|route|fly|pass|transit)\s+(?:\w+\s+){0,2}?(?:around|south|north|east|west)\b|\b(?:do\s+not|don't|not\s+to|unable\s+to)\s+(?:enter|transit|cross|overfly|fly\s+over|come)|\bclear\s+of\s+the\s+(?:fire|area|incident)\b|\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|fifteen|twenty)\s+miles?\s+(?:clear|outside|away|from)\b/;
   var RX_THRU=/\b(?:clear(?:ed)?\s+(?:to\s+)?(?:transit|through|cross|over|direct|as\s+requested|westbound|eastbound)|you(?:'re|\s+are)\s+(?:cleared|clear\s+to|good\s+to)|\bapproved\b|\bgo\s+ahead\s+(?:and\s+)?(?:transit|through|westbound|cross)|\bcontinue\s+(?:westbound|on\s+course|as\s+planned|through)|\bno\s+(?:factor|problem|conflict)|\bpermission\s+granted)/;
@@ -2990,7 +3200,7 @@ boot();
   }
   function armTimeout(){
     var tk=++N.tok;
-    after(60,function(){
+    after(DIFF.n412Wait,function(){
       if(tk!==N.tok||!N.waiting)return;
       N.say('Air Attack 230, 4 1 2 Sierra Papa, we’ll remain clear to the south.');
       var G=N.best||{got:0,miss:N_EL.map(function(e){return e[1];}),notes:['N412SP got no answer']};
@@ -3003,7 +3213,7 @@ boot();
     if(round!==1||freq!=='vhf'||N.started)return;
     N.started=true;
     after(3.6,function(){
-      N.say('Air Attack 230, November 4 1 2 Sierra Papa, Cessna 182, 8 miles southeast of the Cedar Fire at 4,500, westbound. Request to transit.');
+      N.say('Air Attack 230, November 4 1 2 Sierra Papa, Cessna 182, 8 miles southeast of the Cedar Fire at '+fmtAlt(SCN.n412)+', westbound. Request to transit.');
       N.waiting=true;N.asks=0;N.best=null;
       after(.6,function(){if(!N.waiting)return;showPromptRaw('N412SP — transiting Cessna on 122.925',MODEL);setNextStep('Answer N412SP on 122.925 — have them remain clear');});
       armTimeout();
@@ -3018,7 +3228,7 @@ boot();
       var G0=gradeN(s);
       after(1.4,function(){
         if(G0.g.clear)N.say('4 1 2 Sierra Papa copies, remaining clear of the fire area to the '+G0.dir+'.');
-        else N.say(N.started?'4 1 2 Sierra Papa is 10 miles south of the fire, clear of the area.':'Air Attack 230, 4 1 2 Sierra Papa, Cessna 182, 9 miles southeast of the Cedar Fire at 4,500, westbound.');
+        else N.say(N.started?'4 1 2 Sierra Papa is 10 miles south of the fire, clear of the area.':'Air Attack 230, 4 1 2 Sierra Papa, Cessna 182, 9 miles southeast of the Cedar Fire at '+fmtAlt(SCN.n412)+', westbound.');
       });
       return true;
     }
@@ -3055,6 +3265,240 @@ boot();
 
 </script>
 <script>
+// ════════════════════════════════════════════════════════════════════
+//  DIFFICULTY — intro control, per-level setup at launch, Guided model
+//  answers, and the Advanced curveballs (CB). Parameters live in DIFF
+//  (STATE block). At Standard every hook here is a no-op.
+// ════════════════════════════════════════════════════════════════════
+function renderDiff(){
+  document.querySelectorAll('#diffRow [data-lv]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lv===DIFF.level)));
+  $('diffDesc').textContent=DIFF.desc;$('diffTag').textContent=DIFF.name;
+}
+document.querySelectorAll('#diffRow [data-lv]').forEach(b=>b.addEventListener('click',()=>{if(DIFF.set(b.dataset.lv,true))renderDiff();}));
+renderDiff();
+const CB_SKILL=['curve','Curveballs','blocked calls, go-arounds, UAS intrusion, priority traffic'];
+DIFF.apply=function(){
+  DIFF.locked=true;
+  S.fireSpeed=DIFF.fireSpeed;
+  for(const id in DIFF.arr){const a=S.aircraft.find(x=>x.id===id);if(a)a.arrDelay=DIFF.arr[id];}
+  if(DIFF.hints===true)setHints(true);else if(DIFF.hints===false)setHints(false);
+  if(DIFF.hintLock){const b=$('hintBtn');b.disabled=true;b.title='Hints are locked off at Advanced';b.style.opacity='.45';}
+  if(DIFF.curveballs){if(!S.reps.curve)S.reps.curve=[];if(!SKILLS.some(k=>k[0]==='curve'))SKILLS.push(CB_SKILL);}
+  renderDiff();
+};
+// Guided: the model call after any incomplete rep. Built from the same
+// generators the hints use (hintFor, blindModel, SIZEUP, N412), so no
+// scenario numbers are copied here.
+DIFF.model=function(kind,label){
+  let m=null;
+  try{
+    const ac=S.aircraft.find(a=>label.indexOf('— '+a.short)>=0),as=st=>hintFor(Object.assign({},ac,{status:st,clr:null,targetReady:false}));
+    if(kind==='blind'){const f=BL_ORDER.find(x=>label.endsWith(flbl(x)));if(f)m=blindModel(f,/^7-/.test(label)?2:1);}
+    else if(kind==='clear'&&ac)m=as('inbound');
+    else if((kind==='target'||kind==='rotor')&&ac)m=as('orbit').split('\nThen')[0];
+    else if(kind==='dropclr'&&ac)m=as('on_final');
+    else if(kind==='depart'&&ac)m=`"${ac.spokenCS}, good start, good line, good end. Load and return."`;
+    else if(kind==='ic')m='"Engine 2362, Air Attack 230, any aircraft on scene? Say your objectives and priorities."';
+    else if(kind==='report')m=/size-up/i.test(label)?`"${SIZEUP.example}"`:`"NEU West, Air Attack 230, update: about ${Math.round(fireStats().acres)} acres, moderate rate of spread, ${Math.round(fireStats().contain)} percent contained."`;
+    else if(kind==='airspace')m=N412.model;
+  }catch(e){m=null;}
+  if(m)addLog('Model',m,'fb');
+};
+
+// ── Curveballs ───────────────────────────────────────────────────────
+// One at a time, never in the blind phase, with a modal open, during the
+// divert or N412 exchanges, or around the wind shift; each has a timeout
+// so an ignored one still grades and ends.
+function cbSay(ac,m){rtx(ac.callsign,m,ac.role==='heli'?'heli':'rx',ac.role,fqOf(ac));}
+function cbFinalLeft(a){const g=a.route[0];if(!g||g.k!=='line'||!a._finalLen)return 0;return a._finalLen-15-((a.pos.x-g.px)*g.dx+(a.pos.z-g.pz)*g.dz);}
+// Tanker breaks off the pattern and goes back to its orbit, still briefed (needs "cleared to maneuver" again)
+function cbOrbit(ac){ac.status='orbit';ac.currentLeg='';ac.cleared=false;ac._dryRun=false;ac._finalCalled=false;ac.pendingLine=null;ac._established=true;routeOrbit(ac);
+  S.awaitingQueue=S.awaitingQueue.filter(x=>x!==ac);if(S.awaitingAC===ac)clearAwaiting(ac);}
+function cbRep(k,label,EL,G,notes,model){
+  if(k.over)return;k.over=true;
+  if(!S.reps.curve)S.reps.curve=[];if(!SKILLS.some(x=>x[0]==='curve'))SKILLS.push(CB_SKILL);
+  const miss=EL.filter(([e])=>!G[e]).map(([,n])=>n);
+  recordRep('curve',label,EL.length-miss.length,EL.length,miss,notes.filter(Boolean).join('; '));
+  addLog('Model',model,'fb');CB.end();
+}
+const CB={queue:[],cur:null,done:[],skipped:[],lastEnd:-1e9,nextChat:null,
+  AT:{blocked:40,goaround:120,drone:150,icfinal:120},     // earliest ops second for each
+  plan(){
+    CB.queue=[];CB.cur=null;CB.done=[];CB.skipped=[];CB.lastEnd=-1e9;CB.nextChat=null;
+    const W=DIFF.windShift;DIFF.windShiftAt=W[0]===W[1]?W[0]:Math.round(W[0]+(W[1]-W[0])*DIFF.rng());
+    if(DIFF.curveballs){
+      const ids=Object.keys(CB.DEFS);
+      for(let i=ids.length-1;i>0;i--){const j=Math.floor(DIFF.rng()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]];}
+      ids.slice(0,DIFF.curveballs).forEach(id=>CB.queue.push({id,at:CB.AT[id]+Math.round(DIFF.rng()*240)}));
+      CB.queue.sort((a,b)=>a.at-b.at);}
+    if(DIFF.chatter)CB.nextChat=S.opsElapsed+Math.round(DIFF.chatter[0]+(DIFF.chatter[1]-DIFF.chatter[0])*DIFF.rng());
+  },
+  canStart(){return S.opsActive&&!S.blindPhase&&!S.userPaused&&!modalOpen()&&!S.divertDue&&!(window.N412&&N412.waiting)&&
+    (S.windShifted?S.elapsed-S.windShiftAt>=40:S.opsElapsed<DIFF.windShiftAt-25)&&S.elapsed-CB.lastEnd>=DIFF.cbGap;},
+  tick(){
+    if(CB.cur){CB.cur.tick();return;}
+    if(CB.nextChat!=null&&S.opsElapsed>=CB.nextChat)CB.chat();
+    if(!CB.queue.length||!CB.canStart())return;
+    for(let i=0;i<CB.queue.length;i++){const q=CB.queue[i];
+      if(S.opsElapsed<q.at)continue;
+      if(S.opsElapsed>q.at+600){CB.queue.splice(i--,1);CB.skipped.push(q.id);continue;}
+      if(CB.start(q.id)){CB.queue.splice(i,1);return;}}
+  },
+  start(id){const D=CB.DEFS[id],ctx=D.ready();if(!ctx)return false;
+    const k=Object.create(D);k.id=id;k.t0=S.elapsed;k.over=false;CB.cur=k;k.start(ctx);dbg('curveball: '+id);return true;},
+  force(id){if(CB.cur)return 'busy';if(!CB.DEFS[id])return 'unknown';return CB.start(id)?'started':'not ready';},
+  end(){if(CB.cur){CB.done.push(CB.cur.id);CB.cur=null;CB.lastEnd=S.elapsed;}},
+  cancel(){if(CB.cur){CB.skipped.push(CB.cur.id);CB.cur=null;}},        // never engaged — no rep
+  flush(){if(CB.cur)CB.cur.grade();},
+  onXmit(s,freq){
+    if(CB.cur&&CB.cur.onXmit&&CB.cur.onXmit(s,freq))return true;
+    if(DIFF.curveballs&&(freq==='tac'||freq==='rv'))return CB.broadcast(s,freq);
+    return false;},
+  onAC(ac,s,c){return !!(CB.cur&&CB.cur.onAC&&CB.cur.onAC(ac,s,c));},
+  // Advanced only: "All aircraft, hold / resume" on one frequency
+  broadcast(s,freq){
+    if(addressees(s).length)return false;
+    if(!/\ball\s+(?:aircraft|tankers|copters|helicopters|traffic|stations|units)\b|\beveryone\b|\beverybody\b|\battention\s+all\b/.test(s))return false;
+    const res=/\bresume|back\s+to\s+work|\bcontinue\b|press\s+on|clear(?:ed)?\s+to\s+(?:resume|work|continue)/.test(s);
+    const hold=!res&&/\bhold|stand\s*by|suspend|\bstop\b|cease|knock\s*it\s*off|stay\s+(?:clear|out|away)|remain\s+clear|break\s*off|back\s+to\s+(?:the\s+)?orbit/.test(s);
+    if(!hold&&!res)return false;
+    const on=S.aircraft.filter(a=>a.onCanvas&&fqOf(a)===freq&&['orbit','maneuvering','on_final'].includes(a.status));
+    if(!on.length){addLog('',`No aircraft working on ${flbl(freq)}.`,'sys');return true;}
+    on.forEach((a,i)=>{const cs=a.spokenCS,t=1.2*(i+1);let m;
+      if(hold){
+        if(a.role==='heli'){if(!a.held&&a.status==='maneuvering'){a.held=true;a.seqBehind=null;heliHold(a);}m=`${cs} holding${a.status==='maneuvering'?' at the pond':''}.`;}
+        else if(a.status==='maneuvering'||a.status==='on_final'){cbOrbit(a);S.safety.aborts++;m=`${cs} breaking off, back to the orbit.`;}
+        else m=`${cs} holding in the orbit.`;
+      } else {
+        if(a.role==='heli'&&a.held){a.held=false;a.seqBehind=null;heliCycle(a);m=`${cs} copies, back to work.`;}
+        else if(a.role==='tanker'&&a.status==='orbit')m=a.targetReady?`${cs} in the orbit, ready to maneuver.`:`${cs} in the orbit, need a target.`;
+        else m=`${cs} copies.`;
+      }
+      after(t,()=>cbSay(a,m));});
+    if(CB.cur&&CB.cur.onBroadcast)CB.cur.onBroadcast(hold);
+    return true;},
+  // Advanced: other units on NEU West that need nothing from you
+  CHAT:[['NEU WEST','Engine 2371, NEU West, respond to a vehicle fire, Highway 49 at Lime Kiln Road.','dsp','dispatch'],
+    ['BATTALION 2411','NEU West, Battalion 2411, responding to the Cedar Fire.','gnd','ground'],
+    ['DOZER 2341','NEU West, Dozer 2341, available at the Lone incident.','gnd','ground'],
+    ['NEU WEST','Battalion 2411, NEU West, copy. Medic 26 is staging at the Ridgeline Road turnout.','dsp','dispatch'],
+    ['ENGINE 2371','NEU West, Engine 2371, on scene, vehicle fire knocked down.','gnd','ground']],
+  chat(){
+    if(speechQ.length||speaking){CB.nextChat=S.opsElapsed+10;return;}
+    const L=CB.CHAT[Math.floor(DIFF.rng()*CB.CHAT.length)];rtx(L[0],L[1],L[2],L[3],'neu');
+    CB.nextChat=S.opsElapsed+Math.round(DIFF.chatter[0]+(DIFF.chatter[1]-DIFF.chatter[0])*DIFF.rng());
+  },
+  DEFS:{}};
+window.CB=CB;
+
+// 1 — Blocked transmission. CSAS 3 Cs of initial contact (csas.txt 1333-1346):
+// the inbound pilot acknowledges receipt of the clearance or holds outside the
+// NOCOM ring until it is received and understood. No readback = not cleared.
+// The first call to the chosen aircraft never reaches the pilot.
+CB.DEFS.blocked={name:'Blocked transmission',
+  ready(){return S.aircraft.find(a=>a.onCanvas&&!isWing(a)&&(a.status==='inbound'||a.status==='waiting_clearance')&&a.checkInT!=null&&!(a.clr&&a.clr.pending))||null;},
+  start(ac){this.ac=ac;this.tb=null;this.recall=false;},
+  onAC(ac,s,c){
+    if(ac!==this.ac||this.over)return false;
+    if(this.tb==null){if(ac.status!=='inbound'&&ac.status!=='waiting_clearance')return false;
+      this.tb=S.elapsed;ac._nextCall=S.opsElapsed+DIFF.blockRecall+2;dbg('blocked call to '+ac.short);return true;}
+    if(S.elapsed-this.tb<=DIFF.blockRecall)this.recall=true;
+    return false;},
+  tick(){const ac=this.ac;
+    if(this.tb==null){if(S.elapsed-this.t0>150||!ac.onCanvas||(ac.status!=='inbound'&&ac.status!=='waiting_clearance'))CB.cancel();return;}
+    if(['orbit','maneuvering','on_final','dropping','returning','released'].includes(ac.status)||!ac.onCanvas||S.elapsed-this.tb>120)this.grade();},
+  grade(){if(this.tb==null){CB.cancel();return;}
+    const ac=this.ac,clr=['orbit','maneuvering','on_final','dropping'].includes(ac.status);
+    cbRep(this,`Blocked call — ${ac.short}`,[['recall','called again when no readback came'],['clear','got the aircraft cleared in']],{recall:this.recall,clear:clr},
+      [!this.recall&&'no readback means the pilot never got it — call again right away; a clearance counts only once it is received and understood (CSAS 3 Cs)',!clr&&`${ac.short} was never cleared in`],
+      `No readback heard — call again: "${csFor(ac)}, Cedar Air Attack, how copy?" then give the full clearance again.`);}};
+
+// 2 — Tanker goes around on its own. CSAS (csas.txt 2249-2258): anyone, the
+// tanker included, may call a go-around; the tanker re-establishes downwind and
+// needs "I have your final; clear to drop" again — the old clearance is gone.
+CB.DEFS.goaround={name:'Tanker go-around on final',
+  ready(){return S.aircraft.find(a=>a.role==='tanker'&&a.onCanvas&&a.status==='on_final'&&a.cleared&&!a._dryRun&&cbFinalLeft(a)>700)||null;},
+  start(ac){this.ac=ac;this.ack=false;this.reclear=null;this.early=false;this.orbit=false;this.ga0=S.safety.goaround;
+    ac.cleared=false;ac.currentLeg='';hidePrompt();
+    cbSay(ac,`${ac.spokenCS}, going around — smoke on final, lost sight of the target. Re-establishing downwind.`);
+    flashLeg(`${ac.short} going around — smoke on final`,'#7a4a00');
+    ac.status='maneuvering';startPattern(ac);
+    setNextStep(`${ac.short} went around — acknowledge, then clear it again on final`);},
+  onAC(ac,s,c){
+    if(ac!==this.ac||this.over)return false;
+    if(c.drop){if(ac.status==='on_final')this.reclear=true;else if(ac.status==='maneuvering')this.early=true;
+      if(/\bcopy|roger|go(?:ing)?\s*around/.test(s))this.ack=true;return false;}
+    if(!this.ack&&ac.status==='maneuvering'&&(c.abort||/\bcopy|roger|affirm|understand|wilco|re-?establish|downwind|in\s+sight|have\s+you|call\s+(?:me\s+)?(?:on\s+)?final|standing\s+by/.test(s))){
+      this.ack=true;hidePrompt();cbSay(ac,`${ac.spokenCS}.`);return true;}
+    return false;},
+  tick(){const ac=this.ac;
+    if(S.safety.goaround>this.ga0){this.reclear=false;this.grade();return;}
+    if(ac.status==='dropping'||ac.status==='returning'){this.grade();return;}
+    if(ac.status==='orbit'){this.orbit=true;this.grade();return;}
+    if(!ac.onCanvas||ac.status==='released'||S.elapsed-this.t0>200)this.grade();},
+  grade(){const ac=this.ac,cs=ac.spokenCS,rc=this.reclear===true||this.orbit;
+    cbRep(this,`Go-around on final — ${ac.short}`,[['ack','acknowledged the go-around'],['reclear','new drop clearance on the next final']],{ack:this.ack,reclear:rc},
+      [!this.ack&&'acknowledge the go-around so the pilot knows you saw it',this.early&&'clear it to drop only once it calls final again',
+       !rc&&!this.early&&'the old clearance went with the go-around — it needs "I have your final; clear to drop" again (CSAS)',this.orbit&&'brought back to the orbit — fine if the target changed'],
+      `"${cs}, copy the go-around." Then on final: "${cs}, I have your final; clear to drop."`);}};
+
+// 3 — UAS intrusion. CSAS Protocol for Airspace Conflicts and Intrusions inside a
+// TFR (csas.txt 1469-1518): ensure the safety of incident aircraft, notify them of
+// the intruder's position, keep them clear (may mean suspending operations), and
+// report it to the local dispatch office. A drone can't be raised on the radio.
+CB.DEFS.drone={name:'UAS intrusion',
+  ready(){return S.aircraft.find(a=>a.role==='heli'&&a.onCanvas&&a.status==='maneuvering'&&!a.held)||
+    S.aircraft.find(a=>a.role==='tanker'&&a.onCanvas&&a.status==='orbit'&&a._established)||null;},
+  start(rep){this.rep=rep;this.safe=false;this.notified=false;this.bad=null;this.resolveAt=null;this.gone=false;
+    this.where=['the right flank','the left flank','the heel'][Math.floor(DIFF.rng()*3)];
+    cbSay(rep,`Cedar Air Attack, ${rep.spokenCS} — drone in the fire area! Small drone over ${this.where}, maybe 400 feet, just south of Ridgeline Road.`);
+    flashLeg('Drone reported in the fire area','#7a4a00');},
+  onXmit(s,freq){
+    if(this.over||this.gone||freq!=='neu'||!/\bdrones?\b|\buas\b|unmanned|intru/.test(s))return false;
+    if(!this.notified){this.notified=true;this.resolveAt=S.elapsed+35+Math.round(DIFF.rng()*15);}
+    after(1.4,()=>rtx('NEU WEST','Air Attack 230, NEU West copies the drone over the Cedar Fire. We’re notifying law enforcement and the FAA.','dsp','dispatch','neu'));
+    return true;},
+  onBroadcast(hold){if(this.over||this.gone)return;if(hold)this.safe=true;else this.bad='resumed operations while the drone was still up';},
+  onAC(ac,s,c){
+    if(this.over||this.gone)return false;
+    if(!c.drop&&(c.abort||c.hold||/\bstand\s*off|stay\s+(?:out|clear|away|at)|remain\s+clear|break\s*off|back\s+to\s+(?:the\s+)?orbit/.test(s))){
+      this.safe=true;
+      if(ac.role==='tanker'&&(ac.status==='maneuvering'||ac.status==='on_final')){cbOrbit(ac);S.safety.aborts++;cbSay(ac,`${ac.spokenCS} copies, breaking off, back to the orbit.`);return true;}
+      return false;}
+    if(ac.role==='tanker'&&c.drop&&(ac.status==='on_final'||ac.status==='maneuvering'))this.bad='cleared a drop while the drone was up';
+    else if(ac.role==='tanker'&&c.maneuver&&ac.status==='orbit')this.bad='cleared a tanker to maneuver while the drone was up';
+    else if(ac.role==='heli'&&c.resume&&ac.held)this.bad='released a copter while the drone was up';
+    return false;},
+  tick(){if(this.over||this.gone)return;
+    const le=this.resolveAt!=null&&S.elapsed>=this.resolveAt;
+    if(!le&&S.elapsed-this.t0<DIFF.droneMax)return;
+    this.gone=true;const rp=this.rep;
+    if(le)rtx('NEU WEST','Air Attack 230, NEU West, law enforcement has the drone operator. The drone is down.','dsp','dispatch','neu');
+    if(rp.onCanvas)after(le?3:.5,()=>cbSay(rp,`Cedar Air Attack, ${rp.spokenCS}, the drone is ${le?'down':'gone, last seen headed east'}.`));
+    this.grade();},
+  grade(){const ok=this.safe&&!this.bad;
+    cbRep(this,'Drone in the fire area',[['safe','held incident aircraft clear of the drone'],['notify','reported the intrusion to NEU West']],{safe:ok,notify:this.notified},
+      [this.bad,!this.safe&&'hold the copters and break the tankers off until the drone is gone — if a drone flies, we don’t',!this.notified&&'report a drone to NEU West so law enforcement and the FAA can find the operator'],
+      `"All aircraft, Cedar Air Attack, drone over ${this.where} — hold your positions." Then: "NEU West, Air Attack 230, drone intrusion over the Cedar Fire. Air operations are on hold. Request law enforcement and notify the FAA." When it's down: "All aircraft, the drone is clear, resume."`);}};
+
+// 4 — The IC calls while a tanker is on final. CSAS (csas.txt 2219-2230,
+// 2257-2258): the final needs a verbal acknowledgment and "clear to drop", or the
+// tanker goes around. The IC can stand by for the few seconds that takes.
+CB.DEFS.icfinal={name:'Priority traffic with a tanker on final',
+  ready(){return S.aircraft.find(a=>a.role==='tanker'&&a.onCanvas&&a.status==='on_final'&&!a.cleared&&!a._dryRun&&!a._warned&&cbFinalLeft(a)>900)||null;},
+  start(ac){this.ac=ac;this.ga0=S.safety.goaround;this.tank=null;this.ans=null;
+    rtx('ENGINE 2362','Air Attack 230, Engine 2362 — spot fire north of Ridgeline Road, east of the homes. We’re taking it with a hose lay. How copy?','gnd','ground','cdf');},
+  onXmit(s,freq){if(!this.over&&freq==='cdf'&&this.ans==null)this.ans=S.elapsed;return false;},   // engineTraffic still answers
+  tick(){const ac=this.ac;
+    if(this.tank==null){if(S.safety.goaround>this.ga0)this.tank=false;else if(ac.status!=='on_final'||ac.cleared)this.tank=true;}
+    if(this.tank!=null&&this.ans!=null){this.grade();return;}
+    if(S.elapsed-this.t0>=75){if(this.ans==null)rtx('ENGINE 2362','Air Attack 230, Engine 2362, disregard — we have a line around the spot.','gnd','ground','cdf');this.grade();}},
+  grade(){const cs=this.ac.spokenCS;
+    cbRep(this,`IC call with ${this.ac.short} on final`,[['final','cleared (or waved off) the tanker on final'],['ic','answered Engine 2362']],{final:this.tank===true,ic:this.ans!=null},
+      [this.tank!==true&&'the tanker on final needed its clearance first — the IC can wait a few seconds ("Engine 2362, stand by")',this.ans==null&&'answer the IC once the tanker is taken care of'],
+      `"${cs}, I have your final; clear to drop." Then on CDF A/G 3: "Engine 2362, Air Attack 230, copy the spot fire north of Ridgeline Road."`);}};
+</script>
+<script>
 /* ATGS radio trainer — speech-to-text auto-correct layer.
  * window.AUTOCORRECT(text) -> text   (apply to the RAW transcript, before normCall)
  * window.AUTOCORRECT.table           ordered [regex, replacement, note] rules
@@ -3069,9 +3513,38 @@ boot();
   var D = { zero:'0', oh:'0', o:'0', one:'1', won:'1', two:'2', to:'2', too:'2', three:'3', tree:'3', free:'3',
             four:'4', 'for':'4', fore:'4', five:'5', fife:'5', six:'6', sex:'6', seven:'7', eight:'8', ate:'8', nine:'9', niner:'9' };
   var TENS = { twenty:'2', thirty:'3', forty:'4', fifty:'5', sixty:'6', seventy:'7', eighty:'8', ninety:'9' };
+  var TEENS = { ten:'10', eleven:'11', twelve:'12', thirteen:'13', fourteen:'14', fifteen:'15', sixteen:'16', seventeen:'17', eighteen:'18', nineteen:'19' };
   var dig = function(w){ return /^\d$/.test(w) ? w : (D[w] || ''); };
   var R = function(src, flags){ return new RegExp(src, flags || 'g'); };
   var finalCtx = function(s){ return /\bfinal|\bdrop\b/.test(s); };
+
+  // This scenario's altimeter setting said without the word "altimeter":
+  // "thirty oh two", "three zero one two", "30 12", "thirty twelve", "twenty nine eighty five".
+  // Built from SCN, so only this scenario's value is rewritten.
+  var SCN_ALTIM = (typeof SCN !== 'undefined' && SCN.altim) || '30.02';
+  function altimRx(v){
+    var I = v.slice(0, 2), a = v.charAt(3), b = v.charAt(4);
+    var W = { 0:'oh|zero|o|0', 1:'one|won|1', 2:'two|to|too|2', 3:'three|tree|3', 4:'four|for|fore|4', 5:'five|fife|5',
+              6:'six|sex|6', 7:'seven|7', 8:'eight|ate|8', 9:'nine|niner|9' };
+    var w = function(d){ return '(?:' + W[d] + ')'; };
+    var TEEN = ['ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+    var TW = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+    var IW = I === '30' ? '(?:thirty|30)' : '(?:twenty\\s+niner?|29)';
+    var IS = I === '30' ? 'three\\s+(?:zero|oh)' : 'two\\s+niner?';
+    var alts = [
+      IW + '\\s+(?:point\\s+)?' + w(a) + '\\s+' + w(b),        // thirty oh two / 30 1 2 / thirty point one two
+      IS + '\\s+(?:point\\s+)?' + w(a) + '\\s+' + w(b),        // three zero zero two / two niner eight five
+      I + '\\s+(?:point\\s+)?' + a + b,                           // 30 02 / 30 point 12
+      I + '\\.' + a + '\\s+' + b,                                 // 30.0 2
+      I + '\\s+point\\s+' + a + '\\s*' + b,                     // 30 point 0 2
+      I + '\\.\\s+' + a + b                                       // 30. 02
+    ];
+    if(a !== '0'){                                                  // the hundredths as one number: thirty twelve, 29 eighty five
+      var n = a === '1' ? TEEN[+b] : TW[+a] + (b === '0' ? '' : '\\s+' + w(b));
+      alts.push(IW + '\\s+(?:point\\s+)?' + n);
+    }
+    return alts.map(function(x){ return '\\b' + x + '\\b'; }).join('|');
+  }
 
   // Tanker / copter prefixes Chrome produces for "tanker" / "copter"
   var TPFX = '(?:tanker|tankers|tinker|thinker|anchor|banker|tanger|tanka|taker|tank\\s+(?:or|her|a)|tank)';
@@ -3114,7 +3587,7 @@ boot();
     [R('\\b(?:tree|free)\\s+thousand\\b'), 'three thousand', '3,000'],
     [R('\\b(?:one|won|1)\\s+(?:two|to|too|2)\\s+(nautical\\s+)?miles\\b'), '12 $1miles', '12 miles'],
     [R('\\b(?:all\\s+timeter|all\\s+to\\s+meter|alti\\s+meter|alt\\s+meter|ultimeter|altimeters|altimeter\'s|altimetre)\\b'), 'altimeter', 'altimeter'],
-    [R('\\b(?:thirty|30)\\s+(?:point\\s+)?(?:oh|zero|o|0)\\s+(?:two|to|too|2)\\b|\\bthree\\s+(?:zero|oh)\\s+(?:point\\s+)?(?:zero|oh)\\s+two\\b|\\b30\\s+(?:point\\s+)?02\\b|\\b30\\.0\\s+2\\b|\\b30\\s+point\\s+0\\s*2\\b|\\bthirty\\s+point\\s+(?:zero|oh)\\s+two\\b|\\b30\\.\\s+02\\b'), '30.02', '30.02'],
+    [R(altimRx(SCN_ALTIM)), SCN_ALTIM, SCN_ALTIM],
     [R('\\b(?:29\\s+92|twenty\\s+nine\\s+ninety\\s+two|two\\s+nine(?:r)?\\s+nine(?:r)?\\s+two|29\\s+point\\s+92|29\\.9\\s+2)\\b'), '29.92', '29.92'],
 
     // ── 4. coverage level ──────────────────────────────────────────
@@ -3171,13 +3644,14 @@ boot();
 
   // Altimeter: "altimeter is thirty oh two" / "three zero zero two" / "30 0 2" / "3002" -> "altimeter 30.02"
   function fixAltimeter(s, log){
-    return s.replace(/\baltimeter((?:\s+(?:is|setting|now|of|reads|will\s+be))*)\s+((?:(?:[\d.]+|zero|oh|o|one|won|two|to|too|three|tree|four|for|five|six|seven|eight|ate|nine|niner|twenty|thirty|ninety|eighty|point|decimal)(?:\s+|$)){1,7})/g,
+    return s.replace(/\baltimeter((?:\s+(?:is|setting|now|of|reads|will\s+be))*)\s+((?:(?:[\d.]+|zero|oh|o|one|won|two|to|too|three|tree|four|for|five|six|seven|eight|ate|nine|niner|twenty|thirty|forty|fifty|sixty|seventy|ninety|eighty|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|point|decimal)(?:\s+|$)){1,7})/g,
       function(m, pre, body){
         var toks = body.trim().split(/\s+/), out = '', used = 0;
         for(var i = 0; i < toks.length && out.length < 4; i++){
           var t = toks[i], u;
           if(t === 'point' || t === 'decimal'){ used = i + 1; continue; }
           if(/^[\d.]+$/.test(t)){ var d = t.replace(/\./g, ''); if(out.length + d.length > 4) break; out += d; used = i + 1; continue; }
+          if(out.length === 2 && TEENS[t]){ out += TEENS[t]; used = i + 1; continue; }
           if(TENS[t]){ u = toks[i+1] && dig(toks[i+1]); if(u && u !== '0'){ out += TENS[t] + u; i++; } else out += TENS[t] + '0'; used = i + 1; continue; }
           u = dig(t); if(!u) break; out += u; used = i + 1;
         }
@@ -3225,6 +3699,972 @@ boot();
   AC.changed = function(text){ return run(text).log; };
   AC.version = 'agentB-1';
   window.AUTOCORRECT = AC;
+})();
+
+</script>
+<script>
+/* ATGS radio trainer — progress tracking and printable instructor debrief.
+ *
+ * window.PROGRESS
+ *   capture(meta)          -> session record (plain JSON) built from the live sim
+ *   onSummary(meta)        -> capture + save (when the session has reps); call from showSummary()
+ *   save(rec) / list() / get(id) / remove(id) / clear()     history in localStorage 'cedarHist1'
+ *   renderTrend(el,opts)   history view: weakest skills, per-skill trends, sessions table
+ *   renderDebrief(rec,el,opts)  on-screen preview of the printable debrief
+ *   print(rec,opts)        prints the debrief (US Letter portrait) via a hidden print-only container
+ *   exportJSON() / importJSON(fileOrText) / exportCSV() / csv(list)
+ *   studentName            get/set, persisted ('cedarStudent1')
+ *   open(view,id) / close() / isOpen()   the #progress modal
+ *   attach()               wires #progRow, #progPrintBtn, #progOpenBtn, keyboard; runs itself on load
+ *
+ * Globals read (all optional, each read inside try): S, SKILLS, houseObjs, fireStats, LINES, addLog,
+ * blindModel, SIZEUP, N412, syncPause. Nothing here may throw into the sim: every public entry
+ * point is wrapped, storage failures fall back to memory, and old or partial records are
+ * normalised (missing totals are recomputed from the reps).
+ * Plain script, ES2017, no dependencies.
+ */
+(function(){
+  'use strict';
+  var VERSION = 1;
+  var KEY = 'cedarHist1', NAMEKEY = 'cedarStudent1', PREFKEY = 'cedarHist1.prefs';
+  var MAX_SESSIONS = 60;      // sessions kept
+  var KEEP_TX = 20;           // newest sessions that keep a radio transcript
+  var MAX_TX = 1500, MAX_LEDGER = 400, MAX_REPS = 600, MAX_IMPORT = 10 * 1024 * 1024;
+  var TREND_N = 10;           // sessions shown per sparkline
+  var LOW = 80;               // percent below which a skill is flagged (matches the report card)
+  var PAGE_PX = 960;          // printable height of one Letter page at 0.5in margins (10in x 96px)
+
+  var FALLBACK_SKILLS = [['blind','Calls in the blind','6 elements each, in frequency order'],['clear','FTA clearances','altimeter, clearance altitude, Air Attack altitude, other aircraft, hazards'],
+    ['target','Target descriptions','orientation, target, objective, coverage, load, hazards, exit'],['dropclr','Drop clearances','"I have your final, clear to drop"'],
+    ['depart','Departure briefings','start, line, end, instructions'],['ic','IC contact','verify no other aircraft; objectives and priorities'],['rotor','Copter briefings','target, dip site, altitude, hazards, calls'],['airspace','Incident airspace','callsign, remain clear / TFR, altitude or distance'],['report','Reports to NEU West','CSAS size-up: on scene, location, size, potential, fuel, ROS, behavior, values, strategy, resources']];
+  // Standard wording (CAL FIRE CSAS scripts as shown under Scripts in the sim). meta.models overrides
+  // per skill key; meta.models === false suppresses them (e.g. for a scenario with other callsigns).
+  var DEFAULT_MODELS = {
+    blind: 'Any aircraft at scene or responding to the Cedar incident, in the vicinity of Cedar Ridge, Air Attack 230, 12 miles from the south at 4,000, advise on Air Tactics 4.',
+    clear: 'Tanker 88, Cedar Air Attack, altimeter 30.02, you’re cleared in at 3,000. Cedar Air Attack is at 4,000. No other aircraft. Power lines along Ridgeline Road are your hazard.',
+    target: 'Tanker 88, the head is running northeast upslope with homes on Ridgeline Road off the left flank. Objective is direct attack: your target is the left flank, anchor at the heel and tie in to the head. Coverage level 4, full load. Caution power lines along Ridgeline Road. Exit straight out at 3,000.',
+    dropclr: 'Tanker 88, I have your final; clear to drop.',
+    depart: 'Tanker 88, good start, good line, good end. Load and return.',
+    ic: 'Engine 2362, Air Attack 230, any aircraft on scene? Say your objectives and priorities.',
+    rotor: 'Copter 5 Bravo Tango, objective is direct attack on the right flank. Dip site is Pilgrim Pond. Hard ceiling 2,000. Caution power lines along Ridgeline Road. Call your dips and drops.',
+    airspace: '', report: ''
+  };
+  var SAFETY_TIPS = {
+    deconf: ['Deconfliction', 'Hold the copter (“hold at the pond”) before a tanker goes on final; release it when the tanker is clear.'],
+    unwarned: ['Ground safety', 'Warn Engine 2362 on CDF A/G 3 (“retardant inbound, clear the area”) before any drop near them.'],
+    goaround: ['Go-arounds', 'Clear tankers to drop as soon as they call final and the line is clear — they go around after about 15 seconds.'],
+    aborts: ['Aborted runs', 'Brief the target fully before clearing to maneuver so runs don’t have to be aborted.'],
+    windshift: ['Wind shift', 'Re-brief every aircraft after the wind shift: new orientation, objective and target.'],
+    divert: ['No divert', 'With structures threatened, request no divert on the tankers through NEU West.']
+  };
+
+  var mem = null, memDirty = false, lastError = '', current = null, currentSaved = false, installed = false, txBuf = [], attached = false;
+  var SID = 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+  // ── small helpers ────────────────────────────────────────────────
+  function num(x, d){ if(x === null || x === undefined || x === '') return d === undefined ? 0 : d; x = +x; return isFinite(x) ? x : (d === undefined ? 0 : d); }
+  function str(x, max){ if(x === null || x === undefined) return ''; x = typeof x === 'string' ? x : (typeof x === 'number' || typeof x === 'boolean') ? String(x) : ''; return max && x.length > max ? x.slice(0, max) : x; }
+  function esc(s){ return str(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function pctOf(g, o){ return o > 0 ? Math.round(100 * g / o) : null; }
+  function mmss(s){ s = Math.max(0, Math.round(num(s))); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
+  function fmtDate(ts, withTime){
+    if(!ts) return 'Unknown date';
+    try{ var d = new Date(ts); if(isNaN(d.getTime())) return 'Unknown date';
+      var s = d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+      return withTime === false ? s : s + ' ' + d.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', hour12:false});
+    }catch(e){ return 'Unknown date'; }
+  }
+  function isoDay(ts){ try{ var d = new Date(ts || Date.now()); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }catch(e){ return 'date'; } }
+  function byId(id){ try{ return document.getElementById(id); }catch(e){ return null; } }
+  function warn(where, e){ lastError = where + ': ' + (e && e.message || e); try{ console.warn('[PROGRESS] ' + lastError); }catch(_){} }
+  function safe(fn, fallback, where){ return function(){ try{ return fn.apply(this, arguments); }catch(e){ warn(where || 'error', e); return typeof fallback === 'function' ? fallback() : fallback; } }; }
+  function plural(n, w){ return n + ' ' + w + (n === 1 ? '' : 's'); }
+  function joinList(a){ a = a.filter(Boolean); return a.length < 2 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
+
+  // Globals from the sim. const/let at the top of a classic script are not window properties, so they
+  // are read as bare identifiers inside try (ReferenceError when absent).
+  function gS(){ try{ return S; }catch(e){ return null; } }
+  function gSkills(){ try{ if(Array.isArray(SKILLS) && SKILLS.length) return SKILLS; }catch(e){} return FALLBACK_SKILLS; }
+  function gHouses(){ try{ return Array.isArray(houseObjs) ? houseObjs : null; }catch(e){ return null; } }
+  function gStats(){ try{ return fireStats(); }catch(e){ return null; } }
+  function gLines(){ try{ return Array.isArray(LINES) ? LINES : null; }catch(e){ return null; } }
+
+  // ── storage ─────────────────────────────────────────────────────
+  function store(){ try{ return window.localStorage || null; }catch(e){ return null; } }
+  function lget(k){ try{ var s = store(); return s ? s.getItem(k) : null; }catch(e){ return null; } }
+  function lset(k, v){ try{ var s = store(); if(!s) return false; s.setItem(k, v); return true; }catch(e){ lastError = 'storage: ' + (e && (e.name || e.message) || e); return false; } }
+  function lrem(k){ try{ var s = store(); if(s) s.removeItem(k); }catch(e){} }
+  function prefs(){ try{ var o = JSON.parse(lget(PREFKEY) || '{}'); return o && typeof o === 'object' ? o : {}; }catch(e){ return {}; } }
+  function setPref(k, v){ var p = prefs(); p[k] = v; lset(PREFKEY, JSON.stringify(p)); }
+
+  var corruptSeen = false;
+  function readAll(){
+    if(memDirty && mem) return mem.slice();
+    var raw = lget(KEY);
+    if(raw === null || raw === undefined) return mem ? mem.slice() : [];
+    var data;
+    try{ data = JSON.parse(raw); }catch(e){
+      if(!corruptSeen){ corruptSeen = true; warn('history', 'stored history is not valid JSON; keeping a copy in ' + KEY + '.corrupt and starting fresh'); lset(KEY + '.corrupt', raw.slice(0, 500000)); }
+      return mem ? mem.slice() : [];
+    }
+    var arr = Array.isArray(data) ? data : (data && Array.isArray(data.sessions)) ? data.sessions : [];
+    var out = [];
+    for(var i = 0; i < arr.length; i++){ var r = normalize(arr[i]); if(r) out.push(r); }
+    sortList(out);
+    return out;
+  }
+  function sortList(a){ a.sort(function(x, y){ return (y.ts || 0) - (x.ts || 0); }); return a; }
+  function stripTx(r){ if(r.transcript && r.transcript.length){ r.transcript = []; r.txDropped = true; return true; } return false; }
+  // Write newest-first, capped. On quota errors: drop transcripts (oldest first), then ledgers,
+  // then whole sessions (oldest first). Falls back to memory when storage is unavailable.
+  function writeAll(list){
+    sortList(list);
+    var res = {ok:true, stored:true, dropped:0, strippedTx:0};
+    if(list.length > MAX_SESSIONS){ res.dropped = list.length - MAX_SESSIONS; list = list.slice(0, MAX_SESSIONS); }
+    for(var i = KEEP_TX; i < list.length; i++) if(stripTx(list[i])) res.strippedTx++;
+    mem = list.slice();
+    var full = JSON.parse(JSON.stringify(list));   // what memory keeps if storage takes nothing
+    var s = store();
+    if(!s){ memDirty = true; res.stored = false; res.note = 'Storage is unavailable (private window?) — history is kept only until this page closes.'; return res; }
+    function attempt(){ return lset(KEY, JSON.stringify({app:'cedar-atgs', v:VERSION, sessions:list})); }
+    if(attempt()){ memDirty = false; return res; }
+    var j;
+    for(j = list.length - 1; j >= 0; j--){ if(stripTx(list[j])){ res.strippedTx++; if(attempt()){ memDirty = false; mem = list.slice(); res.note = 'Storage is nearly full — older radio transcripts were removed.'; return res; } } }
+    for(j = list.length - 1; j >= 0; j--){ if(list[j].ledger && list[j].ledger.length){ list[j].ledger = []; if(attempt()){ memDirty = false; mem = list.slice(); res.note = 'Storage is nearly full — older transcripts and score ledgers were removed.'; return res; } } }
+    while(list.length > 1){ list.pop(); res.dropped++; if(attempt()){ memDirty = false; mem = list.slice(); res.note = 'Storage is full — the oldest sessions were removed.'; return res; } }
+    mem = full; memDirty = true; res.stored = false; res.dropped = 0;
+    res.note = 'Could not save to this browser’s storage (' + lastError + '). Export the history to keep it.';
+    return res;
+  }
+
+  // ── record normalisation (current and older shapes) ─────────────
+  function cleanRep(r, kind){
+    if(!r || typeof r !== 'object') return null;
+    var miss = Array.isArray(r.miss) ? r.miss : Array.isArray(r.missed) ? r.missed : [];
+    var o = {kind:str(r.kind || kind, 40), label:str(r.label, 200), got:num(r.got), of:num(r.of), miss:[], notes:str(r.notes, 600), t:num(r.t, null)};
+    for(var i = 0; i < miss.length && i < 20; i++){ var m = str(miss[i], 120); if(m && o.miss.indexOf(m) < 0) o.miss.push(m); }
+    if(r.model) o.model = str(r.model, 1200);
+    if(!o.kind) return null;
+    return o;
+  }
+  function flattenReps(reps){
+    var out = [];
+    if(Array.isArray(reps)) reps.forEach(function(r){ var c = cleanRep(r); if(c) out.push(c); });
+    else if(reps && typeof reps === 'object') Object.keys(reps).forEach(function(k){ if(Array.isArray(reps[k])) reps[k].forEach(function(r){ var c = cleanRep(r, k); if(c) out.push(c); }); });
+    out.sort(function(a, b){ return (a.t == null ? 1e9 : a.t) - (b.t == null ? 1e9 : b.t); });
+    return out.slice(0, MAX_REPS);
+  }
+  function skillRows(reps, prior, models){
+    var defs = gSkills().slice(), keys = {}, rows = [];
+    defs.forEach(function(d){ keys[d[0]] = 1; });
+    (prior || []).forEach(function(p){ if(p && p.key && !keys[p.key]){ keys[p.key] = 1; defs.push([p.key, p.name || p.key, p.std || '']); } });
+    reps.forEach(function(r){ if(!keys[r.kind]){ keys[r.kind] = 1; defs.push([r.kind, r.kind, '']); } });
+    defs.forEach(function(d){
+      var R = reps.filter(function(r){ return r.kind === d[0]; }), got = 0, of = 0, cnt = {}, model = '';
+      R.forEach(function(r){ got += r.got; of += r.of; r.miss.forEach(function(m){ cnt[m] = (cnt[m] || 0) + 1; }); if(!model && r.model && r.miss.length) model = r.model; });
+      var p = (prior || []).filter(function(x){ return x && x.key === d[0]; })[0];
+      if(!model && p && p.model) model = str(p.model, 1200);
+      if(!model && models && models[d[0]]) model = str(models[d[0]], 1200);
+      rows.push({key:str(d[0], 40), name:str(d[1], 80), std:str(d[2], 200), reps:R.length, got:got, of:of, pct:pctOf(got, of), missCounts:cnt, model:model});
+    });
+    return rows;
+  }
+  function overallOf(skills){
+    var s = 0, n = 0, g = 0, o = 0;
+    skills.forEach(function(k){ if(k.reps && k.pct !== null){ s += k.pct; n++; g += k.got; o += k.of; } });
+    return {pct:n ? Math.round(s / n) : null, elemPct:pctOf(g, o), skillsPractised:n};
+  }
+  function titleFor(pct, n){ return !n ? 'Exercise ended' : pct >= 90 ? 'Sharp radio work' : pct >= 75 ? 'Solid — keep the reps going' : pct >= 55 ? 'Getting there' : 'Needs reps'; }
+  function safetyRowsFrom(sf){
+    sf = sf || {};
+    var rows = [['Deconfliction violations', num(sf.deconf)], ['Drops near E-2362 without warning', num(sf.unwarned)], ['Go-arounds (no clearance on final)', num(sf.goaround)]];
+    if(sf.windShift) rows.push(['Wind shift re-brief', str(sf.windShift)]);
+    if(sf.noDivert) rows.push(['No divert for the structure threat', str(sf.noDivert)]);
+    return rows;
+  }
+  function normalize(rec){
+    try{
+      if(!rec || typeof rec !== 'object' || Array.isArray(rec)) return null;
+      var ts = num(rec.ts, 0) || num(rec.savedAt, 0) || (rec.date ? Date.parse(rec.date) : 0) || (rec.endedAt ? Date.parse(rec.endedAt) : 0) || 0;
+      if(!isFinite(ts)) ts = 0;
+      var reps = flattenReps(rec.reps);
+      var prior = Array.isArray(rec.skills) ? rec.skills.filter(function(x){ return x && typeof x === 'object' && x.key; }) : [];
+      var skills;
+      if(reps.length || !prior.length) skills = skillRows(reps, prior, null);
+      else skills = prior.map(function(p){   // a record that kept totals but not the reps
+        var got = num(p.got), of = num(p.of), cnt = {};
+        if(p.missCounts && typeof p.missCounts === 'object') Object.keys(p.missCounts).slice(0, 30).forEach(function(m){ var c = num(p.missCounts[m]); if(c > 0) cnt[str(m, 120)] = c; });
+        return {key:str(p.key, 40), name:str(p.name || p.key, 80), std:str(p.std, 200), reps:num(p.reps), got:got, of:of, pct:pctOf(got, of), missCounts:cnt, model:str(p.model, 1200)};
+      });
+      var have = {}; skills.forEach(function(k){ have[k.key] = 1; });
+      gSkills().forEach(function(d){ if(!have[d[0]]) skills.push({key:d[0], name:d[1], std:d[2], reps:0, got:0, of:0, pct:null, missCounts:{}, model:''}); });
+      var id = str(rec.id, 80) || ('r' + (ts || 0).toString(36) + '-' + (reps.length + '-' + skills.reduce(function(a, k){ return a + k.got * 7 + k.of; }, 0)).toString(36));
+      var ov = overallOf(skills), o = rec.outcome && typeof rec.outcome === 'object' ? rec.outcome : {};
+      var sc = rec.score && typeof rec.score === 'object' ? rec.score : {total:rec.score !== undefined ? rec.score : (rec.overall && typeof rec.overall === 'object' ? rec.overall.score : null)};
+      var sf = rec.safety && typeof rec.safety === 'object' ? rec.safety : {};
+      var meta = {}, m = rec.meta && typeof rec.meta === 'object' ? rec.meta : {};
+      ['scenarioCode', 'scenarioName', 'difficulty', 'version'].forEach(function(k){ var v = str(m[k] !== undefined ? m[k] : rec[k], 80); if(v) meta[k] = v; });
+      var hu = m.hintsUsed !== undefined ? m.hintsUsed : rec.hintsUsed;
+      if(hu !== undefined && hu !== null && hu !== '' && isFinite(+hu)) meta.hintsUsed = +hu;
+      var out = {
+        v:VERSION, id:id, ts:ts, app:'cedar-atgs',
+        student:str(rec.student, 80),
+        durationSec:num(rec.durationSec, num(rec.duration, 0)),
+        meta:meta,
+        title:titleFor(ov.pct, ov.skillsPractised),
+        skills:skills, reps:reps,
+        overall:{pct:ov.pct, elemPct:ov.elemPct, skillsPractised:ov.skillsPractised, score:num(sc.total, null)},
+        buckets:{},
+        outcome:{structuresTotal:num(o.structuresTotal, null), structuresLost:num(o.structuresLost, null), acres:num(o.acres, null), contain:num(o.contain, null), retardantGal:num(o.retardantGal, null), drops:num(o.drops, null)},
+        safety:{deconf:num(sf.deconf), unwarned:num(sf.unwarned), goaround:num(sf.goaround), aborts:num(sf.aborts), diverted:str(sf.diverted, 40), windShift:str(sf.windShift, 40), noDivert:str(sf.noDivert, 80)},
+        settings:{},
+        ledger:[], transcript:[], txDropped:!!rec.txDropped
+      };
+      if(out.outcome.structuresTotal !== null && out.outcome.structuresLost !== null) out.outcome.structuresSaved = Math.max(0, out.outcome.structuresTotal - out.outcome.structuresLost);
+      else out.outcome.structuresSaved = num(o.structuresSaved, null);
+      var bk = rec.buckets && typeof rec.buckets === 'object' ? rec.buckets : {};
+      Object.keys(bk).concat(Object.keys(sc)).forEach(function(k){ var v = k in sc ? sc[k] : bk[k]; if(k !== 'total' && k !== 'ledger' && typeof v === 'number' && isFinite(v)) out.buckets[str(k, 30)] = v; });
+      out.safetyRows = Array.isArray(rec.safetyRows) ? rec.safetyRows.filter(function(r){ return Array.isArray(r) && r.length >= 2; }).slice(0, 12).map(function(r){ return [str(r[0], 80), typeof r[1] === 'number' ? r[1] : str(r[1], 80)]; }) : safetyRowsFrom(out.safety);
+      if(rec.settings && typeof rec.settings === 'object') ['hints', 'review'].forEach(function(k){ if(typeof rec.settings[k] === 'boolean') out.settings[k] = rec.settings[k]; });
+      var led = Array.isArray(rec.ledger) ? rec.ledger : (sc && Array.isArray(sc.ledger) ? sc.ledger : []);
+      out.ledger = led.slice(-MAX_LEDGER).filter(function(l){ return l && typeof l === 'object'; }).map(function(l){ return {t:num(l.t), delta:num(l.delta), reason:str(l.reason, 200)}; });
+      var tx = Array.isArray(rec.transcript) ? rec.transcript : [];
+      out.transcript = tx.slice(-MAX_TX).filter(function(l){ return l && typeof l === 'object'; }).map(function(l){ return {t:num(l.t, null), tm:str(l.tm, 10) || (l.t != null && isFinite(+l.t) ? mmss(l.t) : ''), who:str(l.who, 80), text:str(l.text, 2000), type:str(l.type, 12) || 'sys'}; });
+      return out;
+    }catch(e){ warn('normalize', e); return null; }
+  }
+
+  // ── transcript mirror: wraps the sim's addLog (the DOM log keeps only 160 lines) ──
+  function install(){
+    if(installed) return true;
+    try{
+      var orig = addLog;   // eslint-disable-line no-undef
+      if(typeof orig !== 'function') return false;
+      var wrapped = function(cs, msg, type){
+        var r = orig.apply(this, arguments);
+        try{ var s = gS(), t = s ? num(s.elapsed) : 0;
+          txBuf.push({t:t, tm:mmss(t), who:str(cs, 80), text:str(msg, 2000), type:str(type, 12) || 'sys'});
+          if(txBuf.length > MAX_TX) txBuf.splice(0, txBuf.length - MAX_TX);
+        }catch(e){}
+        return r;
+      };
+      wrapped._progWrapped = true;
+      addLog = wrapped;    // eslint-disable-line no-undef, no-global-assign
+      installed = true; return true;
+    }catch(e){ return false; }
+  }
+  function domTranscript(){
+    var out = [];
+    try{
+      var els = document.querySelectorAll('#log .le');
+      for(var i = 0; i < els.length; i++){
+        var e = els[i], q = function(c){ var n = e.querySelector(c); return n ? n.textContent : ''; };
+        var type = 'sys'; for(var j = 0; j < e.classList.length; j++){ if(e.classList[j] !== 'le'){ type = e.classList[j]; break; } }
+        var tm = q('.tm'), mm = /^(\d+):(\d\d)$/.exec(tm);
+        out.push({t:mm ? (+mm[1]) * 60 + (+mm[2]) : null, tm:tm, who:q('.cs'), text:q('.m') || e.textContent, type:type});
+      }
+    }catch(e){}
+    return out;
+  }
+
+  // ── capture ─────────────────────────────────────────────────────
+  function resolveModels(meta){
+    if(meta && meta.models === false) return {};
+    var m = {}; Object.keys(DEFAULT_MODELS).forEach(function(k){ m[k] = DEFAULT_MODELS[k]; });
+    try{ var b = blindModel('tac', 1); if(b) m.blind = str(b).replace(/^["“]|["”]$/g, ''); }catch(e){}
+    try{ if(SIZEUP && SIZEUP.example) m.report = str(SIZEUP.example); }catch(e){}
+    try{ if(N412 && N412.model) m.airspace = str(N412.model); }catch(e){}
+    if(meta && meta.models && typeof meta.models === 'object') Object.keys(meta.models).forEach(function(k){ m[k] = str(meta.models[k], 1200); });
+    return m;
+  }
+  function captureInner(meta){
+    meta = meta && typeof meta === 'object' ? meta : {};
+    var s = gS() || {}, now = Date.now();
+    var reps = flattenReps(s.reps || {});
+    var models = resolveModels(meta);
+    var skills = skillRows(reps, null, models);
+    var houses = gHouses(), st = gStats(), lines = gLines(), sf = s.safety || {};
+    var lost = houses ? houses.filter(function(h){ return h && h.lost; }).length : null;
+    var safety = {deconf:num(sf.deconf), unwarned:num(sf.unwarned), goaround:num(sf.goaround), aborts:num(sf.aborts), diverted:str(sf.diverted, 40),
+      windShift:s.windShifted ? (s.windRebriefed ? 'done' : 'missed') : 'not reached',
+      noDivert:s.noDivert ? 'requested' : sf.diverted ? 'not requested — ' + str(sf.diverted) + ' diverted' : 'not requested'};
+    var m = {};
+    ['scenarioCode', 'scenarioName', 'difficulty', 'version', 'hintsUsed'].forEach(function(k){ if(meta[k] !== undefined && meta[k] !== null && meta[k] !== '') m[k] = meta[k]; });
+    if(!m.version){ try{ var nt = document.querySelector('#intro .note'), vm = nt && /Version\s+([\d.]+)/.exec(nt.textContent); if(vm) m.version = vm[1]; }catch(e){} }
+    var score = s.score || {};
+    var raw = {
+      id:SID, ts:now, student:api.studentName, durationSec:num(s.elapsed), meta:m,
+      reps:reps, skills:skills, score:score,
+      outcome:{structuresTotal:houses ? houses.length : null, structuresLost:lost, acres:st ? Math.round(num(st.acres)) : null, contain:st ? Math.round(num(st.contain)) : null,
+        retardantGal:s.retDropped != null ? Math.round(num(s.retDropped)) : null, drops:lines ? lines.filter(function(l){ return l && l.kind === 'ret'; }).length : null},
+      safety:safety,
+      settings:{hints:!!s.hints, review:!!s.review},
+      ledger:Array.isArray(score.ledger) ? score.ledger : [],
+      transcript:installed && txBuf.length ? txBuf.slice() : domTranscript()
+    };
+    var rec = normalize(raw);
+    rec.safetyRows = [['Deconfliction violations', safety.deconf], ['Drops near E-2362 without warning', safety.unwarned], ['Go-arounds (no clearance on final)', safety.goaround],
+      ['Wind shift re-brief', safety.windShift], ['No divert for the structure threat', safety.noDivert]];
+    return rec;
+  }
+  function emptyRecord(meta){ return normalize({id:SID, ts:Date.now(), student:api.studentName, meta:meta || {}, reps:[]}) || {id:SID, ts:Date.now(), skills:[], reps:[], meta:{}, overall:{}, outcome:{}, safety:{}, safetyRows:[], ledger:[], transcript:[]}; }
+
+  // ── analysis ────────────────────────────────────────────────────
+  function topMiss(cnt, n){ return Object.keys(cnt || {}).map(function(k){ return [k, cnt[k]]; }).sort(function(a, b){ return b[1] - a[1] || (a[0] < b[0] ? -1 : 1); }).slice(0, n || 3); }
+  function aggregate(sessions){
+    var agg = {}, order = [];
+    sessions.forEach(function(r){ (r.skills || []).forEach(function(k){
+      if(!agg[k.key]){ agg[k.key] = {key:k.key, name:k.name, std:k.std, reps:0, got:0, of:0, missCounts:{}, model:''}; order.push(k.key); }
+      var a = agg[k.key]; a.reps += k.reps; a.got += k.got; a.of += k.of; if(!a.model && k.model) a.model = k.model;
+      Object.keys(k.missCounts || {}).forEach(function(m){ a.missCounts[m] = (a.missCounts[m] || 0) + k.missCounts[m]; });
+    }); });
+    return order.map(function(k){ var a = agg[k]; a.pct = pctOf(a.got, a.of); return a; });
+  }
+  function weakest(list, n){
+    var recent = list.slice(0, 3);
+    return aggregate(recent).filter(function(a){ return a.reps && a.pct !== null && a.pct < 100; })
+      .sort(function(a, b){ return a.pct - b.pct || b.reps - a.reps; }).slice(0, n || 3)
+      .map(function(a){ a.top = topMiss(a.missCounts, 2); a.sessions = recent.length; return a; });
+  }
+  function workOnNext(rec){
+    var items = [], sf = rec.safety || {};
+    function add(rank, head, body){ items.push({rank:rank, head:head, body:body}); }
+    if(sf.unwarned > 0) add(95, SAFETY_TIPS.unwarned[0] + ' — ' + plural(sf.unwarned, 'drop') + ' near E-2362 without a warning', SAFETY_TIPS.unwarned[1]);
+    if(sf.deconf > 0) add(90, SAFETY_TIPS.deconf[0] + ' — ' + plural(sf.deconf, 'violation'), SAFETY_TIPS.deconf[1]);
+    if(sf.goaround > 0) add(70, SAFETY_TIPS.goaround[0] + ' — ' + sf.goaround, SAFETY_TIPS.goaround[1]);
+    if(sf.windShift === 'missed') add(65, SAFETY_TIPS.windshift[0] + ' — re-brief missed', SAFETY_TIPS.windshift[1]);
+    if(sf.aborts > 0) add(40, SAFETY_TIPS.aborts[0] + ' — ' + sf.aborts, SAFETY_TIPS.aborts[1]);
+    if(sf.diverted) add(55, SAFETY_TIPS.divert[0] + ' — ' + sf.diverted + ' was diverted', SAFETY_TIPS.divert[1]);
+    (rec.skills || []).forEach(function(k){
+      if(!k.reps || k.pct === null || k.pct >= 100) return;
+      var tm = topMiss(k.missCounts, 2).map(function(x){ return x[0] + ' (' + x[1] + ' of ' + k.reps + ')'; });
+      add(100 - k.pct, k.name + ' — ' + k.pct + '%', tm.length ? 'Missed ' + joinList(tm) + ' — say them every time.' : 'Work through every element of the standard: ' + k.std + '.');
+    });
+    var practised = (rec.skills || []).filter(function(k){ return k.reps; }).length;
+    if(practised) (rec.skills || []).forEach(function(k){ if(!k.reps && k.key !== 'airspace') add(10, k.name + ' — not practised', 'Get reps on this next session' + (k.std ? ': ' + k.std : '') + '.'); });
+    items.sort(function(a, b){ return b.rank - a.rank; });
+    items = items.slice(0, 3);
+    if(!items.length) items.push({head:'Keep it sharp', body:'Every graded element was there. Fly a harder difficulty or add aircraft to raise the workload.'});
+    return items;
+  }
+  function outcomeText(o, short){
+    var p = [];
+    if(o.structuresTotal !== null && o.structuresTotal !== undefined){ var lost = o.structuresLost || 0;
+      p.push(short ? (o.structuresSaved + '/' + o.structuresTotal + ' saved') : (o.structuresSaved + ' of ' + o.structuresTotal + ' structures saved' + (lost ? ' (' + lost + ' lost)' : ''))); }
+    if(o.acres !== null && o.acres !== undefined) p.push(o.acres + ' ac');
+    if(!short && o.contain !== null && o.contain !== undefined) p.push(o.contain + '% contained');
+    if(!short && o.drops) p.push(plural(o.drops, 'retardant drop') + (o.retardantGal ? ' (' + Number(o.retardantGal).toLocaleString('en-US') + ' gal)' : ''));
+    return p.join(' · ') || '—';
+  }
+  function scenarioText(r){ var m = r.meta || {}; return [m.scenarioCode, m.scenarioName].filter(Boolean).join(' — '); }
+
+  // ── CSS (injected once) ─────────────────────────────────────────
+  var CSS = [
+    '#progress .card{width:min(900px,100%);max-height:92vh;padding:20px 22px;}','#progress .card:focus{outline:none;}',
+    '#progress .pg-top{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:4px 0 6px;}',
+    '#progress .pg-top label{font-family:"Barlow Condensed",sans-serif;font-size:13px;color:var(--muted,#A9AB9F);display:flex;align-items:center;gap:6px;}',
+    '.pg-name{background:var(--panel-lo,#1F221F);border:1px solid var(--rule,#3D433B);border-radius:3px;color:var(--placard,#ECE7DA);font:inherit;font-size:14px;padding:5px 8px;width:14em;max-width:52vw;}',
+    '#progress .pg-sp{flex:1 1 auto;}',
+    '#progMsg{min-height:1.2em;font-size:12.5px;color:var(--muted,#A9AB9F);margin:2px 0 8px;}',
+    '#progress .tbtn{color:var(--placard,#ECE7DA);}',
+    '#progress .tbtn.warn{border-color:var(--amber,#F2A93B);color:var(--amber,#F2A93B);}',
+    '.pg h3{margin:16px 0 4px;font-family:"Barlow Condensed",sans-serif;font-size:17px;font-weight:600;letter-spacing:.3px;}',
+    '.pg .pg-sub{margin:0 0 8px;font-size:12.5px;color:var(--muted,#A9AB9F);line-height:1.45;}',
+    '.pg-empty{padding:18px 0 6px;line-height:1.55;color:#DAD5C8;}',
+    '.pg-empty b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:20px;margin-bottom:4px;color:var(--placard,#ECE7DA);}',
+    '.pg-weak{list-style:none;margin:0;padding:0;}',
+    '.pg-weak li{display:grid;grid-template-columns:2.2em 1fr;gap:2px 8px;padding:7px 0;border-bottom:1px solid var(--rule,#3D433B);line-height:1.4;}',
+    '.pg-weak li>i{grid-row:span 2;font-style:normal;font-family:"Barlow Condensed",sans-serif;font-size:20px;font-weight:700;color:var(--amber,#F2A93B);}',
+    '.pg-weak li b{font-weight:500;} .pg-weak li em{font-style:normal;font-size:12.5px;color:var(--muted,#A9AB9F);}',
+    '.pg-sk{display:grid;grid-template-columns:minmax(0,1.3fr) 166px repeat(3,4.6em);gap:4px 10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--rule,#3D433B);}',
+    '.pg-sk.hd{border-bottom:1px solid var(--rule,#3D433B);padding:2px 0;font-family:"Barlow Condensed",sans-serif;font-size:12px;color:var(--muted,#A9AB9F);}',
+    '.pg-sk .nm{min-width:0;} .pg-sk .nm small{display:block;font-size:11.5px;color:var(--dim,#7F8378);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
+    '.pg-sk .v{font-family:"Barlow Condensed",sans-serif;font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;}',
+    '.pg-sk .v small{display:none;font-weight:500;font-size:11px;color:var(--muted,#A9AB9F);margin-right:3px;}',
+    '.pg-sk .v.low{color:var(--amber,#F2A93B);} .pg-sk .v.na{color:var(--dim,#7F8378);font-weight:500;font-size:13px;}',
+    '.pg-sk svg{display:block;width:150px;height:40px;overflow:visible;}',
+    '.pg-s{display:grid;grid-template-columns:9.5em minmax(0,1fr) 6.5em 4em minmax(0,1.3fr) auto;gap:4px 10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--rule,#3D433B);font-size:13px;}',
+    '.pg-s.nosc{grid-template-columns:9.5em 4em minmax(0,1.6fr) auto;}',
+    '.pg-s.hd{font-family:"Barlow Condensed",sans-serif;font-size:12px;color:var(--muted,#A9AB9F);padding:2px 0;}',
+    '.pg-s.cur{background:rgba(242,169,59,.07);box-shadow:inset 2px 0 0 var(--amber,#F2A93B);padding-left:6px;}',
+    '.pg-s .ov{font-family:"Barlow Condensed",sans-serif;font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;}',
+    '.pg-s .ov.low{color:var(--amber,#F2A93B);}',
+    '.pg-s .act{display:flex;gap:6px;justify-content:flex-end;} .pg-s .tag{font-size:11px;color:var(--amber,#F2A93B);display:block;}',
+    '.pg-s .lb{display:none;color:var(--muted,#A9AB9F);font-size:11.5px;margin-right:4px;}',
+    '.pg-legend{font-size:12px;color:var(--muted,#A9AB9F);}',
+    '.pg-db-bar{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:2px 0 12px;}',
+    '.pg-db-bar label{font-size:13px;color:var(--muted,#A9AB9F);display:flex;gap:6px;align-items:center;}',
+    '.pd-screen{background:#fff;color:#000;border-radius:2px;padding:28px 30px;max-width:780px;margin:0 auto;box-shadow:0 4px 18px rgba(0,0,0,.35);}',
+    '.pd-screen .pd-page+.pd-page{border-top:2px dashed #999;margin-top:22px;padding-top:18px;}',
+    '@media (max-width:640px){',
+    '  #progress{padding:8px;} #progress .card{padding:16px 14px;max-height:96vh;}',
+    '  .pg-sk{grid-template-columns:repeat(3,minmax(0,1fr));gap:2px 8px;}',
+    '  .pg-sk .nm{grid-column:1 / -1;} .pg-sk svg{grid-column:1 / -1;}',
+    '  .pg-sk .v{text-align:left;} .pg-sk .v small{display:inline;} .pg-sk.hd{display:none;}',
+    '  .pg-s,.pg-s.nosc{grid-template-columns:1fr auto;gap:2px 8px;} .pg-s.hd{display:none;}',
+    '  .pg-s>*{grid-column:1;} .pg-s .act{grid-column:2;grid-row:1 / span 6;flex-direction:column;align-self:center;}',
+    '  .pg-s .lb{display:inline;}',
+    '  .pd-screen{padding:16px 12px;}',
+    '  .pd-screen .pd-meta,.pd-screen .pd-meta tbody{display:block;} .pd-screen .pd-meta tr{display:grid;grid-template-columns:5.6em minmax(0,1fr);} .pd-screen .pd-meta td{display:block;width:auto !important;}',
+    '  .pd-screen .pd-meta td:empty{display:none;} .pd-screen .pd-sk td.std,.pd-screen .pd-sk th.std{display:none;}',
+    '  .pd-screen .pd-cols{display:block;} .pd-screen .pd-hd{flex-wrap:wrap;} .pd-screen .pd-hd .ttl{text-align:left;}',
+    '  .pd-screen .pd-sig{flex-wrap:wrap;} .pd-screen .pd-sig div{flex:1 1 40% !important;margin-top:14pt;}',
+    '  .pd-screen .pd-tx div{grid-template-columns:3.6em minmax(0,1fr);} .pd-screen .pd-tx div span:last-child{grid-column:1 / -1;}',
+    '}',
+    // ── debrief document (screen preview and print) ──
+    '.pd{font-family:"Barlow","Helvetica Neue",Arial,sans-serif;color:#000;font-size:9.6pt;line-height:1.24;}',
+    '.pd *{color:#000;}',
+    '.pd h1{font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif;font-size:19pt;font-weight:700;margin:0;line-height:1.05;}',
+    '.pd h2{font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif;font-size:12pt;font-weight:700;margin:7pt 0 2pt;padding-bottom:1pt;border-bottom:1.2pt solid #000;text-transform:uppercase;letter-spacing:.4pt;}',
+    '.pd .pd-hd{display:flex;justify-content:space-between;align-items:flex-end;gap:12pt;border-bottom:2pt solid #000;padding-bottom:4pt;}',
+    '.pd .pd-hd .sub{font-size:9.5pt;} .pd .pd-hd .ttl{font-size:16pt;font-weight:700;font-family:"Barlow Condensed","Arial Narrow",Arial,sans-serif;text-align:right;}',
+    '.pd table{border-collapse:collapse;width:100%;}',
+    '.pd .pd-meta{margin-top:4pt;table-layout:fixed;} .pd .pd-meta td{padding:1pt 6pt 1pt 0;vertical-align:top;font-size:9.2pt;} .pd .pd-meta td.k{width:5.6em;} .pd .pd-meta td.v1{width:15em;}',
+    '.pd .pd-meta td.k{font-weight:700;white-space:nowrap;}',
+    '.pd .pd-meta .line{display:inline-block;min-width:16em;border-bottom:.8pt solid #000;}',
+    '.pd .pd-sk th,.pd .pd-sk td,.pd .pd-rep th,.pd .pd-rep td{border-bottom:.6pt solid #888;padding:1.1pt 5pt 1.1pt 0;text-align:left;vertical-align:top;}',
+    '.pd .pd-sk th,.pd .pd-rep th{font-size:8.5pt;border-bottom:1pt solid #000;font-weight:700;}',
+    '.pd .pd-sk td.n,.pd .pd-sk th.n,.pd .pd-rep td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;}',
+    '.pd .pd-sk td.std{font-size:7.8pt;line-height:1.2;}',
+    '.pd .pd-sk tr.low td{font-weight:700;} .pd .pd-sk tr.low td.std{font-weight:400;}',
+    '.pd .pd-sk tr.na td{font-style:italic;}',
+    '.pd .pd-miss{margin:0;padding:0;list-style:none;}',
+    '.pd .pd-miss li{padding:1.6pt 0;border-bottom:.6pt solid #bbb;break-inside:avoid;}',
+    '.pd .pd-miss .md{display:block;font-size:8.8pt;font-style:italic;margin:1pt 0 0 10pt;}',
+    '.pd .pd-cols{display:flex;gap:14pt;} .pd .pd-cols>div{flex:1 1 0;min-width:0;}',
+    '.pd .pd-saf td{padding:1.4pt 4pt 1.4pt 0;border-bottom:.6pt solid #bbb;font-size:9.5pt;} .pd .pd-saf td.n{text-align:right;font-weight:700;white-space:nowrap;}',
+    '.pd ol.pd-next{margin:0;padding-left:15pt;} .pd ol.pd-next li{padding:1.4pt 0;} .pd ol.pd-next b{display:block;}',
+    '.pd .pd-notes{border:1pt solid #000;margin-top:3pt;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 23px,#bbb 23px,#bbb 24px);}',
+    '.pd .pd-sig{display:flex;gap:18pt;margin-top:12pt;font-size:9pt;} .pd .pd-sig div{flex:1;border-top:1pt solid #000;padding-top:2pt;}',
+    '.pd .pd-foot{margin-top:6pt;font-size:7.5pt;display:flex;justify-content:space-between;}',
+    '.pd .pd-tx{font-size:8.5pt;line-height:1.3;} .pd .pd-tx div{display:grid;grid-template-columns:4.2em 11em 1fr;gap:0 6pt;padding:1pt 0;border-bottom:.4pt solid #ddd;break-inside:avoid;}',
+    '.pd .pd-tx div span:first-child{white-space:nowrap;font-variant-numeric:tabular-nums;} .pd .pd-tx div.fb{font-style:italic;} .pd .pd-tx div.fb span:nth-child(2)::before{content:"GRADE ";font-weight:700;font-style:normal;}',
+    '.pd .pd-tx div.sys{color:#333;} .pd .pd-tx div.me span:nth-child(2){font-weight:700;}',
+    '.pd .pd-rep{font-size:8.5pt;}',
+    '.pd.pd-d1 h2{margin-top:7pt;} .pd.pd-d1 .pd-miss .md{font-size:8.4pt;} .pd.pd-d1 .pd-sk td.std,.pd.pd-d1 .pd-sk th.std{display:none;}',
+    '.pd.pd-d2{font-size:8.8pt;line-height:1.22;} .pd.pd-d2 h2{margin-top:5pt;font-size:11pt;} .pd.pd-d2 .pd-sk td.std,.pd.pd-d2 .pd-sk th.std{display:none;}',
+    '.pd.pd-d3{font-size:8.2pt;line-height:1.15;} .pd.pd-d3 h2{margin-top:4pt;font-size:10pt;} .pd.pd-d3 .pd-sk td.std,.pd.pd-d3 .pd-sk th.std{display:none;}',
+    '.pd.pd-d3 ol.pd-next li span{display:none;} .pd.pd-d3 .pd-miss li{padding:1pt 0;} .pd.pd-d3 .pd-meta td{padding:.5pt 6pt .5pt 0;}',
+    '#progPrint{display:none;}',
+    '#progPrint.measure{display:block;position:absolute;left:-12000px;top:0;width:720px;visibility:hidden;pointer-events:none;}',
+    '@media print{',
+    '  @page{size:letter portrait;margin:.5in;}',
+    '  html.prog-printing,html.prog-printing body{height:auto !important;overflow:visible !important;background:#fff !important;color:#000 !important;padding:0 !important;margin:0 !important;}',
+    '  html.prog-printing body>*:not(#progPrint){display:none !important;}',
+    '  html.prog-printing #progPrint{display:block !important;position:static !important;width:auto !important;visibility:visible !important;}',
+    '  html.prog-printing #progPrint .pd-page{page-break-after:always;break-after:page;}',
+    '  html.prog-printing #progPrint .pd-page:last-child{page-break-after:auto;break-after:auto;}',
+    '  html.prog-printing #progPrint .pd-p1{max-height:9.95in;overflow:hidden;}',
+    '}'
+  ].join('\n');
+  function injectCSS(){ try{ if(byId('progStyle') || !document.head) return; var st = document.createElement('style'); st.id = 'progStyle'; st.textContent = CSS; document.head.appendChild(st); }catch(e){} }
+  injectCSS();
+
+  // ── trend view ──────────────────────────────────────────────────
+  function spark(vals){
+    // vals oldest→newest, null = no reps that session. Scale runs from 50% (or the lowest value, in
+    // steps of 10) to 100%, so a 75→95 change is visible; the 80% line is dashed, the floor solid.
+    var lo = 50; vals.forEach(function(v){ if(v !== null && v < lo) lo = Math.max(0, Math.floor(v / 10) * 10); });
+    var W = 150, H = 40, n = vals.length, x = function(i){ return n < 2 ? W / 2 : 4 + i * (W - 8) / (n - 1); }, y = function(v){ return 36 - (Math.max(lo, v) - lo) * 32 / (100 - lo); };
+    var segs = [], cur = [];
+    vals.forEach(function(v, i){ if(v === null){ if(cur.length) segs.push(cur); cur = []; } else cur.push(x(i).toFixed(1) + ',' + y(v).toFixed(1)); });
+    if(cur.length) segs.push(cur);
+    var last = -1; vals.forEach(function(v, i){ if(v !== null) last = i; });
+    var known = vals.filter(function(v){ return v !== null; });
+    var lbl = known.length ? 'Trend over ' + plural(known.length, 'session') + ': ' + known.join(', ') + ' percent' : 'No reps yet';
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(lbl) + '">' +
+      '<line x1="0" x2="' + W + '" y1="' + y(LOW) + '" y2="' + y(LOW) + '" stroke="var(--dim,#7F8378)" stroke-width="1" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/>' +
+      '<line x1="0" x2="' + W + '" y1="' + y(lo) + '" y2="' + y(lo) + '" stroke="var(--rule,#3D433B)" stroke-width="1" vector-effect="non-scaling-stroke"/>' +
+      '<text x="' + (W + 3) + '" y="' + (y(LOW) + 3) + '" font-size="8" fill="var(--dim,#7F8378)">' + LOW + '</text>' +
+      '<text x="' + (W + 3) + '" y="' + (y(lo) + 3) + '" font-size="8" fill="var(--dim,#7F8378)">' + lo + '</text>';
+    segs.forEach(function(p){ if(p.length > 1) s += '<polyline points="' + p.join(' ') + '" fill="none" stroke="var(--placard,#ECE7DA)" stroke-width="1.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>'; });
+    vals.forEach(function(v, i){ if(v === null) return;
+      var big = i === last, r = big ? 3.6 : 2.4, lowv = v < LOW;
+      s += '<circle cx="' + x(i).toFixed(1) + '" cy="' + y(v).toFixed(1) + '" r="' + r + '" stroke-width="1.4" ' +
+        (lowv ? 'fill="var(--panel,#272B27)" stroke="var(--amber,#F2A93B)"' : 'fill="' + (big ? 'var(--amber,#F2A93B)' : 'var(--placard,#ECE7DA)') + '" stroke="' + (big ? 'var(--amber,#F2A93B)' : 'var(--placard,#ECE7DA)') + '"') + '/>'; });
+    if(!known.length) s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="No reps yet"><text x="' + W / 2 + '" y="24" text-anchor="middle" font-size="10" fill="var(--dim,#7F8378)">no reps yet</text>';
+    return s + '</svg>';
+  }
+  function renderTrendInner(el, opts){
+    if(!el) return false;
+    opts = opts || {};
+    var list = readAll(), curId = opts.currentId || (current && current.id);
+    var h = '<div class="pg">';
+    if(!list.length){
+      h += '<div class="pg-empty"><b>No sessions yet</b>Fly the Cedar Fire and end the exercise (the End button, or say “end exercise”). Each report card is saved here on this device, so you and your instructor can see every skill trend from session to session.' +
+        '<br><br>Moving computers? Use Import to load a history file exported from another browser.</div></div>';
+      el.innerHTML = h; bindTrend(el, opts); return true;
+    }
+    // weakest skills right now
+    var wk = weakest(list, 3), n3 = Math.min(3, list.length);
+    h += '<h3>Weakest skills right now</h3><p class="pg-sub">From your last ' + (n3 === 1 ? 'session' : n3 + ' sessions') + '.</p>';
+    if(wk.length){
+      h += '<ol class="pg-weak">' + wk.map(function(a, i){
+        var m = a.top.map(function(t){ return t[0] + ' omitted in ' + t[1] + ' of ' + a.reps; });
+        return '<li><i aria-hidden="true">' + (i + 1) + '</i><b>' + esc(a.name) + ' — ' + a.pct + '%</b><em>' + esc(m.length ? m.join('; ') : plural(a.reps, 'rep') + ', elements dropped across calls') + '</em></li>';
+      }).join('') + '</ol>';
+    } else h += '<p class="pg-sub" style="color:var(--placard,#ECE7DA)">Every graded element was there in every rep. Step up the difficulty.</p>';
+    // per-skill trends
+    var chrono = list.slice(0, TREND_N).reverse(), keys = [], names = {}, stds = {};
+    chrono.concat(list).forEach(function(r){ (r.skills || []).forEach(function(k){ if(!names[k.key]){ keys.push(k.key); names[k.key] = k.name; stds[k.key] = k.std; } }); });
+    gSkills().forEach(function(d){ if(!names[d[0]]){ keys.push(d[0]); names[d[0]] = d[1]; stds[d[0]] = d[2]; } });
+    var order = gSkills().map(function(d){ return d[0]; }); keys.sort(function(a, b){ var ia = order.indexOf(a), ib = order.indexOf(b); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
+    h += '<h3>Skill trends</h3><p class="pg-sub pg-legend">Oldest to newest, last ' + plural(chrono.length, 'session') + '. Filled dot: ' + LOW + '% or better; open dot: below ' + LOW + '%; dashed line marks ' + LOW + '%; the scale runs from the number at the bottom right (usually 50%) to 100%. Change is against the previous session that had reps.</p>';
+    h += '<div class="pg-sk hd"><span>Skill</span><span>Trend</span><span style="text-align:right">Last</span><span style="text-align:right">Best</span><span style="text-align:right">Change</span></div>';
+    keys.forEach(function(k){
+      var vals = chrono.map(function(r){ var s = (r.skills || []).filter(function(x){ return x.key === k; })[0]; return s && s.reps && s.pct !== null ? s.pct : null; });
+      var all = list.map(function(r){ var s = (r.skills || []).filter(function(x){ return x.key === k; })[0]; return s && s.reps && s.pct !== null ? s.pct : null; }).filter(function(v){ return v !== null; });
+      var last = all.length ? all[0] : null, prev = all.length > 1 ? all[1] : null, best = all.length ? Math.max.apply(null, all) : null;
+      var ch = '—', chl = 'no previous session';
+      if(last !== null && prev !== null){ var d = last - prev; ch = d > 0 ? '▲ +' + d : d < 0 ? '▼ −' + (-d) : '= 0'; chl = d > 0 ? 'up ' + d + ' points' : d < 0 ? 'down ' + (-d) + ' points' : 'no change'; }
+      h += '<div class="pg-sk" data-skill="' + esc(k) + '"><div class="nm">' + esc(names[k]) + (stds[k] ? '<small>' + esc(stds[k]) + '</small>' : '') + '</div>' + spark(vals) +
+        '<span class="v' + (last === null ? ' na' : last < LOW ? ' low' : '') + '"><small>Last</small>' + (last === null ? 'no reps' : last + '%' + (last < LOW ? '<span aria-label=" below ' + LOW + ' percent"></span>' : '')) + '</span>' +
+        '<span class="v' + (best === null ? ' na' : '') + '"><small>Best</small>' + (best === null ? '—' : best + '%') + '</span>' +
+        '<span class="v' + (last !== null && prev !== null ? '' : ' na') + '" aria-label="' + esc(chl) + '"><small>Change</small>' + ch + '</span></div>';
+    });
+    // sessions table
+    var hasSc = list.some(function(r){ return r.meta && (r.meta.scenarioCode || r.meta.scenarioName || r.meta.difficulty); });
+    h += '<h3>Sessions</h3><p class="pg-sub">' + plural(list.length, 'session') + ' saved on this device (newest first, up to ' + MAX_SESSIONS + '). Open one for its printable debrief.</p>';
+    h += '<div class="pg-s hd' + (hasSc ? '' : ' nosc') + '"><span>Date</span>' + (hasSc ? '<span>Scenario</span><span>Difficulty</span>' : '') + '<span>Overall</span><span>Outcome</span><span></span></div>';
+    list.forEach(function(r){
+      var ov = r.overall && r.overall.pct;
+      h += '<div class="pg-s' + (hasSc ? '' : ' nosc') + (r.id === curId ? ' cur' : '') + '" data-id="' + esc(r.id) + '">' +
+        '<span><span class="lb">Date</span>' + esc(fmtDate(r.ts)) + (r.id === curId ? '<span class="tag">this session</span>' : '') + '</span>' +
+        (hasSc ? '<span><span class="lb">Scenario</span>' + esc(scenarioText(r) || '—') + '</span><span><span class="lb">Difficulty</span>' + esc(r.meta.difficulty || '—') + '</span>' : '') +
+        '<span class="ov' + (ov !== null && ov !== undefined && ov < LOW ? ' low' : '') + '"><span class="lb">Overall</span>' + (ov === null || ov === undefined ? '—' : ov + '%') + '</span>' +
+        '<span><span class="lb">Outcome</span>' + esc(outcomeText(r.outcome || {}, true)) + '</span>' +
+        '<span class="act"><button class="tbtn" type="button" data-act="open" data-id="' + esc(r.id) + '">Open</button><button class="tbtn" type="button" data-act="del" data-id="' + esc(r.id) + '" aria-label="Delete session from ' + esc(fmtDate(r.ts)) + '">Delete</button></span></div>';
+    });
+    h += '</div>';
+    el.innerHTML = h; bindTrend(el, opts);
+    return true;
+  }
+  function bindTrend(el, opts){
+    el._progOpts = opts;
+    if(el._progBound) return; el._progBound = true;
+    el.addEventListener('click', function(e){
+      try{
+        var b = e.target.closest && e.target.closest('button[data-act]'); if(!b) return;
+        var id = b.getAttribute('data-id'), o = el._progOpts || {};
+        if(b.getAttribute('data-act') === 'open'){ if(o.onOpen) o.onOpen(id); else openModal('debrief', id); }
+        else if(b.getAttribute('data-act') === 'del'){
+          if(b.getAttribute('data-armed') !== '1'){ b.setAttribute('data-armed', '1'); b.textContent = 'Confirm'; b.classList.add('warn'); setTimeout(function(){ try{ if(b.isConnected){ b.removeAttribute('data-armed'); b.textContent = 'Delete'; b.classList.remove('warn'); } }catch(_){} }, 4000); return; }
+          remove(id); renderTrendInner(el, o); msg('Session deleted.');
+        }
+      }catch(err){ warn('trend click', err); }
+    });
+  }
+
+  // ── debrief document ────────────────────────────────────────────
+  function debriefHTML(r, opts, level, notesPx){
+    opts = opts || {};
+    var m = r.meta || {}, o = r.outcome || {}, ov = r.overall || {};
+    var lv = level ? ' pd-d' + level : '';
+    var h = '<div class="pd pd-page pd-p1' + lv + '">';
+    h += '<div class="pd-hd"><div><h1>ATGS Session Debrief</h1><div class="sub">' + esc(m.scenarioName || 'Cedar Fire') + ' · graded to the CAL FIRE CSAS standard scripts</div></div>' +
+      '<div class="ttl">' + (ov.pct === null || ov.pct === undefined ? 'No graded calls' : 'Overall ' + ov.pct + '%') + '<div class="sub">' + esc(r.title || '') + '</div></div></div>';
+    var rows = [['Student', r.student ? esc(r.student) : '<span class="line">&nbsp;</span>'], ['Date', esc(fmtDate(r.ts))]];
+    if(m.scenarioCode || m.scenarioName) rows.push(['Scenario', esc(scenarioText(r))]);
+    if(m.difficulty) rows.push(['Difficulty', esc(m.difficulty)]);
+    rows.push(['On scene', esc(mmss(r.durationSec)) + ' (mm:ss)']);
+    rows.push(['Outcome', esc(outcomeText(o, false))]);
+    var extra = [];
+    if(ov.score !== null && ov.score !== undefined) extra.push('Score ' + ov.score);
+    if(ov.elemPct !== null && ov.elemPct !== undefined) extra.push(ov.elemPct + '% of all graded elements');
+    if(m.hintsUsed !== undefined) extra.push('hints used: ' + m.hintsUsed);
+    else if(r.settings && typeof r.settings.hints === 'boolean') extra.push('hints ' + (r.settings.hints ? 'on' : 'off'));
+    if(m.version) extra.push('sim version ' + m.version);
+    if(extra.length) rows.push(['Scoring', esc(extra.join(' · '))]);
+    var half = Math.ceil(rows.length / 2);
+    h += '<table class="pd-meta"><tbody>';
+    for(var i = 0; i < half; i++){ var a = rows[i], b = rows[i + half];
+      h += '<tr><td class="k">' + a[0] + '</td><td class="v1">' + a[1] + '</td>' + (b ? '<td class="k">' + b[0] + '</td><td>' + b[1] + '</td>' : '<td></td><td></td>') + '</tr>'; }
+    h += '</tbody></table>';
+    // skills
+    h += '<h2>Skills</h2><table class="pd-sk"><thead><tr><th>Skill</th><th class="std">Standard elements</th><th class="n">Reps</th><th class="n">Got / of</th><th class="n">Percent</th></tr></thead><tbody>';
+    (r.skills || []).forEach(function(k){
+      var na = !k.reps || k.pct === null, low = !na && k.pct < LOW;
+      h += '<tr class="' + (na ? 'na' : low ? 'low' : '') + '"><td>' + esc(k.name) + '</td><td class="std">' + esc(k.std) + '</td><td class="n">' + (k.reps || 0) + '</td><td class="n">' + (na ? '—' : k.got + ' / ' + k.of) + '</td><td class="n">' + (na ? 'no reps' : (low ? '▼ ' : '') + k.pct + '%') + '</td></tr>';
+    });
+    h += '</tbody></table><div style="font-size:7.5pt;margin-top:1pt">▼ = below ' + LOW + '%.</div>';
+    // missed elements
+    var missed = (r.skills || []).filter(function(k){ return k.reps && Object.keys(k.missCounts || {}).length; }).sort(function(a, b){ return (a.pct || 0) - (b.pct || 0); });
+    h += '<h2>Missed elements and standard wording</h2>';
+    if(missed.length){
+      h += '<ul class="pd-miss">' + missed.map(function(k, idx){
+        var tm = topMiss(k.missCounts, level >= 3 ? 2 : level >= 2 ? 3 : 5).map(function(x){ return esc(x[0]) + ' (' + x[1] + ' of ' + k.reps + ')'; });
+        var showModel = k.model && ((level <= 1 && idx < 2) || (level === 2 && idx < 1));
+        return '<li><b>' + esc(k.name) + ' — ' + k.pct + '%:</b> ' + tm.join(', ') + (showModel ? '<span class="md">Standard: “' + esc(k.model) + '”</span>' : '') + '</li>';
+      }).join('') + '</ul>';
+    } else h += '<div>' + ((r.reps || []).length ? 'None — every graded element was there in every rep.' : 'No graded calls this session.') + '</div>';
+    // safety + work on next
+    h += '<div class="pd-cols"><div><h2>Safety</h2><table class="pd-saf"><tbody>' + (r.safetyRows || []).map(function(sr){
+      var bad = (typeof sr[1] === 'number' && sr[1] > 0) || sr[1] === 'missed' || /diverted/.test(String(sr[1]));
+      return '<tr><td>' + esc(sr[0]) + '</td><td class="n">' + (bad ? '▲ ' : '') + esc(sr[1]) + '</td></tr>'; }).join('') + '</tbody></table><div style="font-size:7.5pt;margin-top:1pt">▲ = needs attention.</div></div>';
+    h += '<div><h2>Work on next</h2><ol class="pd-next">' + workOnNext(r).map(function(it){ return '<li><b>' + esc(it.head) + '</b><span>' + esc(it.body) + '</span></li>'; }).join('') + '</ol></div></div>';
+    // notes + signatures
+    h += '<h2>Instructor notes</h2><div class="pd-notes" style="height:' + Math.round(notesPx == null ? 150 : notesPx) + 'px"></div>';
+    h += '<div class="pd-sig"><div>Student signature</div><div style="flex:.45">Date</div><div>Instructor signature</div><div style="flex:.45">Date</div></div>';
+    h += '<div class="pd-foot"><span>Session ' + esc(r.id) + '</span><span>' + (opts.transcript ? 'Every rep and the radio transcript follow.' : '') + '</span></div>';
+    h += '</div>';
+    if(opts.transcript){
+      h += '<div class="pd pd-page pd-p2"><div class="pd-hd"><div><h1>Every rep and radio transcript</h1><div class="sub">' + esc(r.student || 'Student') + ' · ' + esc(fmtDate(r.ts)) + (scenarioText(r) ? ' · ' + esc(scenarioText(r)) : '') + '</div></div></div>';
+      var nm = {}; (r.skills || []).forEach(function(k){ nm[k.key] = k.name; });
+      h += '<h2>Every rep (' + (r.reps || []).length + ')</h2>';
+      if((r.reps || []).length) h += '<table class="pd-rep"><thead><tr><th>Time</th><th>Call</th><th class="n">Score</th><th>Missed / notes</th></tr></thead><tbody>' + r.reps.map(function(p){
+        return '<tr><td class="n">' + (p.t === null ? '' : esc(mmss(p.t))) + '</td><td>' + esc(p.label || nm[p.kind] || p.kind) + '</td><td class="n">' + p.got + '/' + p.of + '</td><td>' + esc(p.miss.length ? 'missing ' + joinList(p.miss) : 'complete') + (p.notes ? '. ' + esc(p.notes) : '') + '</td></tr>'; }).join('') + '</tbody></table>';
+      else h += '<div>No graded calls.</div>';
+      h += '<h2>Radio transcript</h2>';
+      var tx = r.transcript || [];
+      if(tx.length) h += '<div class="pd-tx">' + tx.map(function(l){ return '<div class="' + esc(l.type) + '"><span>' + esc(l.tm) + '</span><span>' + esc(l.who) + '</span><span>' + esc(l.text) + '</span></div>'; }).join('') + '</div>';
+      else h += '<div>' + (r.txDropped ? 'The transcript for this older session was removed to save space.' : 'No transcript was recorded.') + '</div>';
+      h += '</div>';
+    }
+    return h;
+  }
+  // Lay out page 1 at print width (7.5in = 720px) and pick the densest-needed level so it fits one
+  // page; the notes box takes whatever height is left.
+  function layout(r, opts){
+    var box = ensurePrintBox(), res = {level:0, notesPx:150};
+    if(!box) return res;
+    var mins = [130, 100, 90, 72]; var tried = [];
+    box.classList.add('measure');
+    try{
+      for(var lv = 0; lv < 4; lv++){
+        box.innerHTML = debriefHTML(r, {transcript:false}, lv, 0);
+        var p = box.firstElementChild, hgt = p ? p.getBoundingClientRect().height : 0;
+        var left = PAGE_PX - hgt - 14;
+        tried.push(Math.round(hgt));
+        res = {level:lv, notesPx:Math.max(mins[lv], Math.min(left, 420)), fits:left >= mins[lv], height:hgt, tried:tried};
+        if(res.fits || !hgt) break;
+      }
+    }catch(e){ warn('layout', e); }
+    box.classList.remove('measure'); box.innerHTML = '';
+    return res;
+  }
+  function ensurePrintBox(){
+    try{ var b = byId('progPrint'); if(b) return b; if(!document.body) return null;
+      b = document.createElement('div'); b.id = 'progPrint'; b.setAttribute('aria-hidden', 'true'); document.body.appendChild(b); return b; }catch(e){ return null; }
+  }
+  function renderDebriefInner(r, el, opts){
+    if(!el) return false;
+    r = normalize(r) || current || emptyRecord();
+    opts = opts || {};
+    var L = layout(r, opts);
+    el.innerHTML = '<div class="pd-screen">' + debriefHTML(r, opts, L.level, L.notesPx) + '</div>';
+    return L;
+  }
+  var printCleanup = null;
+  function printInner(r, opts){
+    opts = opts || {};
+    if(opts.transcript === undefined) opts.transcript = !!prefs().transcript;
+    r = r ? normalize(r) : (current || readAll()[0]);
+    if(!r){ msg('Nothing to print yet.'); return false; }
+    var box = ensurePrintBox(); if(!box) return false;
+    var L = layout(r, opts);
+    box.innerHTML = debriefHTML(r, opts, L.level, L.notesPx);
+    var root = document.documentElement;
+    if(printCleanup) printCleanup();
+    root.classList.add('prog-printing');
+    var done = false;
+    var clean = function(){ if(done) return; done = true; try{ root.classList.remove('prog-printing'); box.innerHTML = ''; window.removeEventListener('afterprint', later); document.removeEventListener('pointerdown', clean, true); }catch(e){} if(printCleanup === clean) printCleanup = null; };
+    // afterprint can fire before the print snapshot is taken (Chromium's PDF path does this), so the
+    // restore waits; the print-only layout is invisible on screen in the meantime.
+    var later = function(){ setTimeout(clean, 1500); };
+    printCleanup = clean;
+    if(opts.noPrint) return L;   // caller prints (tests: page.pdf()) and then calls PROGRESS.endPrint()
+    window.addEventListener('afterprint', later);
+    try{ window.print(); }catch(e){ warn('print', e); printCleanup(); return false; }
+    // Browsers that return from print() before printing fire afterprint later; as a fallback the
+    // next tap or click restores the page (the print container is invisible on screen anyway).
+    setTimeout(function(){ try{ if(printCleanup === clean) document.addEventListener('pointerdown', clean, true); }catch(e){} }, 0);
+    return L;
+  }
+
+  // ── import / export ─────────────────────────────────────────────
+  function download(name, text, type){
+    try{
+      var blob = new Blob([text], {type:type}), url = URL.createObjectURL(blob), a = document.createElement('a');
+      a.href = url; a.download = name; a.style.display = 'none'; document.body.appendChild(a); a.click();
+      setTimeout(function(){ try{ URL.revokeObjectURL(url); a.remove(); }catch(e){} }, 1500);
+      return true;
+    }catch(e){ warn('download', e); return false; }
+  }
+  function fileSlug(){ var n = api.studentName.replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30); return n ? '-' + n : ''; }
+  function exportJSONInner(){
+    var list = readAll();
+    var data = {app:'cedar-atgs-progress', v:VERSION, exportedAt:new Date().toISOString(), student:api.studentName, sessions:list};
+    var name = 'cedar-atgs-history' + fileSlug() + '-' + isoDay() + '.json';
+    var ok = download(name, JSON.stringify(data, null, 1), 'application/json');
+    return {ok:ok, count:list.length, filename:name};
+  }
+  function mergeIn(incoming){
+    var list = readAll(), byKey = {}, res = {ok:true, added:0, updated:0, unchanged:0, skipped:0};
+    list.forEach(function(r){ byKey[r.id] = r; });
+    incoming.forEach(function(x){
+      var r = normalize(x); if(!r){ res.skipped++; return; }
+      var have = byKey[r.id];
+      if(!have){ byKey[r.id] = r; list.push(r); res.added++; return; }
+      if(r.ts > have.ts || (r.ts === have.ts && (r.transcript.length > have.transcript.length || r.reps.length > have.reps.length))){
+        if(!r.transcript.length && have.transcript.length){ r.transcript = have.transcript; r.txDropped = false; }
+        list[list.indexOf(have)] = r; byKey[r.id] = r; res.updated++;
+      } else res.unchanged++;
+    });
+    var w = writeAll(list); res.stored = w.stored; res.note = w.note || ''; res.total = Math.min(list.length, MAX_SESSIONS);
+    if(w.dropped) res.note = (res.note ? res.note + ' ' : '') + plural(w.dropped, 'older session') + ' beyond the ' + MAX_SESSIONS + '-session limit were not kept.';
+    return res;
+  }
+  function parseImport(text){
+    var data;
+    try{ data = JSON.parse(text); }catch(e){ return {ok:false, error:'That file is not valid JSON.'}; }
+    var arr = Array.isArray(data) ? data : (data && Array.isArray(data.sessions)) ? data.sessions : (data && typeof data === 'object' && (data.reps || data.skills)) ? [data] : null;
+    if(!arr) return {ok:false, error:'That file is not a Cedar ATGS history export.'};
+    if(data && data.app && data.app !== 'cedar-atgs-progress' && data.app !== 'cedar-atgs') return {ok:false, error:'That file is from another app (' + str(data.app, 40) + ').'};
+    var valid = arr.filter(function(x){ return x && typeof x === 'object' && (Array.isArray(x.skills) || x.reps); });
+    if(!valid.length) return {ok:false, error:'No sessions found in that file.'};
+    var res = mergeIn(valid); res.skipped += arr.length - valid.length;
+    return res;
+  }
+  function importJSONInner(file){
+    return new Promise(function(resolve){
+      var fin = function(r){ try{ refreshOpen(); msg(importMsg(r)); }catch(e){} resolve(r); };
+      try{
+        if(file === null || file === undefined) return fin({ok:false, error:'No file chosen.'});
+        if(typeof file === 'string') return fin(parseImport(file));
+        if(typeof file === 'object' && !(typeof Blob !== 'undefined' && file instanceof Blob)) return fin(parseImport(JSON.stringify(file)));
+        if(file.size > MAX_IMPORT) return fin({ok:false, error:'That file is too large to be a history export.'});
+        var done = function(t){ try{ fin(parseImport(String(t))); }catch(e){ fin({ok:false, error:'Could not read that file.'}); } };
+        if(file.text) file.text().then(done, function(){ fin({ok:false, error:'Could not read that file.'}); });
+        else { var fr = new FileReader(); fr.onload = function(){ done(fr.result); }; fr.onerror = function(){ fin({ok:false, error:'Could not read that file.'}); }; fr.readAsText(file); }
+      }catch(e){ fin({ok:false, error:'Could not read that file.'}); }
+    });
+  }
+  function importMsg(r){
+    if(!r || !r.ok) return 'Import failed: ' + ((r && r.error) || 'unknown error');
+    return 'Imported: ' + r.added + ' new, ' + r.updated + ' updated, ' + r.unchanged + ' already here' + (r.skipped ? ', ' + r.skipped + ' skipped (not valid)' : '') + '.' + (r.note ? ' ' + r.note : '');
+  }
+  function csvCell(v){
+    if(v === null || v === undefined) return '';
+    if(typeof v === 'number') return isFinite(v) ? String(v) : '';
+    var s = String(v);
+    if(/^[=+\-@\t\r]/.test(s)) s = "'" + s;               // keep spreadsheets from running it as a formula
+    return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+  var CSV_COLS = ['session_id', 'date', 'time', 'student', 'scenario_code', 'scenario_name', 'difficulty', 'version', 'hints_used', 'duration_sec', 'overall_pct', 'score',
+    'structures_saved', 'structures_total', 'acres', 'contained_pct', 'deconf', 'unwarned_drops', 'go_arounds', 'skill_key', 'skill', 'reps', 'got', 'of', 'pct', 'most_missed'];
+  function csvInner(list){
+    list = (list || readAll()).map(function(r){ return normalize(r); }).filter(Boolean);
+    var lines = [CSV_COLS.join(',')];
+    list.forEach(function(r){
+      var d = r.ts ? new Date(r.ts) : null, m = r.meta || {}, o = r.outcome || {}, sf = r.safety || {};
+      var date = d && !isNaN(d) ? isoDay(r.ts) : '', time = d && !isNaN(d) ? String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') : '';
+      (r.skills || []).forEach(function(k){
+        lines.push([r.id, date, time, r.student, m.scenarioCode, m.scenarioName, m.difficulty, m.version, m.hintsUsed, r.durationSec, r.overall.pct, r.overall.score,
+          o.structuresSaved, o.structuresTotal, o.acres, o.contain, sf.deconf, sf.unwarned, sf.goaround,
+          k.key, k.name, k.reps, k.reps ? k.got : null, k.reps ? k.of : null, k.reps ? k.pct : null,
+          topMiss(k.missCounts, 3).map(function(x){ return x[0] + ' (' + x[1] + ')'; }).join('; ')].map(csvCell).join(','));
+      });
+    });
+    return lines.join('\r\n') + '\r\n';
+  }
+  function exportCSVInner(){
+    var text = csvInner(), name = 'cedar-atgs-skills' + fileSlug() + '-' + isoDay() + '.csv';
+    var ok = download(name, '\ufeff' + text, 'text/csv;charset=utf-8');
+    return {ok:ok, filename:name, csv:text, rows:text.split('\r\n').length - 2};
+  }
+
+  // ── history API ─────────────────────────────────────────────────
+  function save(rec){
+    var r = normalize(rec);
+    if(!r) return {ok:false, stored:false, error:'invalid record'};
+    var list = readAll().filter(function(x){ return x.id !== r.id; });
+    list.push(r);
+    var w = writeAll(list); w.id = r.id;
+    if(current && current.id === r.id) current = r;
+    refreshRowSoon();
+    return w;
+  }
+  function remove(id){ id = str(id); var list = readAll(), n = list.length; list = list.filter(function(x){ return x.id !== id; }); if(list.length === n) return false; writeAll(list); refreshRowSoon(); return true; }
+  function clearAll(){ lrem(KEY); mem = []; memDirty = !store(); refreshRowSoon(); return true; }
+  var rowTimer = null;
+  function refreshRowSoon(){ try{ clearTimeout(rowTimer); rowTimer = setTimeout(function(){ try{ refreshRow(); }catch(e){} }, 0); }catch(e){} }
+
+  // ── modal ───────────────────────────────────────────────────────
+  var MODAL_HTML = '<div class="card" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="progTitle">' +
+    '<h2 id="progTitle">Progress</h2><p class="lead" id="progLead">Every report card is saved on this device. Open a session for the printable instructor debrief.</p>' +
+    '<div id="progView"></div>' +
+    '<button class="cta" id="progClose" type="button">Close</button></div>';
+  var view = {name:'history', id:null}, opener = null;
+  function ensureModal(){
+    var m = byId('progress');
+    if(!m){ if(!document.body) return null; m = document.createElement('div'); m.className = 'modal'; m.id = 'progress'; document.body.appendChild(m); }
+    if(!byId('progView')) m.innerHTML = MODAL_HTML;
+    if(!m._progBound){
+      m._progBound = true;
+      m.addEventListener('keydown', function(e){ if(e.key !== 'Escape' && e.key !== 'Tab') e.stopPropagation(); });   // keys typed here never reach the radio/PTT handlers
+      m.addEventListener('keyup', function(e){ e.stopPropagation(); });
+      m.addEventListener('click', onModalClick);
+      m.addEventListener('change', onModalChange);
+      m.addEventListener('input', function(e){ if(e.target && e.target.classList.contains('pg-name')) api.studentName = e.target.value; });
+    }
+    return m;
+  }
+  function msg(t){ var el = byId('progMsg'); if(el) el.textContent = t || ''; }
+  function toolbar(){
+    return '<div class="pg-top"><label>Student <input class="pg-name" type="text" maxlength="60" autocomplete="name" placeholder="Name for the debrief" value="' + esc(api.studentName) + '"></label><span class="pg-sp"></span>' +
+      '<button class="tbtn" type="button" data-pa="export">Export history</button>' +
+      '<button class="tbtn" type="button" data-pa="import">Import</button><input type="file" id="progFile" accept=".json,application/json" hidden>' +
+      '<button class="tbtn" type="button" data-pa="csv">Spreadsheet (CSV)</button>' +
+      '<button class="tbtn" type="button" data-pa="clear">Clear all</button></div><div id="progMsg" role="status" aria-live="polite"></div>';
+  }
+  function renderView(){
+    var v = byId('progView'); if(!v) return;
+    if(view.name === 'debrief'){
+      var r = view.id ? (readAll().filter(function(x){ return x.id === view.id; })[0] || (current && current.id === view.id ? current : null)) : current;
+      if(!r){ view = {name:'history', id:null}; return renderView(); }
+      var tx = !!prefs().transcript;
+      byId('progTitle').textContent = 'Debrief';
+      byId('progLead').textContent = 'One page, US Letter. Go over it with the student, then print or save it as a PDF.';
+      v.innerHTML = '<div class="pg-db-bar"><button class="tbtn" type="button" data-pa="back">← All sessions</button><span class="pg-sp" style="flex:1"></span>' +
+        '<label><input type="checkbox" data-pa="tx"' + (tx ? ' checked' : '') + '> Add every rep and the radio transcript (page 2)</label>' +
+        '<button class="cta" type="button" data-pa="print" style="margin:0;padding:7px 16px;font-size:15px">Print</button></div><div id="progMsg" role="status" aria-live="polite"></div><div id="progDoc"></div>';
+      v._rec = r;
+      renderDebriefInner(r, byId('progDoc'), {transcript:tx});
+    } else {
+      byId('progTitle').textContent = 'Progress';
+      byId('progLead').textContent = 'Every report card is saved on this device. Open a session for the printable instructor debrief.';
+      v.innerHTML = toolbar() + '<div id="progTrend"></div>';
+      renderTrendInner(byId('progTrend'), {});
+    }
+  }
+  function onModalClick(e){
+    try{
+      if(e.target && e.target.id === 'progClose'){ closeModal(); return; }
+      if(e.target === byId('progress')){ closeModal(); return; }   // backdrop
+      var b = e.target.closest && e.target.closest('[data-pa]'); if(!b || b.tagName === 'INPUT') return;
+      var a = b.getAttribute('data-pa');
+      if(a === 'back'){ view = {name:'history', id:null}; renderView(); }
+      else if(a === 'print'){ var v = byId('progView'); printInner(v && v._rec, {transcript:!!prefs().transcript}); }
+      else if(a === 'export'){ var r = exportJSONInner(); msg(r.ok ? 'Saved ' + plural(r.count, 'session') + ' to ' + r.filename + '.' : 'Export failed.'); }
+      else if(a === 'csv'){ var c = exportCSVInner(); msg(c.ok ? 'Saved ' + c.filename + ' (' + plural(c.rows, 'row') + ').' : 'Export failed.'); }
+      else if(a === 'import'){ var f = byId('progFile'); if(f){ f.value = ''; f.click(); } }
+      else if(a === 'clear'){
+        if(b.getAttribute('data-armed') !== '1'){ b.setAttribute('data-armed', '1'); b.textContent = 'Confirm clear all'; b.classList.add('warn'); msg('This deletes every saved session on this device. Export first to keep a copy.'); return; }
+        clearAll(); renderView(); msg('History cleared.');
+      }
+    }catch(err){ warn('modal click', err); }
+  }
+  function onModalChange(e){
+    try{
+      var t = e.target; if(!t) return;
+      if(t.id === 'progFile' && t.files && t.files[0]) importJSONInner(t.files[0]);
+      else if(t.getAttribute('data-pa') === 'tx'){ setPref('transcript', !!t.checked); var v = byId('progView'); renderDebriefInner(v._rec, byId('progDoc'), {transcript:!!t.checked}); }
+    }catch(err){ warn('modal change', err); }
+  }
+  function refreshOpen(){ if(isOpen()) renderView(); refreshRow(); }
+  function isOpen(){ var m = byId('progress'); return !!(m && m.classList.contains('show')); }
+  function sync(){ try{ syncPause(); }catch(e){} }   // the sim pauses while any modal is open (modalOpen lists 'progress')
+  function openModal(name, id){
+    var m = ensureModal(); if(!m) return false;
+    view = {name:name === 'debrief' ? 'debrief' : 'history', id:id || null};
+    if(!isOpen()) opener = document.activeElement;
+    renderView();
+    m.classList.add('show'); sync();
+    try{ var c = m.querySelector('.card'); if(c){ c.scrollTop = 0; c.focus({preventScroll:true}); } }catch(e){}   // focus the dialog, not a button: Space (PTT habit) must not activate anything
+    return true;
+  }
+  function closeModal(){
+    var m = byId('progress'); if(!m) return;
+    m.classList.remove('show'); sync(); refreshRow();
+    try{ if(opener && opener.focus && opener.isConnected) opener.focus({preventScroll:true}); }catch(e){}
+    opener = null;
+  }
+
+  // ── intro row and summary buttons ───────────────────────────────
+  function refreshRow(){
+    var row = byId('progRow'); if(!row) return;
+    var list = readAll(), last = list[0];
+    var stat = byId('progStat');
+    var txt = list.length ? plural(list.length, 'session') + ' saved · last ' + fmtDate(last.ts, false) + (last.overall && last.overall.pct !== null ? ', ' + last.overall.pct + '%' : '') : 'No sessions saved yet';
+    if(stat) stat.textContent = txt;
+    var inp = row.querySelector('.pg-name'); if(inp && document.activeElement !== inp) inp.value = api.studentName;
+  }
+  function attachInner(){
+    injectCSS(); install(); ensureModal(); ensurePrintBox();
+    var row = byId('progRow');
+    if(row && !row._progBound){
+      row._progBound = true;
+      row.innerHTML = '<label class="pr-l">Student <input class="pg-name" id="progName" type="text" maxlength="60" autocomplete="name" placeholder="Name (for the debrief)"></label>' +
+        '<button class="tbtn" id="progIntroBtn" type="button">Progress</button><span id="progStat"></span>';
+      row.addEventListener('input', function(e){ if(e.target && e.target.classList.contains('pg-name')) api.studentName = e.target.value; });
+      row.addEventListener('keydown', function(e){ if(e.key !== 'Tab') e.stopPropagation(); });
+      byId('progIntroBtn').addEventListener('click', function(){ openModal('history'); });
+      var st = document.createElement('style'); st.textContent = '#progRow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:14px;font-size:12.5px;color:var(--muted,#A9AB9F);}#progRow .pr-l{display:flex;align-items:center;gap:6px;font-family:"Barlow Condensed",sans-serif;font-size:13px;}#progRow .tbtn{color:var(--placard,#ECE7DA);}#progStat{flex-basis:100%;}';
+      row.appendChild(st);
+    }
+    refreshRow();
+    var pb = byId('progPrintBtn'); if(pb && !pb._progBound){ pb._progBound = true; pb.addEventListener('click', function(){ pb.blur(); if(!current) onSummaryInner(); printInner(current); }); }
+    var ob = byId('progOpenBtn'); if(ob && !ob._progBound){ ob._progBound = true; ob.addEventListener('click', function(){ ob.blur(); openModal('history'); }); }
+    if(!attached){
+      attached = true;
+      // Escape closes this modal wherever focus is (capture phase so the sim's handler never sees it)
+      document.addEventListener('keydown', function(e){ try{ if(e.key === 'Escape' && isOpen()){ e.stopPropagation(); e.preventDefault(); closeModal(); } }catch(_){} }, true);
+    }
+    return true;
+  }
+  function onSummaryInner(meta){
+    var rec = captureInner(meta);
+    current = rec;
+    var w = null;
+    if(rec.reps.length) w = save(rec);
+    if(w && !w.stored){ try{ var l = byId('sumLead'); if(l && w.note && l.textContent.indexOf(w.note) < 0) l.textContent += ' ' + w.note; }catch(e){} }
+    currentSaved = !!(w && w.ok);
+    refreshRow();
+    return rec;
+  }
+
+  // ── public API (every entry point is wrapped so nothing throws into the sim) ──
+  var api = {
+    version:VERSION, key:KEY, maxSessions:MAX_SESSIONS,
+    capture:safe(function(meta){ return captureInner(meta); }, function(){ return emptyRecord(); }, 'capture'),
+    onSummary:safe(onSummaryInner, null, 'onSummary'),
+    save:safe(save, {ok:false, stored:false}, 'save'),
+    list:safe(function(){ return readAll(); }, function(){ return []; }, 'list'),
+    get:safe(function(id){ return readAll().filter(function(x){ return x.id === String(id); })[0] || null; }, null, 'get'),
+    remove:safe(remove, false, 'remove'),
+    clear:safe(clearAll, false, 'clear'),
+    normalize:safe(normalize, null, 'normalize'),
+    renderTrend:safe(renderTrendInner, false, 'renderTrend'),
+    renderDebrief:safe(renderDebriefInner, false, 'renderDebrief'),
+    debriefHTML:safe(function(r, opts){ r = normalize(r); return r ? debriefHTML(r, opts || {}, 0, 150) : ''; }, '', 'debriefHTML'),
+    print:safe(printInner, false, 'print'),
+    endPrint:safe(function(){ if(printCleanup) printCleanup(); return true; }, false, 'endPrint'),
+    exportJSON:safe(exportJSONInner, {ok:false}, 'exportJSON'),
+    importJSON:function(f){ try{ return importJSONInner(f); }catch(e){ return Promise.resolve({ok:false, error:'Could not read that file.'}); } },
+    exportCSV:safe(exportCSVInner, {ok:false}, 'exportCSV'),
+    csv:safe(csvInner, '', 'csv'),
+    weakest:safe(function(n){ return weakest(readAll(), n); }, function(){ return []; }, 'weakest'),
+    workOnNext:safe(function(r){ r = normalize(r); return r ? workOnNext(r) : []; }, function(){ return []; }, 'workOnNext'),
+    open:safe(openModal, false, 'open'), close:safe(closeModal, null, 'close'), isOpen:safe(isOpen, false, 'isOpen'),
+    attach:safe(attachInner, false, 'attach'), install:safe(install, false, 'install'),
+    get current(){ return current; },
+    get sessionId(){ return SID; },
+    get lastError(){ return lastError; }
+  };
+  Object.defineProperty(api, 'studentName', {
+    enumerable:true,
+    get:function(){ try{ var v = lget(NAMEKEY); return v === null ? (api._name || '') : str(v, 60); }catch(e){ return ''; } },
+    set:function(v){ try{ v = str(v, 60).replace(/[\u0000-\u001f]/g, '').replace(/^\s+/, ''); api._name = v; if(v) lset(NAMEKEY, v); else lrem(NAMEKEY);
+      var p = byId('progRow'); if(p){ var i = p.querySelector('.pg-name'); if(i && i !== document.activeElement && i.value !== v) i.value = v; }
+      if(current){ current.student = v.trim(); if(currentSaved && readAll().some(function(x){ return x.id === current.id; })) save(current); }
+    }catch(e){} }
+  });
+  api._name = '';
+  window.PROGRESS = api;
+  try{
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ api.attach(); });
+    else api.attach();
+  }catch(e){}
 })();
 
 </script>
